@@ -13,8 +13,7 @@ public class TCPThread extends Thread{
 	Socket connectionSocket = null;
 	BufferedOutputStream outToClient = null;
 	
-	public TCPThread(Socket connectionSocket) {
-		
+	public TCPThread(Socket connectionSocket) {	
 		
 		try {
 			outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());

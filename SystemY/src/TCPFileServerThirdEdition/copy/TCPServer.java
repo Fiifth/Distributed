@@ -11,8 +11,7 @@ class TCPServer {
     	
         while (true) {
             ServerSocket welcomeSocket = null;
-            Socket connectionSocket = null;
-            BufferedOutputStream outToClient = null;
+            Socket connectionSocket = null;      
 
             try {
                 welcomeSocket = new ServerSocket(3248);
@@ -20,16 +19,15 @@ class TCPServer {
                 while(true)
                 {
                 	connectionSocket = welcomeSocket.accept();
-                	                	
                 }
+                
             } catch (IOException ex) {
                 // Do exception handling
             	System.out.println("AJ1");
             }
-
-            if (outToClient != null) {
-            	TCPThread tcp1 = new TCPThread(connectionSocket);            	
-                }
+            
+            //TCPThread tcp1 = new TCPThread(connectionSocket);
+            //TCPThread tcp2 = new TCPThread(connectionSocket);
             }
         }
     }
