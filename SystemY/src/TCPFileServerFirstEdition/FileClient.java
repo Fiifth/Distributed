@@ -5,8 +5,6 @@ import java.net.*;
 
 class FileClient {
 
-
-
     public static void main(String args[]) {
         byte[] aByte = new byte[1];
         int bytesRead;
@@ -30,7 +28,7 @@ class FileClient {
             FileOutputStream fos = null;
             BufferedOutputStream bos = null;
             try {
-                fos = new FileOutputStream( fileOutput );
+                fos = new FileOutputStream(fileOutput);
                 bos = new BufferedOutputStream(fos);
                 bytesRead = is.read(aByte, 0, aByte.length);
 
