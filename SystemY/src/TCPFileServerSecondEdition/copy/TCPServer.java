@@ -1,4 +1,4 @@
-package TCPFileServerFirstEdition;
+package TCPFileServerSecondEdition.copy;
 
 import java.io.*;
 import java.net.*;
