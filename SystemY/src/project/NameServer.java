@@ -7,7 +7,10 @@ import java.util.*;
 
 
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
+	
 	Map nodeMap = new HashMap();
+
+	
 
 	public void addIP() throws RemoteException {
 		// TODO Auto-generated method stub
