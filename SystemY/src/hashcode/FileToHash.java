@@ -1,5 +1,6 @@
 package hashcode;
 	public class FileToHash {
+		//hashes fileName
 		public static void main(String args[]){
 	    	String fileName = "voorbeeldfile.txt" ;
 	    	int hashedFN;
