@@ -17,5 +17,4 @@ public class StartNameServer {
 			e.printStackTrace();
 		}
 	}
-
 }
