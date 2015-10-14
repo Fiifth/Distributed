@@ -1,25 +1,24 @@
 package project;
 
-import java.rmi.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.net.InetAddress;
+import java.rmi.*; 
+import java.util.*; 
 
 
-public class NameServer extends UnicastRemoteObject implements NameServerInterface{
+public class NameServer{
 	
-	Map nodeMap = new HashMap();
+	Map<Integer, InetAddress> nodeMap = new HashMap();
 
 	
 
-	public void addIP() throws RemoteException {
-		// TODO Auto-generated method stub
-		
+	public void addNode(String nodeName, InetAddress nodeIP) throws RemoteException {
+		int hashedNN = Math.abs(nodeName.hashCode()%32768);
+    	nodeMap.put(hashedNN,nodeIP);
 	}
 
-	public void rmIP() throws RemoteException {
-		// TODO Auto-generated method stub
-		
+	public void rmIP(String nodeName, InetAddress nodeIP) throws RemoteException {
+		int hashedNN = Math.abs(nodeName.hashCode()%32768);
+		nodeMap.remove(hashedNN);
 	}
 
 	public void showList() throws RemoteException {
