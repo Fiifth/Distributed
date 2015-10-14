@@ -1,13 +1,19 @@
 package project;
 
 import java.net.InetAddress;
-import java.rmi.*; 
+import java.rmi.*;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*; 
 
 
-public class NameServer{
+public class NameServer extends UnicastRemoteObject implements NameServerInterface{
 	
-	Map<Integer, InetAddress> nodeMap = new HashMap();
+	protected NameServer() throws RemoteException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	HashMap<Integer,InetAddress> nodeMap = new HashMap<Integer,InetAddress>();
 
 	
 
@@ -16,13 +22,13 @@ public class NameServer{
     	nodeMap.put(hashedNN,nodeIP);
 	}
 
-	public void rmIP(String nodeName, InetAddress nodeIP) throws RemoteException {
+	public void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
 		nodeMap.remove(hashedNN);
 	}
 
-	public void showList() throws RemoteException {
+	public HashMap showList() throws RemoteException {
 		// TODO Auto-generated method stub
-		
+		return nodeMap;
 	}
 }
