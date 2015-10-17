@@ -7,7 +7,8 @@ import java.util.*;
 
 
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
-	
+	private static final long serialVersionUID = 1L;
+
 	protected NameServer() throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
@@ -27,7 +28,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		nodeMap.remove(hashedNN);
 	}
 
-	public HashMap showList() throws RemoteException {
+	public HashMap<Integer, InetAddress> showList() throws RemoteException {
 		// TODO Auto-generated method stub
 		return nodeMap;
 	}

@@ -10,6 +10,6 @@ public interface NameServerInterface extends java.rmi.Remote{
 	
 	void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException;
 	
-	HashMap showList() throws RemoteException;
+	HashMap<Integer, InetAddress> showList() throws RemoteException;
 
 }
