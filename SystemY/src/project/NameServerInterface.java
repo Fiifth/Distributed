@@ -1,13 +1,15 @@
 package project;
 
+import java.net.InetAddress;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 public interface NameServerInterface extends java.rmi.Remote{
 	
-	void addIP() throws RemoteException;
+	void addNode(String nodeName, InetAddress nodeIP) throws RemoteException;
 	
-	void rmIP() throws RemoteException;
+	void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException;
 	
-	void showList() throws RemoteException;
+	HashMap<Integer, InetAddress> showList() throws RemoteException;
 
 }
