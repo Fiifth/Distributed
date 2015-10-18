@@ -10,7 +10,7 @@ public class NameServerClient {
 		NameServerInterface nameserver;
 		try{
 			System.setSecurityManager(new SecurityManager());
-			nameserver = (NameServerInterface)Naming.lookup("//localhost:2020/NameServer");
+			nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
 			System.out.println("Excecuting remote method:");
 			InetAddress temp=InetAddress.getLocalHost();
 			nameserver.addNode("test", temp);

@@ -37,6 +37,10 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	public void addNode(String nodeName, InetAddress nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
     	nodeMap.put(hashedNN,nodeIP);
+    	System.out.print("Node added:");
+    	System.out.print(hashedNN);
+    	System.out.println(nodeIP);
+    	
 	}
 
 	public void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException {
