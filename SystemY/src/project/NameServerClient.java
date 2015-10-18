@@ -15,7 +15,7 @@ public class NameServerClient {
 			InetAddress temp=InetAddress.getLocalHost();
 			nameserver.addNode("test", temp);
 		}catch(Exception e) {
-			System.out.println("BankClient exception: " + e);
+			System.out.println("NameClient exception: " + e);
 		}
 	}
 
