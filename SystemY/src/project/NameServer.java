@@ -12,6 +12,8 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	
 	public static void main(String[] args){
 		try{
+			System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
+			
 			LocateRegistry.createRegistry(1099);
 			NameServerInterface nameint = new NameServer();
 			Naming.rebind("//localhost/NameServer", nameint);

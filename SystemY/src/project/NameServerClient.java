@@ -8,6 +8,7 @@ public class NameServerClient {
 	public static void main(String[] args) {
 
 		NameServerInterface nameserver;
+		System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
 		try{
 			System.setSecurityManager(new SecurityManager());
 			nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
