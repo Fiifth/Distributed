@@ -3,6 +3,7 @@ package project;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public interface NameServerInterface extends java.rmi.Remote{
 	
@@ -10,6 +11,8 @@ public interface NameServerInterface extends java.rmi.Remote{
 	
 	void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException;
 	
-	HashMap<Integer, InetAddress> showList() throws RemoteException;
+	TreeMap<Integer, InetAddress> showList() throws RemoteException;
+	
+	InetAddress locateFile(String filename)throws RemoteException;
 
 }

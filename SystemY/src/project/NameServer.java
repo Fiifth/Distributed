@@ -4,7 +4,8 @@ import java.net.InetAddress;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*; 
+import java.util.*;
+import java.util.Map.Entry; 
 
 
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
@@ -33,17 +34,21 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		// TODO Auto-generated constructor stub
 	}
 
-	HashMap<Integer,InetAddress> nodeMap = new HashMap<Integer,InetAddress>();
-
+	//HashMap<Integer,InetAddress> nodeMap = new HashMap<Integer,InetAddress>();
+	TreeMap<Integer,InetAddress> nodeMap = new TreeMap<Integer,InetAddress>();
 	
 
 	public void addNode(String nodeName, InetAddress nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
     	nodeMap.put(hashedNN,nodeIP);
-    	System.out.print("Node added:");
-    	System.out.print(hashedNN);
-    	System.out.println(nodeIP);
     	
+
+    	System.out.print("CURRENT MAP");
+    	for (Entry<Integer, InetAddress> entry : nodeMap.entrySet()) 
+    	{
+    	     System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+    	}
+    	System.out.print("***");
 	}
 
 	public void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException {
@@ -51,8 +56,15 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		nodeMap.remove(hashedNN);
 	}
 
-	public HashMap<Integer, InetAddress> showList() throws RemoteException {
+	public TreeMap<Integer, InetAddress> showList() throws RemoteException {
 		// TODO Auto-generated method stub
-		return nodeMap;
+		return (TreeMap<Integer, InetAddress>) nodeMap;
+	}
+	
+	public InetAddress locateFile(String filename)throws RemoteException
+	{
+		
+		return null;
+		
 	}
 }

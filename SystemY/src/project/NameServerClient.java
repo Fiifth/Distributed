@@ -14,8 +14,15 @@ public class NameServerClient {
 			System.setSecurityManager(new SecurityManager());
 			nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
 			System.out.println("Excecuting remote method:");
-			InetAddress temp=InetAddress.getLocalHost();
-			nameserver.addNode("test", temp);
+			//InetAddress IPaddress=InetAddress.getLocalHost();
+			InetAddress IPaddress1 = InetAddress.getByName("192.168.1.1");
+			InetAddress IPaddress2 = InetAddress.getByName("192.168.1.2");
+			InetAddress IPaddress3 = InetAddress.getByName("192.168.1.3");
+			
+			nameserver.addNode("test1", IPaddress1);
+			nameserver.addNode("test3", IPaddress3);
+			nameserver.addNode("test2", IPaddress2);
+			
 		}catch(Exception e) {
 			System.out.println("NameClient exception: " + e);
 		}
