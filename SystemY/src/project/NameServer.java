@@ -63,8 +63,10 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	
 	public InetAddress locateFile(String filename)throws RemoteException
 	{
-		
-		return null;
+		int hashedFN = Math.abs(filename.hashCode()%32768);
+		int destinationKey=nodeMap.lowerKey(hashedFN);
+		if (destinationKey==0) destinationKey=nodeMap.lastKey();
+		return nodeMap.get(destinationKey);
 		
 	}
 }
