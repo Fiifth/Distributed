@@ -8,22 +8,22 @@ public class Node
 	public static void main(String[] args) 
 	{
 		
-		MulticastSocket multiastSocket =null;
+		MulticastSocket multicastSocket =null;
 		try 
 		{	
 			InetAddress mijnIP0=InetAddress.getLocalHost();
 			String naam="Node1";
 			String mijnIP= mijnIP0.getHostAddress();
 			InetAddress group = InetAddress.getByName("228.5.6.7");
-			multiastSocket = new MulticastSocket(6789);
-			multiastSocket.joinGroup(group);
+			multicastSocket = new MulticastSocket(6789);
+			multicastSocket.joinGroup(group);
 			byte [] m1 = naam.getBytes();
  			byte [] m2 = mijnIP.getBytes(); 			
 			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
 			DatagramPacket messageOut2 = new DatagramPacket(m2, m2.length, group, 6789);
 			
-			multiastSocket.send(messageOut1);	
-			multiastSocket.send(messageOut2);
+			multicastSocket.send(messageOut1);	
+			multicastSocket.send(messageOut2);
 			
 			byte[] buffer = new byte[1000];
 			
@@ -31,13 +31,16 @@ public class Node
 			 {		
 				// get messages from others in group
  				DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
- 				multiastSocket.receive(messageIn);
- 				System.out.println("Received:" + new String(messageIn.getData()));
+ 				multicastSocket.receive(messageIn);
+ 				String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+ 				System.out.println("Received:" + msg);
+ 				//if i = 2 slaag aantal nodes op en bepaal ip adres van server
+ 				//if i = 3 afleiden wie vorige en volgende nodes zijn ofzo
   		}
-			multiastSocket.leaveGroup(group);		
+			multicastSocket.leaveGroup(group);		
 		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
 		}catch (IOException e){System.out.println("IO: " + e.getMessage());
-		}finally {if(multiastSocket != null) multiastSocket.close();}
+		}finally {if(multicastSocket != null) multicastSocket.close();}
 
 
 	}
