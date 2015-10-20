@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
 	private static final long serialVersionUID = 1L;
 	
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException{
 		try{
 			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
@@ -41,14 +42,19 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			
 			// get messages from others in group
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+			
+			int lMes=messageIn.getLength();
 			multiastSocket.receive(messageIn);
+			byte[] mes = new byte[lMes];
+			mes=messageIn.getData();
 			if (i==0)
 			{
-				System.out.println("Received:" + new String(messageIn.getData()));
+				System.out.println("Received:" + new String(mes));
 			}
 			else if (i==1)
 			{
-				InetAddress addr = InetAddress.getByAddress(messageIn.getData());
+				InetAddress addr = InetAddress.getByAddress(mes);
+				System.out.println("Received:" + addr.getLocalHost());
 			}
 			
 			
