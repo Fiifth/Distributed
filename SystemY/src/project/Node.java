@@ -9,6 +9,9 @@ public class Node
 	{
 		
 		MulticastSocket multicastSocket =null;
+		ServerSocket welcomeSocket = null;
+		Socket connectionSocket = null;
+		BufferedOutputStream outToClient = null;
 		try 
 		{	
 			InetAddress mijnIP0=InetAddress.getLocalHost();
@@ -34,6 +37,19 @@ public class Node
  				multicastSocket.receive(messageIn);
  				String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
  				System.out.println("Received:" + msg);
+ 				try
+ 				{
+ 					welcomeSocket = new ServerSocket(3248);
+ 					connectionSocket = welcomeSocket.accept();
+ 					outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
+ 				}
+ 				catch (IOException ex) {System.out.println("IOException 1");}
+ 				
+ 				if(outToClient != null)
+ 				{
+ 					Connection c = new Connection(connectionSocket, outToClient, fileToSend);
+ 					c.start();
+ 				}
  				//if i = 2 slaag aantal nodes op en bepaal ip adres van server
  				//if i = 3 afleiden wie vorige en volgende nodes zijn ofzo
   		}

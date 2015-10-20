@@ -1,9 +1,12 @@
 package project;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -31,7 +34,6 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			e.printStackTrace();
 			}
 		MulticastSocket multicastSocket =null;
-		
 		InetAddress group = InetAddress.getByName("228.5.6.7");
 		multicastSocket = new MulticastSocket(6789);
 		multicastSocket.joinGroup(group);
@@ -55,8 +57,8 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 				System.out.println("Received:" + addr.getLocalHost());
 				String nodeIP = addr.getLocalHost().toString();
 				nameserver.addNode(addr.getHostName(),nodeIP);
+				
 			}
-			
 			//TODO antwoorden aan opstartende node (hoeveel nodes in netwerk) 
 			//TODO ontvangen antwoord server (ignore eerste 2 messages) (tcp?)
 			//TODO fixen vorige node data verwerken
