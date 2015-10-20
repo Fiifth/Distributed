@@ -15,7 +15,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("static-access")
-	public static void main(String[] args) throws IOException{
+	public void main(String[] args) throws IOException{
 		try{
 			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
 			System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
@@ -38,15 +38,12 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		byte[] buffer = new byte[10];
 		for(int i=0; i< 2;i++)	//receive 3 messages
 		 {					
-			//TODO fix da de lengte van de byte array exact is wa we gaan ontvangen
-			
-			// get messages from others in group
+
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			
-			int lMes=messageIn.getLength();
 			multicastSocket.receive(messageIn);
-			byte[] mes = new byte[lMes];
 			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+			
 			if (i==0)
 			{
 				System.out.println("Received:" + new String(msg));
@@ -55,14 +52,13 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			{
 				InetAddress addr = InetAddress.getByName(msg);
 				System.out.println("Received:" + addr.getLocalHost());
+				addNode(addr.getHostName(),addr);
 			}
 			
 			//TODO node in map plaatsen
 			//TODO antwoorden aan opstartende node (hoeveel nodes in netwerk) 
 			//TODO ontvangen antwoord server (ignore eerste 2 messages) (tcp?)
 			//TODO fixen vorige node data verwerken
-			
-			
 		}
 		multicastSocket.close();
 	}
