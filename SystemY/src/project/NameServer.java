@@ -8,7 +8,7 @@ import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
-import java.util.Map.Entry; 
+import java.util.Map.Entry;
 
 
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
@@ -46,16 +46,21 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			int lMes=messageIn.getLength();
 			multiastSocket.receive(messageIn);
 			byte[] mes = new byte[lMes];
-			mes=messageIn.getData();
+			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 			if (i==0)
 			{
-				System.out.println("Received:" + new String(mes));
+				System.out.println("Received:" + new String(msg));
 			}
 			else if (i==1)
 			{
-				InetAddress addr = InetAddress.getByAddress(mes);
+				InetAddress addr = InetAddress.getByName(msg);
 				System.out.println("Received:" + addr.getLocalHost());
 			}
+			
+			//TODO node in map plaatsen
+			//TODO antwoorden aan opstartende node (hoeveel nodes in netwerk) 
+			//TODO ontvangen antwoord server (ignore eerste 2 messages) (tcp?)
+			//TODO fixen vorige node data verwerken
 			
 			
 		}

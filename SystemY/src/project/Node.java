@@ -11,14 +11,14 @@ public class Node
 		MulticastSocket multiastSocket =null;
 		try 
 		{	
+			InetAddress mijnIP0=InetAddress.getLocalHost();
 			String naam="Node1";
-			InetAddress mijnIP=InetAddress.getLocalHost();
+			String mijnIP= mijnIP0.getHostAddress();
 			InetAddress group = InetAddress.getByName("228.5.6.7");
 			multiastSocket = new MulticastSocket(6789);
 			multiastSocket.joinGroup(group);
- 			byte [] m1 = naam.getBytes();
- 			byte [] m2 = mijnIP.getAddress();
- 			
+			byte [] m1 = naam.getBytes();
+ 			byte [] m2 = mijnIP.getBytes(); 			
 			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
 			DatagramPacket messageOut2 = new DatagramPacket(m2, m2.length, group, 6789);
 			
