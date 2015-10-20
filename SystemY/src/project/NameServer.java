@@ -30,11 +30,11 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			System.out.println("NameServer error: " + e.getMessage());
 			e.printStackTrace();
 			}
-		MulticastSocket multiastSocket =null;
+		MulticastSocket multicastSocket =null;
 		
 		InetAddress group = InetAddress.getByName("228.5.6.7");
-		multiastSocket = new MulticastSocket(6789);
-		multiastSocket.joinGroup(group);
+		multicastSocket = new MulticastSocket(6789);
+		multicastSocket.joinGroup(group);
 		byte[] buffer = new byte[10];
 		for(int i=0; i< 2;i++)	//receive 3 messages
 		 {					
@@ -44,7 +44,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			
 			int lMes=messageIn.getLength();
-			multiastSocket.receive(messageIn);
+			multicastSocket.receive(messageIn);
 			byte[] mes = new byte[lMes];
 			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 			if (i==0)
@@ -64,7 +64,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			
 			
 		}
-		multiastSocket.close();
+		multicastSocket.close();
 	}
 
 	protected NameServer() throws RemoteException 
