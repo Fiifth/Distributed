@@ -35,6 +35,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		InetAddress group = InetAddress.getByName("228.5.6.7");
 		multicastSocket = new MulticastSocket(6789);
 		multicastSocket.joinGroup(group);
+		NameServer nameserver = new NameServer();
 		byte[] buffer = new byte[10];
 		for(int i=0; i< 2;i++)	//receive 3 messages
 		 {					
@@ -52,7 +53,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			{
 				InetAddress addr = InetAddress.getByName(msg);
 				System.out.println("Received:" + addr.getLocalHost());
-				//addNode(addr.getHostName(),addr);
+				nameserver.addNode(addr.getHostName(),addr);
 			}
 			
 			//TODO node in map plaatsen
