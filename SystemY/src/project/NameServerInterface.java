@@ -7,12 +7,12 @@ import java.util.TreeMap;
 
 public interface NameServerInterface extends java.rmi.Remote{
 	
-	void addNode(String nodeName, InetAddress nodeIP) throws RemoteException;
+	void addNode(String nodeName, String nodeIP) throws RemoteException;
 	
-	void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException;
+	void rmNode(String nodeName, String nodeIP) throws RemoteException;
 	
-	TreeMap<Integer, InetAddress> showList() throws RemoteException;
+	TreeMap<Integer, String> showList() throws RemoteException;
 	
-	InetAddress locateFile(String filename)throws RemoteException;
+	String locateFile(String filename)throws RemoteException;
 
 }

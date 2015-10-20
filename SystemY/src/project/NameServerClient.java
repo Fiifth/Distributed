@@ -19,9 +19,9 @@ public class NameServerClient {
 			InetAddress IPaddress2 = InetAddress.getByName("192.168.1.2");
 			InetAddress IPaddress3 = InetAddress.getByName("192.168.1.3");
 			
-			nameserver.addNode("test1", IPaddress1);
-			nameserver.addNode("test3", IPaddress3);
-			nameserver.addNode("test2", IPaddress2);
+			//nameserver.addNode("test1", IPaddress1);
+			//nameserver.addNode("test3", IPaddress3);
+			//nameserver.addNode("test2", IPaddress2);
 			
 		}catch(Exception e) {
 			System.out.println("NameClient exception: " + e);

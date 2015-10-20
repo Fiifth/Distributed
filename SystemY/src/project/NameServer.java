@@ -53,10 +53,10 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			{
 				InetAddress addr = InetAddress.getByName(msg);
 				System.out.println("Received:" + addr.getLocalHost());
-				nameserver.addNode(addr.getHostName(),addr);
+				String nodeIP = addr.getLocalHost().toString();
+				nameserver.addNode(addr.getHostName(),nodeIP);
 			}
 			
-			//TODO node in map plaatsen
 			//TODO antwoorden aan opstartende node (hoeveel nodes in netwerk) 
 			//TODO ontvangen antwoord server (ignore eerste 2 messages) (tcp?)
 			//TODO fixen vorige node data verwerken
@@ -69,33 +69,33 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		super();
 	}
 
-	TreeMap<Integer,InetAddress> nodeMap = new TreeMap<Integer,InetAddress>();
+	TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	
 
-	public void addNode(String nodeName, InetAddress nodeIP) throws RemoteException {
+	public void addNode(String nodeName, String nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
     	nodeMap.put(hashedNN,nodeIP);
     	
 
     	System.out.print("CURRENT MAP");
-    	for (Entry<Integer, InetAddress> entry : nodeMap.entrySet()) 
+    	for (Entry<Integer, String> entry : nodeMap.entrySet()) 
     	{
     	     System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
     	}
     	System.out.print("***");
 	}
 
-	public void rmNode(String nodeName, InetAddress nodeIP) throws RemoteException {
+	public void rmNode(String nodeName, String nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
 		nodeMap.remove(hashedNN);
 	}
 
-	public TreeMap<Integer, InetAddress> showList() throws RemoteException {
+	public TreeMap<Integer, String> showList() throws RemoteException {
 		// TODO Auto-generated method stub
-		return (TreeMap<Integer, InetAddress>) nodeMap;
+		return (TreeMap<Integer, String>) nodeMap;
 	}
 	
-	public InetAddress locateFile(String filename)throws RemoteException
+	public String locateFile(String filename)throws RemoteException
 	{
 		int hashedFN = Math.abs(filename.hashCode()%32768);
 		int destinationKey=nodeMap.lowerKey(hashedFN);
