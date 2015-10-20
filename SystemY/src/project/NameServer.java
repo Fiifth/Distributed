@@ -15,7 +15,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("static-access")
-	public void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException{
 		try{
 			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
 			System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
@@ -52,7 +52,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			{
 				InetAddress addr = InetAddress.getByName(msg);
 				System.out.println("Received:" + addr.getLocalHost());
-				addNode(addr.getHostName(),addr);
+				//addNode(addr.getHostName(),addr);
 			}
 			
 			//TODO node in map plaatsen
