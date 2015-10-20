@@ -19,22 +19,21 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			LocateRegistry.createRegistry(1099);
 			NameServerInterface nameint = new NameServer();
 			Naming.rebind("//localhost/NameServer", nameint);
-			//NameServer nameserverobj = new NameServer();
-			//Naming.rebind("//localhost/NameServer", nameserverobj);
 			
 			System.out.println("NameServer is ready.");
-		}catch(Exception e){
+			}
+			catch(Exception e)
+			{
 			System.out.println("NameServer error: " + e.getMessage());
 			e.printStackTrace();
-		}
+			}
 	}
 
-	protected NameServer() throws RemoteException {
+	protected NameServer() throws RemoteException 
+	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	//HashMap<Integer,InetAddress> nodeMap = new HashMap<Integer,InetAddress>();
 	TreeMap<Integer,InetAddress> nodeMap = new TreeMap<Integer,InetAddress>();
 	
 
