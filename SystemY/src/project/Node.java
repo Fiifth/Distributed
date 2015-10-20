@@ -10,8 +10,7 @@ public class Node
 		
 		MulticastSocket multiastSocket =null;
 		try 
-		{
-			InetAddress address = InetAddress.getLocalHost(); 		
+		{	
 			String naam="Node1";
 			InetAddress mijnIP=InetAddress.getLocalHost();
 			InetAddress group = InetAddress.getByName("228.5.6.7");

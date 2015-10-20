@@ -1,6 +1,9 @@
 package project;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,11 +14,10 @@ import java.util.Map.Entry;
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
 	private static final long serialVersionUID = 1L;
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 		try{
 			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
 			System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
-			
 			LocateRegistry.createRegistry(1099);
 			NameServerInterface nameint = new NameServer();
 			Naming.rebind("//localhost/NameServer", nameint);
@@ -27,6 +29,31 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			System.out.println("NameServer error: " + e.getMessage());
 			e.printStackTrace();
 			}
+		MulticastSocket multiastSocket =null;
+		
+		InetAddress group = InetAddress.getByName("228.5.6.7");
+		multiastSocket = new MulticastSocket(6789);
+		multiastSocket.joinGroup(group);
+		byte[] buffer = new byte[10];
+		for(int i=0; i< 2;i++)	//receive 3 messages
+		 {					
+			//TODO fix da de lengte van de byte array exact is wa we gaan ontvangen
+			
+			// get messages from others in group
+			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+			multiastSocket.receive(messageIn);
+			if (i==0)
+			{
+				System.out.println("Received:" + new String(messageIn.getData()));
+			}
+			else if (i==1)
+			{
+				InetAddress addr = InetAddress.getByAddress(messageIn.getData());
+			}
+			
+			
+		}
+		multiastSocket.close();
 	}
 
 	protected NameServer() throws RemoteException 
