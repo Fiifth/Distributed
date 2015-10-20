@@ -47,10 +47,15 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			multicastSocket.receive(messageIn);
 			byte[] mes = new byte[lMes];
 			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-			InetAddress addr = InetAddress.getByName(msg);
-			String addrstring = addr.toString();
-			System.out.println(addrstring);
-			
+			if (i==0)
+			{
+				System.out.println("Received:" + new String(msg));
+			}
+			else if (i==1)
+			{
+				InetAddress addr = InetAddress.getByName(msg);
+				System.out.println("Received:" + addr.getLocalHost());
+			}
 			
 			//TODO node in map plaatsen
 			//TODO antwoorden aan opstartende node (hoeveel nodes in netwerk) 
