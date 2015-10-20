@@ -38,8 +38,6 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		byte[] buffer = new byte[10];
 		for(int i=0; i< 2;i++)	//receive 3 messages
 		 {					
-			//TODO fix da de lengte van de byte array exact is wa we gaan ontvangen
-			
 			// get messages from others in group
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			
