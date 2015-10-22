@@ -58,11 +58,10 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 				nameserver.addNode(addr.getHostName(),nodeIP);
 				
 			}
-			//TODO fixen vorige node data verwerken (in node.java)
+			//TODO fixen vorige node data verwerken 
 		}
 		multicastSocket.close();
-		//Send serverIP 
-		//TODO echt IP doorsturen
+		//Send serverIP to newly joined Node
 		String serverIP = InetAddress.getLocalHost().getHostAddress();
 		Integer numberOfNodes = nameserver.nodeMap.size(); //includes the new node
 		String numOfNodesString = numberOfNodes.toString();
