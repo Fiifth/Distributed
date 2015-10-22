@@ -1,11 +1,10 @@
 package project;
 
-import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -54,16 +53,24 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			else if (i==1)
 			{
 				InetAddress addr = InetAddress.getByName(msg);
-				System.out.println("Received:" + addr.getLocalHost());
+				System.out.println("NodeIP:" + addr.getLocalHost());
 				String nodeIP = addr.getLocalHost().toString();
 				nameserver.addNode(addr.getHostName(),nodeIP);
 				
 			}
-			//TODO antwoorden aan opstartende node (hoeveel nodes in netwerk) 
-			//TODO ontvangen antwoord server (ignore eerste 2 messages) (tcp?)
-			//TODO fixen vorige node data verwerken
+			//TODO fixen vorige node data verwerken (in node.java)
 		}
 		multicastSocket.close();
+		//Send serverIP 
+		//TODO echt IP doorsturen
+		String serverIP = InetAddress.getLocalHost().getHostAddress();
+		Integer numberOfNodes = nameserver.nodeMap.size();
+		String numOfNodesString = numberOfNodes.toString();
+		Socket clientSocket = new Socket("localhost",6789);
+		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
+		outToNode.writeBytes(serverIP + "\n");
+		outToNode.writeBytes(numberOfNodes + "\n");
+		clientSocket.close();
 	}
 
 	protected NameServer() throws RemoteException 

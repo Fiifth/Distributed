@@ -5,9 +5,9 @@ import java.io.*;
 public class Node 
 {
 	
-	public static void main(String[] args) 
+	public static void main(String[] args)throws Exception
 	{
-		
+		//TODO bij ontvangen multicast nieuwe node: update next/previous node
 		MulticastSocket multicastSocket =null;
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
@@ -37,19 +37,6 @@ public class Node
  				multicastSocket.receive(messageIn);
  				String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
  				System.out.println("Received:" + msg);
- 				try
- 				{
- 					welcomeSocket = new ServerSocket(3248);
- 					connectionSocket = welcomeSocket.accept();
- 					outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
- 				}
- 				catch (IOException ex) {System.out.println("IOException 1");}
- 				
- 				if(outToClient != null)
- 				{
- 					Connection c = new Connection(connectionSocket, outToClient, fileToSend);
- 					c.start();
- 				}
  				//if i = 2 slaag aantal nodes op en bepaal ip adres van server
  				//if i = 3 afleiden wie vorige en volgende nodes zijn ofzo
   		}
@@ -57,8 +44,18 @@ public class Node
 		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
 		}catch (IOException e){System.out.println("IO: " + e.getMessage());
 		}finally {if(multicastSocket != null) multicastSocket.close();}
-
-
+		//set up TCP socket to receive IPaddress from server and # nodes
+		String serverIPstring;
+		String amountOfNodes;
+		welcomeSocket = new ServerSocket(6789);
+		connectionSocket = welcomeSocket.accept();
+		BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+		serverIPstring = inFromNameServer.readLine();
+		System.out.println("serverIP: " + serverIPstring);
+		amountOfNodes = inFromNameServer.readLine();
+		System.out.println("amount of Nodes: " + amountOfNodes);
+		welcomeSocket.close();
+		connectionSocket.close();
 	}
 
 }
