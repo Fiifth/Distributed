@@ -37,8 +37,6 @@ public class Node
  				multicastSocket.receive(messageIn);
  				String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
  				System.out.println("Received:" + msg);
- 				//if i = 2 slaag aantal nodes op en bepaal ip adres van server
- 				//if i = 3 afleiden wie vorige en volgende nodes zijn ofzo
   		}
 			multicastSocket.leaveGroup(group);		
 		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());

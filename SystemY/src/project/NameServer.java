@@ -64,12 +64,12 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		//Send serverIP 
 		//TODO echt IP doorsturen
 		String serverIP = InetAddress.getLocalHost().getHostAddress();
-		Integer numberOfNodes = nameserver.nodeMap.size();
+		Integer numberOfNodes = nameserver.nodeMap.size(); //includes the new node
 		String numOfNodesString = numberOfNodes.toString();
 		Socket clientSocket = new Socket("localhost",6789);
 		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 		outToNode.writeBytes(serverIP + "\n");
-		outToNode.writeBytes(numberOfNodes + "\n");
+		outToNode.writeBytes(numOfNodesString + "\n");
 		clientSocket.close();
 	}
 
