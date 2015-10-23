@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 public class NameServer extends UnicastRemoteObject implements NameServerInterface{
 	private static final long serialVersionUID = 1L;
 	
-	@SuppressWarnings("static-access")
+	//@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException{
 		try{
 			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
@@ -85,12 +85,12 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
     	nodeMap.put(hashedNN,nodeIP);
     	
 
-    	System.out.print("CURRENT MAP");
+    	System.out.println("CURRENT MAP");
     	for (Entry<Integer, String> entry : nodeMap.entrySet()) 
     	{
     	     System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
     	}
-    	System.out.print("***");
+    	System.out.println("***");
 	}
 
 	public void rmNode(String nodeName, String nodeIP) throws RemoteException {
@@ -99,7 +99,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	}
 
 	public TreeMap<Integer, String> showList() throws RemoteException {
-		// TODO Auto-generated method stub
+
 		return (TreeMap<Integer, String>) nodeMap;
 	}
 	
