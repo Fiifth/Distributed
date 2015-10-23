@@ -43,15 +43,17 @@ public class Node
 		}catch (IOException e){System.out.println("IO: " + e.getMessage());
 		}finally {if(multicastSocket != null) multicastSocket.close();}
 		//set up TCP socket to receive IPaddress from server and # nodes
-		String serverIPstring;
+		InetAddress serverIP;
 		String amountOfNodes;
 		welcomeSocket = new ServerSocket(6789);
 		connectionSocket = welcomeSocket.accept();
 		BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-		serverIPstring = inFromNameServer.readLine();
-		System.out.println("serverIP: " + serverIPstring);
+		//serverIPstring = inFromNameServer.readLine();
 		amountOfNodes = inFromNameServer.readLine();
 		System.out.println("amount of Nodes: " + amountOfNodes);
+		serverIP=connectionSocket.getInetAddress();
+		String serverIPstring=serverIP.getHostAddress();
+		System.out.println("serverIP: " + serverIPstring);
 		welcomeSocket.close();
 		connectionSocket.close();
 	}

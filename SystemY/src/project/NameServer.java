@@ -62,12 +62,12 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		}
 		multicastSocket.close();
 		//Send serverIP to newly joined Node
-		String serverIP = InetAddress.getLocalHost().getHostAddress();
+		//String serverIP = InetAddress.getLocalHost().getHostAddress();
 		Integer numberOfNodes = nameserver.nodeMap.size(); //includes the new node
 		String numOfNodesString = numberOfNodes.toString();
 		Socket clientSocket = new Socket("localhost",6789);
 		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-		outToNode.writeBytes(serverIP + "\n");
+		//outToNode.writeBytes(serverIP + "\n");
 		outToNode.writeBytes(numOfNodesString + "\n");
 		clientSocket.close();
 	}
