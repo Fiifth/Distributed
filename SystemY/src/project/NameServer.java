@@ -13,11 +13,13 @@ import java.util.*;
 import java.util.Map.Entry;
 
 
-public class NameServer extends UnicastRemoteObject implements NameServerInterface{
+public class NameServer extends UnicastRemoteObject implements NameServerInterface
+{
 	private static final long serialVersionUID = 1L;
 	
-	//@SuppressWarnings("static-access")
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException{
+		String nodeIP=null;
 		try{
 			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
 			System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
@@ -38,37 +40,31 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		multicastSocket.joinGroup(group);
 		NameServer nameserver = new NameServer();
 		byte[] buffer = new byte[10];
-		for(int i=0; i< 2;i++)	//receive 3 messages
+		for(int i=0; i< 1;i++)	//receive 1 messages
 		 {					
 
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			
 			multicastSocket.receive(messageIn);
 			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-			
-			if (i==0)
-			{
-				System.out.println("Received:" + new String(msg));
-			}
-			else if (i==1)
-			{
-				InetAddress addr = InetAddress.getByName(msg);
+
+				InetAddress addr=messageIn.getAddress();
 				System.out.println("NodeIP:" + addr.getLocalHost());
-				String nodeIP = addr.getLocalHost().toString();
-				nameserver.addNode(addr.getHostName(),nodeIP);
+				nodeIP = addr.getHostAddress().toString();
 				
-			}
+				nameserver.addNode(msg,nodeIP);
+
+				
 			//TODO fixen vorige node data verwerken 
 		}
 		multicastSocket.close();
-		//Send serverIP to newly joined Node
-		//String serverIP = InetAddress.getLocalHost().getHostAddress();
+
 		Integer numberOfNodes = nameserver.nodeMap.size(); //includes the new node
 		String numOfNodesString = numberOfNodes.toString();
-		Socket clientSocket = new Socket("localhost",6789);
+		Socket clientSocket = new Socket(nodeIP,6789);
 		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-		//outToNode.writeBytes(serverIP + "\n");
 		outToNode.writeBytes(numOfNodesString + "\n");
+
 		clientSocket.close();
 	}
 

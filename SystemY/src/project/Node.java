@@ -11,7 +11,7 @@ public class Node
 		MulticastSocket multicastSocket =null;
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
-		BufferedOutputStream outToClient = null;
+		
 		try 
 		{	
 			InetAddress mijnIP0=InetAddress.getLocalHost();
@@ -21,34 +21,22 @@ public class Node
 			multicastSocket = new MulticastSocket(6789);
 			multicastSocket.joinGroup(group);
 			byte [] m1 = naam.getBytes();
- 			byte [] m2 = mijnIP.getBytes(); 			
+ 			byte [] m2 = mijnIP.getBytes();		
 			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
-			DatagramPacket messageOut2 = new DatagramPacket(m2, m2.length, group, 6789);
 			
 			multicastSocket.send(messageOut1);	
-			multicastSocket.send(messageOut2);
 			
-			byte[] buffer = new byte[1000];
-			
- 			for(int i=0; i< 2;i++)	//receive 3 messages
-			 {		
-				// get messages from others in group
- 				DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
- 				multicastSocket.receive(messageIn);
- 				String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
- 				System.out.println("Received:" + msg);
-  		}
 			multicastSocket.leaveGroup(group);		
 		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
 		}catch (IOException e){System.out.println("IO: " + e.getMessage());
 		}finally {if(multicastSocket != null) multicastSocket.close();}
+		
 		//set up TCP socket to receive IPaddress from server and # nodes
 		InetAddress serverIP;
 		String amountOfNodes;
 		welcomeSocket = new ServerSocket(6789);
 		connectionSocket = welcomeSocket.accept();
 		BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-		//serverIPstring = inFromNameServer.readLine();
 		amountOfNodes = inFromNameServer.readLine();
 		System.out.println("amount of Nodes: " + amountOfNodes);
 		serverIP=connectionSocket.getInetAddress();
