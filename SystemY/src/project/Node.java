@@ -3,7 +3,10 @@ import java.net.*;
 import java.io.*;
 
 public class Node 
-{
+{	
+	public String nodeNaam;
+	public String prevNode;
+	public String nextNode;
 	
 	public static void main(String[] args)throws Exception
 	{
@@ -14,14 +17,11 @@ public class Node
 		
 		try 
 		{	
-			InetAddress mijnIP0=InetAddress.getLocalHost();
 			String naam="Node1";
-			String mijnIP= mijnIP0.getHostAddress();
 			InetAddress group = InetAddress.getByName("228.5.6.7");
 			multicastSocket = new MulticastSocket(6789);
 			multicastSocket.joinGroup(group);
 			byte [] m1 = naam.getBytes();
- 			byte [] m2 = mijnIP.getBytes();		
 			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
 			
 			multicastSocket.send(messageOut1);	

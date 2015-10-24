@@ -49,7 +49,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 
 				InetAddress addr=messageIn.getAddress();
-				System.out.println("NodeIP:" + addr.getLocalHost());
+				//System.out.println("NodeIP:" + addr.getLocalHost());
 				nodeIP = addr.getHostAddress().toString();
 				
 				nameserver.addNode(msg,nodeIP);
@@ -80,13 +80,13 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
     	nodeMap.put(hashedNN,nodeIP);
     	
-
-    	System.out.println("CURRENT MAP");
+    	System.out.println("************");
+    	System.out.println("CURRENT MAP:");
     	for (Entry<Integer, String> entry : nodeMap.entrySet()) 
     	{
-    	     System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+    	     System.out.println("Key: " + entry.getKey() + ", NodeIP: " + entry.getValue());
     	}
-    	System.out.println("***");
+    	System.out.println("************");
 	}
 
 	public void rmNode(String nodeName, String nodeIP) throws RemoteException {
