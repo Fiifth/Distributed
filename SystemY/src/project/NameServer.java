@@ -48,7 +48,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 
 				InetAddress addr=messageIn.getAddress();
-				//System.out.println("NodeIP:" + addr.getLocalHost());
+				System.out.println("Added NodeIP:" + addr.getLocalHost());
 				nodeIP = addr.getHostAddress().toString();
 				
 				nameserver.addNode(msg,nodeIP);
