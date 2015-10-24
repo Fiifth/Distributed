@@ -17,7 +17,6 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 {
 	private static final long serialVersionUID = 1L;
 	
-	@SuppressWarnings("static-access")
 	public static void main(String[] args) throws IOException{
 		String nodeIP=null;
 		try{
