@@ -12,17 +12,14 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
-//TODO thread starten wanneer nieuwe multicast bericht wordt ontvangen
-//In deze thread moet het IP adres + naam in map gezet worden en een TCP
-//connectie opgezet worden om het aantal nodes terug te geven
 public class NameServer extends UnicastRemoteObject implements NameServerInterface
 {
 	static TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
 	
-	public static void main(String[] args) throws IOException{
-		String nodeIP=null;
-		
+	public static void main(String[] args) throws IOException
+	{
+	
 		setUpRMI();
 		
 		MulticastSocket multicastSocket =null;

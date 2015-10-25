@@ -12,6 +12,7 @@ public class NameServerThread extends Thread {
 	public NameServerThread(DatagramPacket messageIn)
 	{
 		this.messageIn=messageIn;
+		
 	}
 	
 	public void run() {
