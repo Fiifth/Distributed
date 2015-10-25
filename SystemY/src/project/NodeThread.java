@@ -43,14 +43,14 @@ public class NodeThread extends Thread {
 		
 			clientSocket = new Socket(nodeIP,6770);
 			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-			outToNode.writeBytes(MyNextNode + "\n");
+			outToNode.writeBytes(MyNodeID+"-"+MyNextNode + "\n");
 			clientSocket.close();
 		} catch (IOException e) {e.printStackTrace();}	
 		*/
 			
 		}
-		else if( myNodeIDint > newNodeID && newNodeID > myNextNodeint){
-			//Indien deze node zijn id > nieuwe id > volgende id
+		else if( myNodeIDint > newNodeID && newNodeID > myPrevNodeint){
+			//Indien deze node zijn id > nieuwe id > vorige id
 			//i. Update vorige id met ID van nieuwe host
 		}
 

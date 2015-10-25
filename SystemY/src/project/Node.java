@@ -13,7 +13,6 @@ public class Node
 	public static void main(String[] args)throws Exception
 	{
 		nodeName="Node3";
-		//TODO "node3" variabel maken
 		MyNodeID= String.valueOf(Math.abs(nodeName.hashCode()%32768));
 		
 		int numberOfNodes;
@@ -22,11 +21,11 @@ public class Node
 		numberOfNodes=getNameServerRespons();
 		if (numberOfNodes>1)
 		{
-			//TODO we krijgen de volgende node in de cirkel van de vorige node in de cirkel. 
-			//De ID van de node die dit geeft moet dus nog opgehaald worden op vervolgens op te slagen als previous node
-			// ik dacht aan gewoon RMI te gebruiken door de IP te gebruiken om de ID op te zoeken in de map
-			nextNode=getNextNode();
-			prevNode="RMIlookupIguess";
+			
+			String nodes=getNextPrevNode();
+			String[] node = nodes.split("-");
+			nextNode=node[1];
+			prevNode=node[2];
 		}
 		else
 		{
@@ -57,28 +56,23 @@ public class Node
 		//5) Verwijder de node bij de nameserver
 	}
 	
-	private static String getNextNode() 
+	private static String getNextPrevNode() 
 	{
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
-		//InetAddress nodeInet;
-		String nextNode = null;
+		String nextPrevNode = null;
 		
 		try {
 			welcomeSocket = new ServerSocket(6770);
 			connectionSocket = welcomeSocket.accept();
 			welcomeSocket.close();
 			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			nextNode = inFromNameServer.readLine();
-			
-			//nodeInet=connectionSocket.getInetAddress();
-			//NodeIP=serverIP.getHostAddress();
-			//System.out.println("serverIP: " + nameServerIP);
+			nextPrevNode = inFromNameServer.readLine();
 			
 			connectionSocket.close();
 		} 
 		catch (IOException e) {e.printStackTrace();	}
-		return nextNode;
+		return nextPrevNode;
 		
 	}
 
