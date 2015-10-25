@@ -5,15 +5,15 @@ import java.io.*;
 public class Node 
 {	
 	public static String nodeName;
-	public static String prevNode;
-	public static String nextNode;
-	public static String MyNodeID;
+	public static int prevNode;
+	public static int nextNode;
+	public static int MyNodeID;
 	public static String nameServerIP;
 	
 	public static void main(String[] args)throws Exception
 	{
 		nodeName="Node3";
-		MyNodeID= String.valueOf(Math.abs(nodeName.hashCode()%32768));
+		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		
 		int numberOfNodes;
 		
@@ -24,8 +24,8 @@ public class Node
 			
 			String nodes=getNextPrevNode();
 			String[] node = nodes.split("-");
-			nextNode=node[1];
-			prevNode=node[2];
+			nextNode=Integer.parseInt(node[1]);
+			prevNode=Integer.parseInt(node[2]);
 		}
 		else
 		{
