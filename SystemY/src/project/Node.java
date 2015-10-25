@@ -22,17 +22,41 @@ public class Node
 		
 		sendMulticast(nodeName);
 		int numberOfNodes=getNameServerRespons();
-		if (numberOfNodes>1)
+		if (numberOfNodes>2)
 		{
-			System.out.println("getting nodes");
+			System.out.println("Getting nodes...");
 			String nodes=getNextPrevNode();
 			String[] node = nodes.split("-");
 			nextNode=Integer.parseInt(node[1]);
 			prevNode=Integer.parseInt(node[2]);
+			System.out.println("I am node number " + numberOfNodes);
 			System.out.print("My next node:  ");
 			System.out.println(nextNode);
 			System.out.print("My prev node: ");
 			System.out.println(prevNode);
+		}
+		else if(numberOfNodes == 2)
+		{
+			System.out.println("Getting node...");
+			String nodes=getNextPrevNode();
+			System.out.println(nodes);
+			String[] node = nodes.split("-");
+			nextNode=Integer.parseInt(node[1]);
+			prevNode=Integer.parseInt(node[2]);
+			System.out.println("I am node number two");
+			if(nextNode > MyNodeID)
+			{
+				System.out.print("My next node:  ");
+				System.out.println(nextNode);
+				System.out.print("I have no previous nodes");
+			}
+			else if (prevNode < MyNodeID)
+			{
+				System.out.print("My prev node: ");
+				System.out.println(prevNode);
+				System.out.print("I have no next nodes");
+			}			
+			
 		}
 		else
 		{
@@ -76,8 +100,7 @@ public class Node
 			connectionSocket = welcomeSocket.accept();
 			welcomeSocket.close();
 			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			nextPrevNode = inFromNameServer.readLine();
-			
+			nextPrevNode = inFromNameServer.readLine();			
 			connectionSocket.close();
 		} 
 		catch (IOException e) {e.printStackTrace();	}

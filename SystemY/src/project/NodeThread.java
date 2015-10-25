@@ -38,14 +38,14 @@ public class NodeThread extends Thread {
 			//2) Antwoordt aan de opstartende node met de originele huidige en volgende id met onderstaande code
 			Socket clientSocket;
 			try {
-				Thread.sleep(5000);
+				//Thread.sleep(5000);
 				//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
 				//voorlopig zonder sleep
 				clientSocket = new Socket(nodeIP,6770);
 				DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 				outToNode.writeBytes(myNodeID+"-"+myNextNode + "\n");
 				clientSocket.close();
-			} catch (IOException e) {e.printStackTrace();} catch (InterruptedException e) {
+			} catch (IOException e) {e.printStackTrace();//} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
