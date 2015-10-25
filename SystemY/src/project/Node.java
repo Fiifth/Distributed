@@ -12,23 +12,31 @@ public class Node
 	
 	public static void main(String[] args)throws Exception
 	{
-		nodeName="Node2";
-		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		
-		int numberOfNodes;
+		nodeName="Node10";
+		MyNodeID=Math.abs(nodeName.hashCode()%32768);
+		System.out.print("My name is: ");
+		System.out.println(nodeName);
+		System.out.print("My id is: ");
+		System.out.println(MyNodeID);
 		
 		sendMulticast(nodeName);
-		numberOfNodes=getNameServerRespons();
+		int numberOfNodes=getNameServerRespons();
 		if (numberOfNodes>1)
 		{
-			
+			System.out.println("getting nodes");
 			String nodes=getNextPrevNode();
 			String[] node = nodes.split("-");
 			nextNode=Integer.parseInt(node[1]);
 			prevNode=Integer.parseInt(node[2]);
+			System.out.print("My next node:  ");
+			System.out.println(nextNode);
+			System.out.print("My prev node: ");
+			System.out.println(prevNode);
 		}
 		else
 		{
+			System.out.println("I am the first node");
 			 prevNode=MyNodeID;
 			 nextNode=MyNodeID;
 		}
@@ -43,9 +51,10 @@ public class Node
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			multicastSocket.receive(messageIn);//blocks
+			System.out.println("new node connecting");
 			//start thread
 			NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
-			c.start();               
+			c.start();
 		}
 		//TODO uiteindelijk moet het luistere naar de multicast om dan threads op te starten ook in een thread komen anders kunde nooit een node late stoppen
 		//TODO er moet ook een thread gemaakt worden die luistert naar nodes die weg willen gaan 

@@ -27,29 +27,37 @@ public class NodeThread extends Thread {
 		String nodeIP = addr.getHostAddress().toString();
 
 		int newNodeID=Math.abs(msg.hashCode()%32768);
-		
-		if(myNodeID < newNodeID && newNodeID < myNextNode){
-			
-			//1) Update volgende id met de hash van de nieuwe node
+		System.out.println(newNodeID);
+		if(myNodeID < newNodeID && newNodeID < myNextNode)
+			//TODO OR if myprev==mynext==mynodeid (nieuwe node is tweede node)
+		{
+			System.out.println("The new node will be my new next node");
 
 			Node.nextNode=newNodeID;
 			
 			//2) Antwoordt aan de opstartende node met de originele huidige en volgende id met onderstaande code
 			Socket clientSocket;
 			try {
+				Thread.sleep(5000);
 				//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
 				//voorlopig zonder sleep
 				clientSocket = new Socket(nodeIP,6770);
 				DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 				outToNode.writeBytes(myNodeID+"-"+myNextNode + "\n");
 				clientSocket.close();
-			} catch (IOException e) {e.printStackTrace();}	
+			} catch (IOException e) {e.printStackTrace();} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		
 		}
-		else if( myNodeID > newNodeID && newNodeID > myPrevNode){
-			Node.prevNode=newNodeID;		
+		else if( myNodeID > newNodeID && newNodeID > myPrevNode)
+		{
+			Node.prevNode=newNodeID;	
+			System.out.println("The new node will be my new previous node");
 		}
 
+		
 	}
 
 }
