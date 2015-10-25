@@ -9,15 +9,15 @@ import java.rmi.RemoteException;
 
 public class NodeThread extends Thread {
 	DatagramPacket messageIn;
-	String MyNextNode;
+	String myNextNode;
 	String myPrevNode;
-	String MyNodeID;
-	public NodeThread(DatagramPacket messageIn, String MyNextNode,String myPrevNode,String MyNodeID)
+	String myNodeID;
+	public NodeThread(DatagramPacket messageIn, String myNextNode,String myPrevNode,String myNodeID)
 	{
 		this.messageIn=messageIn;
-		this.MyNextNode=MyNextNode;
+		this.myNextNode=myNextNode;
 		this.myPrevNode=myPrevNode;
-		this.MyNodeID=MyNodeID;
+		this.myNodeID=myNodeID;
 		
 	}
 	
@@ -28,6 +28,12 @@ public class NodeThread extends Thread {
 		
 		//TODO hier moet bepaald worden of de nieuwe node een verandering veroorzaakt voor de bestaande node die de thread geopend heeft
 		//Indien deze node zijn id < nieuwe id < volgende id
+		int newNodeID=Math.abs(msg.hashCode()%32768);
+		int myNodeIDint=Integer.parseInt(myNodeID);
+		int myNextNodeint=Integer.parseInt(myNextNode);
+		int myPrevNodeint=Integer.parseInt(myPrevNode);
+		if(myNodeIDint < newNodeID && newNodeID < myNextNodeint){
+			
 			//1) Update volgende id met de hash van de nieuwe node
 			//2) Antwoordt aan de opstartende node met de originele huidige en volgende id met onderstaande code
 		/*
@@ -41,9 +47,12 @@ public class NodeThread extends Thread {
 			clientSocket.close();
 		} catch (IOException e) {e.printStackTrace();}	
 		*/
-		
-		//Indien deze node zijn id > nieuwe id > volgende id
+			
+		}
+		else if( myNodeIDint > newNodeID && newNodeID > myNextNodeint){
+			//Indien deze node zijn id > nieuwe id > volgende id
 			//i. Update vorige id met ID van nieuwe host
+		}
 
 	}
 
