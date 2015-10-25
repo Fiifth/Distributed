@@ -13,9 +13,8 @@ public class Node
 	public static void main(String[] args)throws Exception
 	{
 		nodeName="Node3";
-		//TODO MyNodeID bepaalen door hash toe tepassen op deze naam door gwn da stukje code van nameserver hier ook te zette
+		//TODO "node3" variabel maken
 		MyNodeID= String.valueOf(Math.abs(nodeName.hashCode()%32768));
-		System.out.println("MyNodeID:" + MyNodeID);
 		
 		int numberOfNodes;
 		
@@ -42,12 +41,12 @@ public class Node
 		
 		while(true)
 		{
-		byte[] buffer = new byte[100];
-		DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
-		multicastSocket.receive(messageIn);//blocks
-		//start thread
-		NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
-		c.start();               
+			byte[] buffer = new byte[100];
+			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+			multicastSocket.receive(messageIn);//blocks
+			//start thread
+			NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
+			c.start();               
 		}
 		//TODO uiteindelijk moet het luistere naar de multicast om dan threads op te starten ook in een thread komen anders kunde nooit een node late stoppen
 		//TODO er moet ook een thread gemaakt worden die luistert naar nodes die weg willen gaan 
