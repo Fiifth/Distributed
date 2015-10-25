@@ -29,7 +29,6 @@ public class NodeThread extends Thread {
 		int newNodeID=Math.abs(msg.hashCode()%32768);
 		System.out.println(newNodeID);
 		if(myNodeID < newNodeID && newNodeID < myNextNode)
-			//TODO OR if myprev==mynext==mynodeid (nieuwe node is tweede node)
 		{
 			System.out.println("The new node will be my new next node");
 
@@ -50,6 +49,12 @@ public class NodeThread extends Thread {
 				e.printStackTrace();
 			}	
 		
+		}
+		
+		//nieuwe node = tweede node
+		else if(myPrevNode == myNextNode && myNextNode == myNodeID)
+		{
+			//TODOcorrect aanvullen => in node fixen
 		}
 		else if( myNodeID > newNodeID && newNodeID > myPrevNode)
 		{

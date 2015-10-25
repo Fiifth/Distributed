@@ -13,7 +13,7 @@ public class Node
 	public static void main(String[] args)throws Exception
 	{
 		
-		nodeName="Node10";
+		nodeName="Node12";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
@@ -22,10 +22,13 @@ public class Node
 		
 		sendMulticast(nodeName);
 		int numberOfNodes=getNameServerRespons();
+		//fuckt nog momenteel bij >1 node, bij getNextPrevNode(), kan evengoed aan nodeThread liggen 
+		//TODO in nodethread send beter fixen (zie daar)
 		if (numberOfNodes>2)
 		{
 			System.out.println("Getting nodes...");
 			String nodes=getNextPrevNode();
+			System.out.println("elo?");
 			String[] node = nodes.split("-");
 			nextNode=Integer.parseInt(node[1]);
 			prevNode=Integer.parseInt(node[2]);
@@ -39,6 +42,7 @@ public class Node
 		{
 			System.out.println("Getting node...");
 			String nodes=getNextPrevNode();
+			System.out.println("elo?");
 			System.out.println(nodes);
 			String[] node = nodes.split("-");
 			nextNode=Integer.parseInt(node[1]);
