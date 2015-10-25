@@ -29,12 +29,12 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		
 		while(true)
 		{
-		byte[] buffer = new byte[100];
-		DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
-		multicastSocket.receive(messageIn);//blocks
-		//start thread
-		NameServerThread c =new NameServerThread(messageIn);
-		c.start();               
+			byte[] buffer = new byte[100];
+			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+			multicastSocket.receive(messageIn);//blocks
+			//start thread
+			NameServerThread c =new NameServerThread(messageIn);
+			c.start();               
 		}
 		//multicastSocket.close();
 	}
@@ -92,7 +92,6 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		int hashedFN = Math.abs(filename.hashCode()%32768);
 		int destinationKey=nodeMap.lowerKey(hashedFN);
 		if (destinationKey==0) destinationKey=nodeMap.lastKey();
-		return nodeMap.get(destinationKey);
-		
+		return nodeMap.get(destinationKey);		
 	}
 }

@@ -14,7 +14,8 @@ public class Node
 	{
 		nodeName="Node3";
 		//TODO MyNodeID bepaalen door hash toe tepassen op deze naam door gwn da stukje code van nameserver hier ook te zette
-		//MyNodeID=
+		MyNodeID= String.valueOf(Math.abs(nodeName.hashCode()%32768));
+		System.out.println("MyNodeID:" + MyNodeID);
 		
 		int numberOfNodes;
 		
