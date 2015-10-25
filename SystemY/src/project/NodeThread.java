@@ -33,23 +33,26 @@ public class NodeThread extends Thread {
 		if(myNodeID < newNodeID && newNodeID < myNextNode){
 			
 			//1) Update volgende id met de hash van de nieuwe node
+			myNextNode=newNodeID;
+			
 			//2) Antwoordt aan de opstartende node met de originele huidige en volgende id met onderstaande code
-		/*
-		Socket clientSocket;
-		try {
-		//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
+			Socket clientSocket;
+			try {
+				//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
+				//voorlopig zonder sleep
+				clientSocket = new Socket(nodeIP,6770);
+				DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
+				outToNode.writeBytes(myNodeID+"-"+myNextNode + "\n");
+				clientSocket.close();
+			} catch (IOException e) {e.printStackTrace();}	
 		
-			clientSocket = new Socket(nodeIP,6770);
-			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-			outToNode.writeBytes(MyNodeID+"-"+MyNextNode + "\n");
-			clientSocket.close();
-		} catch (IOException e) {e.printStackTrace();}	
-		*/
 			
 		}
 		else if( myNodeID > newNodeID && newNodeID > myPrevNode){
 			//Indien deze node zijn id > nieuwe id > vorige id
 			//i. Update vorige id met ID van nieuwe host
+			myPrevNode=newNodeID;
+			
 		}
 
 	}
