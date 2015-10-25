@@ -25,15 +25,14 @@ public class NodeThread extends Thread {
 		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
-		
-		//TODO hier moet bepaald worden of de nieuwe node een verandering veroorzaakt voor de bestaande node die de thread geopend heeft
-		//Indien deze node zijn id < nieuwe id < volgende id
+
 		int newNodeID=Math.abs(msg.hashCode()%32768);
 		
 		if(myNodeID < newNodeID && newNodeID < myNextNode){
 			
 			//1) Update volgende id met de hash van de nieuwe node
-			myNextNode=newNodeID;
+
+			Node.nextNode=newNodeID;
 			
 			//2) Antwoordt aan de opstartende node met de originele huidige en volgende id met onderstaande code
 			Socket clientSocket;
@@ -46,13 +45,9 @@ public class NodeThread extends Thread {
 				clientSocket.close();
 			} catch (IOException e) {e.printStackTrace();}	
 		
-			
 		}
 		else if( myNodeID > newNodeID && newNodeID > myPrevNode){
-			//Indien deze node zijn id > nieuwe id > vorige id
-			//i. Update vorige id met ID van nieuwe host
-			myPrevNode=newNodeID;
-			
+			Node.prevNode=newNodeID;		
 		}
 
 	}
