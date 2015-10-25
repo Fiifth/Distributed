@@ -1,17 +1,17 @@
 package project;
 import java.net.*;
 import java.io.*;
-
+//TODO bij ontvangen multicast nieuwe node: update next/previous node
 public class Node 
 {	
 	public static String nodeName;
 	public String prevNode;
 	public String nextNode;
 	public static String nameServerIP;
-	//TODO bij ontvangen multicast nieuwe node: update next/previous node
+	
 	public static void main(String[] args)throws Exception
 	{
-		nodeName="Node2";
+		nodeName="Node3";
 		int numberOfNodes;
 		
 		sendMulticast(nodeName);
@@ -43,7 +43,7 @@ public class Node
 		int nodes=0;
 		
 		try {
-			welcomeSocket = new ServerSocket(6789);
+			welcomeSocket = new ServerSocket(6790);
 			connectionSocket = welcomeSocket.accept();
 			welcomeSocket.close();
 			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));

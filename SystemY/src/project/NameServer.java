@@ -12,16 +12,58 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
-
+//TODO thread starten wanneer nieuwe multicast bericht wordt ontvangen
+//In deze thread moet het IP adres + naam in map gezet worden en een TCP
+//connectie opgezet worden om het aantal nodes terug te geven
 public class NameServer extends UnicastRemoteObject implements NameServerInterface
 {
+	static TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
 	
 	public static void main(String[] args) throws IOException{
 		String nodeIP=null;
+		
+		setUpRMI();
+		
+		MulticastSocket multicastSocket =null;
+		InetAddress group = InetAddress.getByName("228.5.6.7");
+		multicastSocket = new MulticastSocket(6789);
+		multicastSocket.joinGroup(group);
+		
+		while(true)
+		{
+		byte[] buffer = new byte[100];
+		DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
+		multicastSocket.receive(messageIn);//blocks
+		
+		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+		InetAddress addr=messageIn.getAddress();
+		nodeIP = addr.getHostAddress().toString();
+		System.out.println("Added NodeIP:" + nodeIP);
+		NameServer nameserver = new NameServer();
+		nameserver.addNode(msg,nodeIP);
+		
+		Integer numberOfNodes = NameServer.nodeMap.size(); 
+		String numOfNodesString = numberOfNodes.toString();
+		Socket clientSocket = new Socket(nodeIP,6790);
+		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
+		outToNode.writeBytes(numOfNodesString + "\n");
+		clientSocket.close();
+		}
+		//multicastSocket.close();
+	}
+
+	protected NameServer() throws RemoteException 
+	{
+		super();
+	}
+
+	public static void setUpRMI()
+	{
 		try{
-			System.setProperty("java.security.policy","file:$git/Distributed/SystemY/bin/project/security.policy");
-			System.setProperty("java.rmi.server.codebase","file:$git/Distributed/SystemY/bin/project/NameServer.class");
+			System.setProperty("java.security.policy","file:${workspace_loc}/Distributed/SystemY/bin/project/security.policy");
+			System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/project/NameServer.class");
+			
 			LocateRegistry.createRegistry(1099);
 			NameServerInterface nameint = new NameServer();
 			Naming.rebind("//localhost/NameServer", nameint);
@@ -33,46 +75,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			System.out.println("NameServer error: " + e.getMessage());
 			e.printStackTrace();
 			}
-		MulticastSocket multicastSocket =null;
-		InetAddress group = InetAddress.getByName("228.5.6.7");
-		multicastSocket = new MulticastSocket(6789);
-		multicastSocket.joinGroup(group);
-		NameServer nameserver = new NameServer();
-		byte[] buffer = new byte[10];
-		for(int i=0; i< 1;i++)	//receive 1 messages
-		 {					
-
-			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
-			
-			multicastSocket.receive(messageIn);
-			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-
-				InetAddress addr=messageIn.getAddress();
-				System.out.println("Added NodeIP:" + addr.getLocalHost());
-				nodeIP = addr.getHostAddress().toString();
-				
-				nameserver.addNode(msg,nodeIP);
-
-				
-			//TODO fixen vorige node data verwerken 
-		}
-		multicastSocket.close();
-
-		Integer numberOfNodes = nameserver.nodeMap.size(); //includes the new node
-		String numOfNodesString = numberOfNodes.toString();
-		Socket clientSocket = new Socket(nodeIP,6789);
-		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-		outToNode.writeBytes(numOfNodesString + "\n");
-
-		clientSocket.close();
 	}
-
-	protected NameServer() throws RemoteException 
-	{
-		super();
-	}
-
-	TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	
 
 	public void addNode(String nodeName, String nodeIP) throws RemoteException {
