@@ -35,20 +35,9 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		byte[] buffer = new byte[100];
 		DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 		multicastSocket.receive(messageIn);//blocks
-		
-		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-		InetAddress addr=messageIn.getAddress();
-		nodeIP = addr.getHostAddress().toString();
-		System.out.println("Added NodeIP:" + nodeIP);
-		NameServer nameserver = new NameServer();
-		nameserver.addNode(msg,nodeIP);
-		
-		Integer numberOfNodes = NameServer.nodeMap.size(); 
-		String numOfNodesString = numberOfNodes.toString();
-		Socket clientSocket = new Socket(nodeIP,6790);
-		DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-		outToNode.writeBytes(numOfNodesString + "\n");
-		clientSocket.close();
+		//start thread
+		NameServerThread c =new NameServerThread(messageIn);
+		c.start();               
 		}
 		//multicastSocket.close();
 	}
