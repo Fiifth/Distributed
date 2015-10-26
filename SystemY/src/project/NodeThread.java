@@ -28,41 +28,42 @@ public class NodeThread extends Thread {
 
 		int newNodeID=Math.abs(msg.hashCode()%32768);
 		System.out.println(newNodeID);
+		
 		if(myNodeID < newNodeID && newNodeID < myNextNode)
 		{
 			System.out.println("The new node will be my new next node");
-
 			Node.nextNode=newNodeID;
-			
-			//2) Antwoordt aan de opstartende node met de originele huidige en volgende id met onderstaande code
-			Socket clientSocket;
-			try {
-				//Thread.sleep(5000);
-				//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
-				//voorlopig zonder sleep
-				clientSocket = new Socket(nodeIP,6770);
-				DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-				outToNode.writeBytes(myNodeID+"-"+myNextNode + "\n");
-				clientSocket.close();
-			} catch (IOException e) {e.printStackTrace();//} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		
+			sendToNode(myNodeID+"-"+myNextNode,nodeIP);
 		}
-		
-		//nieuwe node = tweede node
 		else if(myPrevNode == myNextNode && myNextNode == myNodeID)
 		{
-			//TODOcorrect aanvullen => in node fixen
+			sendToNode(myNodeID+"-"+myNodeID,nodeIP);
+			Node.prevNode=newNodeID;
+			Node.nextNode=newNodeID;
 		}
 		else if( myNodeID > newNodeID && newNodeID > myPrevNode)
 		{
 			Node.prevNode=newNodeID;	
 			System.out.println("The new node will be my new previous node");
 		}
-
+		//TODO op het einde van de cirkel noes toevoegen
 		
+	}
+	public void sendToNode(String nodes, String nodeIP)
+	{
+		Socket clientSocket;
+		try {
+			//Thread.sleep(5000);
+			//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
+			//voorlopig zonder sleep
+			clientSocket = new Socket(nodeIP,6770);
+			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
+			outToNode.writeBytes(nodes+ "\n");
+			clientSocket.close();
+		} catch (IOException e) {e.printStackTrace();//} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 }
