@@ -13,7 +13,7 @@ public class Node
 	public static void main(String[] args)throws Exception
 	{
 		
-		nodeName="Node12";
+		nodeName="Node20";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
@@ -22,7 +22,7 @@ public class Node
 		
 		sendMulticast(nodeName);
 		int numberOfNodes=getNameServerRespons();
-		if (numberOfNodes>2)
+		if (numberOfNodes>1)
 		{
 			System.out.println("Getting nodes...");
 			String nodes=getNextPrevNode();

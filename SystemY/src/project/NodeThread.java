@@ -46,22 +46,32 @@ public class NodeThread extends Thread {
 			Node.prevNode=newNodeID;	
 			System.out.println("The new node will be my new previous node");
 		}
-		//TODO op het einde van de cirkel noes toevoegen
+		else if( myNodeID > myPrevNode && newNodeID > myPrevNode )
+		{
+			Node.prevNode=newNodeID;	
+			System.out.println("The new node will be my new previous node");
+		}
+		else if(myNodeID < newNodeID && myNodeID < myNextNode)
+		{
+			System.out.println("The new node will be my new next node");
+			Node.nextNode=newNodeID;
+			sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+		}
 		
 	}
 	public void sendToNode(String nodes, String nodeIP)
 	{
 		Socket clientSocket;
 		try {
-			//Thread.sleep(5000);
+			Thread.sleep(1000);
 			//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
 			//voorlopig zonder sleep
 			clientSocket = new Socket(nodeIP,6770);
 			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 			outToNode.writeBytes(nodes+ "\n");
 			clientSocket.close();
-		} catch (IOException e) {e.printStackTrace();//} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException | InterruptedException e) {e.printStackTrace();//} catch (InterruptedException e) {
+			
 			e.printStackTrace();
 		}	
 	}
