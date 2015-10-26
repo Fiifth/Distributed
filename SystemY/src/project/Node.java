@@ -22,8 +22,6 @@ public class Node
 		
 		sendMulticast(nodeName);
 		int numberOfNodes=getNameServerRespons();
-		//fuckt nog momenteel bij >1 node, bij getNextPrevNode(), kan evengoed aan nodeThread liggen 
-		//TODO in nodethread send beter fixen (zie daar)
 		if (numberOfNodes>2)
 		{
 			System.out.println("Getting nodes...");
