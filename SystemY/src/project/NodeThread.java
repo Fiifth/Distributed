@@ -29,28 +29,33 @@ public class NodeThread extends Thread {
 		int newNodeID=Math.abs(msg.hashCode()%32768);
 		System.out.println(newNodeID);
 		
+		//i am the previous node of new node => new node = next node
 		if(myNodeID < newNodeID && newNodeID < myNextNode)
 		{
 			System.out.println("The new node will be my new next node");
 			Node.nextNode=newNodeID;
 			sendToNode(myNodeID+"-"+myNextNode,nodeIP);
 		}
+		//i am the first node
 		else if(myPrevNode == myNextNode && myNextNode == myNodeID)
 		{
 			sendToNode(myNodeID+"-"+myNodeID,nodeIP);
 			Node.prevNode=newNodeID;
 			Node.nextNode=newNodeID;
 		}
+		//i am the next node of new node => new node = prev node
 		else if( myNodeID > newNodeID && newNodeID > myPrevNode)
 		{
 			Node.prevNode=newNodeID;	
 			System.out.println("The new node will be my new previous node");
 		}
+		//new node = between my prev and me => is new prev node
 		else if( myNodeID > myPrevNode && newNodeID > myPrevNode )
 		{
 			Node.prevNode=newNodeID;	
 			System.out.println("The new node will be my new previous node");
 		}
+		//new node = between my next and me => is new next node
 		else if(myNodeID < newNodeID && myNodeID < myNextNode)
 		{
 			System.out.println("The new node will be my new next node");

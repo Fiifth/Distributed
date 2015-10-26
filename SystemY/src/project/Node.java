@@ -13,7 +13,7 @@ public class Node
 	public static void main(String[] args)throws Exception
 	{
 		
-		nodeName="Node20";
+		nodeName="Node18";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
@@ -26,12 +26,11 @@ public class Node
 		{
 			System.out.println("Getting nodes...");
 			String nodes=getNextPrevNode();
-			System.out.println("elo?");
 			String[] node = nodes.split("-");
 			nextNode=Integer.parseInt(node[0]);
 			prevNode=Integer.parseInt(node[1]);
 			System.out.println("I am node number " + numberOfNodes);
-			System.out.print("My next node:  ");
+			System.out.print("My next node: ");
 			System.out.println(nextNode);
 			System.out.print("My prev node: ");
 			System.out.println(prevNode);
@@ -53,7 +52,7 @@ public class Node
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			multicastSocket.receive(messageIn);//blocks
-			System.out.println("new node connecting");
+			System.out.println("New node connecting");
 			//start thread
 			NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
 			c.start();
@@ -117,10 +116,10 @@ public class Node
 			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			String amountOfNodes = inFromNameServer.readLine();
 			nodes=Integer.parseInt(amountOfNodes);
-			System.out.println("amount of Nodes: " + amountOfNodes);
+			System.out.println("Amount of Nodes: " + amountOfNodes);
 			serverIP=connectionSocket.getInetAddress();
 			nameServerIP=serverIP.getHostAddress();
-			System.out.println("serverIP: " + nameServerIP);
+			System.out.println("ServerIP: " + nameServerIP);
 			
 			connectionSocket.close();
 		} 
