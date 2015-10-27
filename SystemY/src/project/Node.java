@@ -8,6 +8,8 @@ public class Node
 	public static int prevNode;
 	public static int nextNode;
 	public static int MyNodeID;
+	public static int toLeave;
+	public static String castMsg;
 	public static String nameServerIP;
 	
 	public static void main(String[] args)throws Exception
@@ -19,7 +21,10 @@ public class Node
 		System.out.print("My id is: ");
 		System.out.println(MyNodeID);
 		
-		sendMulticast(nodeName);
+		//if node is joining => castmsg = 0-nodeName
+		//if node is leaving => castmsg = 1-nodeName
+		
+		sendMulticast(castMsg);
 		int numberOfNodes=getNameServerRespons();
 		if (numberOfNodes>1)
 		{
@@ -46,16 +51,36 @@ public class Node
 		multicastSocket = new MulticastSocket(6789);
 		multicastSocket.joinGroup(group);
 		
-		while(true)
+		boolean boo = true;
+		while(boo == true)
 		{
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			multicastSocket.receive(messageIn);//blocks
-			//if multicast is from own node and 
-			System.out.println("New node connecting");
-			//start thread
-			NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
-			c.start();
+			//check if node wants to join or leave
+			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+			String[] node = msgs.split("-");
+			toLeave=Integer.parseInt(node[0]);
+			InetAddress receivedaddr=messageIn.getAddress();
+			InetAddress ownaddr=InetAddress.getLocalHost();
+			//TODO if multicast is from own node and asks to remove node => out of loop
+			//received multicast is from myself
+			if(receivedaddr == ownaddr)
+			{
+				//i want to leave
+				if(toLeave == 1)
+				{
+					boo = false;
+				}
+			}
+			//received multicast is from new node
+			else
+			{
+				System.out.println("New node connecting");
+				//start thread
+				NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
+				c.start();
+			}
 		}
 		//TODO uiteindelijk moet het luistere naar de multicast om dan threads op te starten ook in een thread komen anders kunde nooit een node late stoppen
 		//TODO er moet ook een thread gemaakt worden die luistert naar nodes die weg willen gaan 
