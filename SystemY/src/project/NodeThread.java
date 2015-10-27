@@ -25,8 +25,9 @@ public class NodeThread extends Thread {
 		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
+		String[] node = msg.split("-");
 
-		int newNodeID=Math.abs(msg.hashCode()%32768);
+		int newNodeID=Math.abs(node[1].hashCode()%32768);
 		System.out.println(newNodeID);
 		
 		//i am the previous node of new node => new node = next node

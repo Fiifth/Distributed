@@ -21,8 +21,10 @@ public class Node
 		System.out.print("My id is: ");
 		System.out.println(MyNodeID);
 		
+		//TODO castMsg fixen adhv user input voor leaving en dan nodename bijvoegen
 		//if node is joining => castmsg = 0-nodeName
 		//if node is leaving => castmsg = 1-nodeName
+		
 		
 		sendMulticast(castMsg);
 		int numberOfNodes=getNameServerRespons();
