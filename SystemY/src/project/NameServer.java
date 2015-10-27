@@ -81,6 +81,13 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	public void rmNode(String nodeName, String nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
 		nodeMap.remove(hashedNN);
+		System.out.println("************");
+    	System.out.println("CURRENT MAP:");
+    	for (Entry<Integer, String> entry : nodeMap.entrySet()) 
+    	{
+    	     System.out.println("Key: " + entry.getKey() + ", NodeIP: " + entry.getValue());
+    	}
+    	System.out.println("************");
 	}
 
 	public TreeMap<Integer, String> showList() throws RemoteException {

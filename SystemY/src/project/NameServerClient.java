@@ -18,10 +18,14 @@ public class NameServerClient {
 			InetAddress IPaddress1 = InetAddress.getByName("192.168.1.1");
 			InetAddress IPaddress2 = InetAddress.getByName("192.168.1.2");
 			InetAddress IPaddress3 = InetAddress.getByName("192.168.1.3");
-			
+			//voeg een Node toe met een unieke naam
 			nameserver.addNode("test2", "192.168.1.2");
-			//nameserver.addNode("test3", IPaddress3);
-			//nameserver.addNode("test2", IPaddress2);
+			//voeg een Node toe met een naam die reeds bestaat
+			nameserver.addNode("test2", "192.168.1.2");
+			//verwijder een node uit de map
+			nameserver.rmNode("test2", "192.168.1.2");
+			//probeer een node te verwijderen uit de map, die niet bestaat
+			nameserver.rmNode("test3", "10.1.1.1");
 			
 		}catch(Exception e) {
 			System.out.println("NameClient exception: " + e);
