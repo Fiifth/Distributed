@@ -11,8 +11,7 @@ public class Node
 	public static String nameServerIP;
 	
 	public static void main(String[] args)throws Exception
-	{
-		
+	{		
 		nodeName="Node18";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
@@ -52,6 +51,7 @@ public class Node
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			multicastSocket.receive(messageIn);//blocks
+			//if multicast is from own node and 
 			System.out.println("New node connecting");
 			//start thread
 			NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
