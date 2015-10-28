@@ -7,12 +7,12 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
-public class NodeThread extends Thread {
+public class NodeOrderThread extends Thread {
 	DatagramPacket messageIn;
 	int myNextNode;
 	int myPrevNode;
 	int myNodeID;
-	public NodeThread(DatagramPacket messageIn, int myNextNode,int myPrevNode,int myNodeID)
+	public NodeOrderThread(DatagramPacket messageIn, int myNextNode,int myPrevNode,int myNodeID)
 	{
 		this.messageIn=messageIn;
 		this.myNextNode=myNextNode;

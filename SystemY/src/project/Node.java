@@ -80,7 +80,7 @@ public class Node
 			{
 				System.out.println("New node connecting");
 				//start thread
-				NodeThread c =new NodeThread(messageIn,nextNode, prevNode, MyNodeID);
+				NodeOrderThread c =new NodeOrderThread(messageIn,nextNode, prevNode, MyNodeID);
 				c.start();
 			}
 		}
