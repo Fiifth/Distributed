@@ -1,7 +1,14 @@
 package project;
 
+
+
+
+
 public class SendReplicateFileThread 
 {
+	
+
+	 
 	public SendReplicateFileThread()
 	{
 		
@@ -10,4 +17,5 @@ public class SendReplicateFileThread
 	{
 		
 	}
+	
 }
