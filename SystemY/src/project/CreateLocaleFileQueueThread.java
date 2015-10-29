@@ -7,12 +7,6 @@ import java.util.Queue;
 
 public class CreateLocaleFileQueueThread extends Thread
 {
-	public static void main(String[] args) throws InterruptedException{
-		CreateLocaleFileQueueThread test = new CreateLocaleFileQueueThread();
-		test.searchFilesToAdd();
-		test.sleep(5000);
-		test.updateQueueWithNewFiles();
-	}
 	Queue<String> fnQueue;
 	ArrayList<String> fnList;
 	String dirToSearch;
