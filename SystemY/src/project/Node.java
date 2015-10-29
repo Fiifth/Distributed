@@ -20,13 +20,14 @@ public class Node
 		System.out.println(nodeName);
 		System.out.print("My id is: ");
 		System.out.println(MyNodeID);
+		System.out.println("To stop this node, type quit.");
 		
 		//TODO castMsg fixen adhv user input voor leaving en dan nodename bijvoegen
 		//if node is joining => castmsg = 0-nodeName
-		//if node is leaving => castmsg = 1-nodeName
+		//if node is leaving => castmsg = 1-nodeName-myPrevNode-myNextNode
 		
 		
-		sendMulticast(castMsg);
+		//sendMulticast(castMsg);
 		int numberOfNodes=getNameServerRespons();
 		if (numberOfNodes>1)
 		{
@@ -65,6 +66,7 @@ public class Node
 			toLeave=Integer.parseInt(node[0]);
 			InetAddress receivedaddr=messageIn.getAddress();
 			InetAddress ownaddr=InetAddress.getLocalHost();
+			
 			//TODO if multicast is from own node and asks to remove node => out of loop
 			//received multicast is from myself
 			if(receivedaddr == ownaddr)
