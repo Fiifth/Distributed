@@ -8,15 +8,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TreeMap;
 
-public class ReceiveQueueThread extends Thread implements ReceiveQueueThreadInterface
+public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQueueThreadInterface, Runnable 
 {
 
 	private static final long serialVersionUID = 1L;
 	Queue<String> myQueue = new LinkedList<String>();
 	
-	public ReceiveQueueThread()
+	public ReceiveQueueThread() throws RemoteException
 	{
-		
+		super();
 	}
 	
 	public void run() 
