@@ -13,7 +13,7 @@ public class Node
 	
 	public static void main(String[] args)throws Exception
 	{		
-		nodeName="Node22";
+		nodeName="Node26";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
@@ -64,14 +64,7 @@ public class Node
 			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 			String[] msg = msgs.split("-");
 			toLeave=Integer.parseInt(msg[0]);
-			//InetAddress receivedInet=messageIn.getAddress();
-			//String receivedaddr = receivedInet.getHostAddress();
-			//InetAddress ownInet=InetAddress.getLocalHost();
-			//String ownaddr = ownInet.getHostAddress();
-			
-			
-			//TODO  addressvergelijking fixen!
-			
+					
 			if(toLeave == 1)
 			{
 				//if received nodename = own node name => remove node
@@ -79,6 +72,7 @@ public class Node
 				{
 					stay = false;
 					multicastSocket.close();
+					
 				}
 			}
 			else

@@ -26,20 +26,18 @@ public class NodeOrderThread extends Thread {
 		//message = 0-nodeName or 1-nodename-prevnode-nextnode
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
-		String[] node = msg.split("-");
-		//node[0]=toleave, node[1] = his name, node[2] = hisprev, node[3] = hisnext
-		int toLeave = Integer.parseInt(node[0]);
-		//nodeName to nodeID
-		int newNodeID= Math.abs(node[1].hashCode()%32768);
-		
-		System.out.println(newNodeID);
+		String[] msgs = msg.split("-");
+		//node[0]=toleave, node[1] = his name, node[2] = hisprevID, node[3] = hisnextID
+		int toLeave = Integer.parseInt(msgs[0]);
+		//his nodeName to nodeID to compare with his next and his prev
+		int newNodeID= Math.abs(msgs[1].hashCode()%32768);
 		
 		//removing node
 		if(toLeave == 1)
 		{
-			//TODO naar ints, zonder hash (parse)
-			int newPrevID=Integer.parseInt(node[2]);
-			int newNextID=Integer.parseInt(node[2]);
+			//Strings van ID's naar int parsen
+			int newPrevID=Integer.parseInt(msgs[2]);
+			int newNextID=Integer.parseInt(msgs[3]);
 			//if myprev == his id => myprev to his prev
 			if(myPrevNode == newNodeID)
 			{
