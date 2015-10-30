@@ -7,14 +7,14 @@ import java.io.InputStreamReader;
 public class NodeRemoveThread extends Thread
 
 {
-	String input = null;
-	int myNodeID;
+	String input;
+	String nodeName;
 	int myPrevNode;
 	int myNextNode;
 	
-	public NodeRemoveThread(int myNextNode,int myPrevNode,int myNodeID)
+	public NodeRemoveThread(String nodeName, int myPrevNode,int myNextNode)
 	{
-		this.myNodeID=myNodeID;
+		this.nodeName=nodeName;
 		this.myPrevNode=myPrevNode;
 		this.myNextNode=myNextNode;
 	}
@@ -35,7 +35,7 @@ public class NodeRemoveThread extends Thread
 				//Node rmNode = new Node();
 				//rmNode.sendMulticast("1"+"-"+myNodeID+"-"+myPrevNode+"-"+myNextNode);
 				
-				Node.sendMulticast("1"+"-"+myNodeID+"-"+myPrevNode+"-"+myNextNode);
+				Node.sendMulticast("1"+"-"+nodeName+"-"+myPrevNode+"-"+myNextNode);
 				stay = false;
 			}
 		}

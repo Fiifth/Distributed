@@ -27,8 +27,9 @@ public class NodeOrderThread extends Thread {
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
 		String[] node = msg.split("-");
-		//node[0]=toleave, node[1] = his id, node[2] = hisprev, node[3] = hisnext
+		//node[0]=toleave, node[1] = his name, node[2] = hisprev, node[3] = hisnext
 		int toLeave = Integer.parseInt(node[0]);
+		//nodeName to nodeID
 		int newNodeID= Math.abs(node[1].hashCode()%32768);
 		
 		System.out.println(newNodeID);
@@ -36,8 +37,9 @@ public class NodeOrderThread extends Thread {
 		//removing node
 		if(toLeave == 1)
 		{
-			int newPrevID=Math.abs(node[2].hashCode()%32768);
-			int newNextID=Math.abs(node[3].hashCode()%32768);
+			//TODO naar ints, zonder hash (parse)
+			int newPrevID=Integer.parseInt(node[2]);
+			int newNextID=Integer.parseInt(node[2]);
 			//if myprev == his id => myprev to his prev
 			if(myPrevNode == newNodeID)
 			{

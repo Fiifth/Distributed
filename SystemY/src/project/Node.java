@@ -13,7 +13,7 @@ public class Node
 	
 	public static void main(String[] args)throws Exception
 	{		
-		nodeName="Node21";
+		nodeName="Node22";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
@@ -25,7 +25,7 @@ public class Node
 		sendMulticast("0"+"-"+nodeName);
 		
 		//removethread listens if node wants to leave
-		NodeRemoveThread rm = new NodeRemoveThread(MyNodeID, prevNode, nextNode);
+		NodeRemoveThread rm = new NodeRemoveThread(nodeName, prevNode, nextNode);
 		rm.start();
 		
 		int numberOfNodes=getNameServerRespons();
@@ -62,27 +62,25 @@ public class Node
 			multicastSocket.receive(messageIn);//blocks
 			//check if node wants to join or leave
 			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-			String[] node = msgs.split("-");
-			toLeave=Integer.parseInt(node[0]);
-			InetAddress receivedInet=messageIn.getAddress();
-			String receivedaddr = receivedInet.getHostAddress();
-			InetAddress ownInet=InetAddress.getLocalHost();
-			String ownaddr = ownInet.getHostAddress();
+			String[] msg = msgs.split("-");
+			toLeave=Integer.parseInt(msg[0]);
+			//InetAddress receivedInet=messageIn.getAddress();
+			//String receivedaddr = receivedInet.getHostAddress();
+			//InetAddress ownInet=InetAddress.getLocalHost();
+			//String ownaddr = ownInet.getHostAddress();
 			
 			
 			//TODO  addressvergelijking fixen!
 			
-			
-			if(receivedaddr == ownaddr)
+			if(toLeave == 1)
 			{
-				//i want to leave
-				if(toLeave == 1)
+				//if received nodename = own node name => remove node
+				if(Node.nodeName == msg[1])
 				{
 					stay = false;
 					multicastSocket.close();
 				}
 			}
-			//received multicast is from new node
 			else
 			{
 				System.out.println("New node connecting");
@@ -90,13 +88,8 @@ public class Node
 				NodeOrderThread c =new NodeOrderThread(messageIn,nextNode, prevNode, MyNodeID);
 				c.start();
 			}
+			
 		}
-		
-		//1) Stuur de id van de volgende node door naar de vorige node
-		//2) In de vorige node wordt de volgende node aangepast met deze info
-		//3) Stuur de id van de vorige node op naar de volgende node
-		//4) In de volgende node wordt de vorige node aangepast met deze info
-		//5) Verwijder de node bij de nameserver
 	}
 	
 	private static String getNextPrevNode() 
