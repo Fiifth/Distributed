@@ -16,28 +16,39 @@ public class NameServerThread extends Thread {
 	}
 	
 	public void run() {
-		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+		
+		String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+		String[] message = msgs.split("-");
+		int toLeave=Integer.parseInt(message[0]);
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
-		
-		try 
+		if(toLeave == 1)//rmnode
 		{
-			NameServer nameserver = new NameServer();
-			nameserver.addNode(msg,nodeIP);
+			try {
+				NameServer nameserver = new NameServer();	
+				nameserver.rmNode(message[1],nodeIP);
+			} catch (RemoteException e) {e.printStackTrace();}				
+		}
+		else//addnode
+		{
+			try 
+			{
+				NameServer nameserver = new NameServer();
+				nameserver.addNode(msgs,nodeIP);
+				Integer numberOfNodes = NameServer.nodeMap.size(); 
+				System.out.println("Added NodeIP:" + nodeIP);
+				String numOfNodesString = numberOfNodes.toString();				
+				Socket clientSocket;
+				try {
+					clientSocket = new Socket(nodeIP,6790);
+					DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
+					outToNode.writeBytes(numOfNodesString + "\n");
+					clientSocket.close();
+				} catch (IOException e) {e.printStackTrace();}
+			} catch (RemoteException e) {e.printStackTrace();}
 		}
 		
-		catch (RemoteException e) {e.printStackTrace();}
-		Integer numberOfNodes = NameServer.nodeMap.size(); 
-		System.out.println("Added NodeIP:" + nodeIP);
-		String numOfNodesString = numberOfNodes.toString();
-		
-		Socket clientSocket;
-		try {
-			clientSocket = new Socket(nodeIP,6790);
-			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-			outToNode.writeBytes(numOfNodesString + "\n");
-			clientSocket.close();
-		} catch (IOException e) {e.printStackTrace();}	
+			
 	}
 
 }

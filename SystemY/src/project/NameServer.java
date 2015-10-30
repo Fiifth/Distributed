@@ -32,10 +32,11 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			multicastSocket.receive(messageIn);//blocks
-			//start thread
-			System.out.print("New node connecting \n");
+			//message = 0-nodeName or 1-nodename-prevnode-nextnode
+			//NameServerThread fixes add or remove
 			NameServerThread c =new NameServerThread(messageIn);
-			c.start();               
+			c.start(); 
+			
 		}
 		//multicastSocket.close();
 	}

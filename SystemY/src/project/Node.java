@@ -9,25 +9,25 @@ public class Node
 	public static int nextNode;
 	public static int MyNodeID;
 	public static int toLeave;
-	public static String castMsg;
 	public static String nameServerIP;
 	
 	public static void main(String[] args)throws Exception
 	{		
-		nodeName="Node18";
+		nodeName="Node21";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
 		System.out.print("My id is: ");
 		System.out.println(MyNodeID);
-		System.out.println("To stop this node, type quit.");
+		System.out.println("Type quit to stop this node.");
 		
-		//TODO castMsg fixen adhv user input voor leaving en dan nodename bijvoegen
-		//if node is joining => castmsg = 0-nodeName
-		//if node is leaving => castmsg = 1-nodeName-myPrevNode-myNextNode
+		//hello i am new node, joining network
+		sendMulticast("0"+"-"+nodeName);
 		
+		//removethread listens if node wants to leave
+		NodeRemoveThread rm = new NodeRemoveThread(MyNodeID, prevNode, nextNode);
+		rm.start();
 		
-		//sendMulticast(castMsg);
 		int numberOfNodes=getNameServerRespons();
 		if (numberOfNodes>1)
 		{
@@ -54,8 +54,8 @@ public class Node
 		multicastSocket = new MulticastSocket(6789);
 		multicastSocket.joinGroup(group);
 		
-		boolean boo = true;
-		while(boo == true)
+		boolean stay = true;
+		while(stay == true)
 		{
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
@@ -74,7 +74,8 @@ public class Node
 				//i want to leave
 				if(toLeave == 1)
 				{
-					boo = false;
+					stay = false;
+					multicastSocket.close();
 				}
 			}
 			//received multicast is from new node
@@ -86,8 +87,7 @@ public class Node
 				c.start();
 			}
 		}
-		//TODO uiteindelijk moet het luistere naar de multicast om dan threads op te starten ook in een thread komen anders kunde nooit een node late stoppen
-		//TODO er moet ook een thread gemaakt worden die luistert naar nodes die weg willen gaan 
+		
 		//1) Stuur de id van de volgende node door naar de vorige node
 		//2) In de vorige node wordt de volgende node aangepast met deze info
 		//3) Stuur de id van de vorige node op naar de volgende node

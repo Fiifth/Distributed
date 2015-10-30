@@ -20,8 +20,8 @@ public class NodeRemoveThread extends Thread
 	}
 	public void run() 
 	{
-		boolean boo = true;
-		while(boo)
+		boolean stay = true;
+		while(stay)
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			try {
@@ -31,9 +31,12 @@ public class NodeRemoveThread extends Thread
 			}
 			if(input.equals("quit"))
 			{
-				Node rmNode = new Node();
-				rmNode.sendMulticast("1"+"-"+myNodeID+"-"+myPrevNode+"-"+myNextNode);
-				boo = false;
+				//sendMulticast = static?
+				//Node rmNode = new Node();
+				//rmNode.sendMulticast("1"+"-"+myNodeID+"-"+myPrevNode+"-"+myNextNode);
+				
+				Node.sendMulticast("1"+"-"+myNodeID+"-"+myPrevNode+"-"+myNextNode);
+				stay = false;
 			}
 		}
 		
