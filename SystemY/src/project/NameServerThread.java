@@ -27,6 +27,9 @@ public class NameServerThread extends Thread {
 			try {
 				NameServer nameserver = new NameServer();	
 				nameserver.rmNode(message[1],nodeIP);
+				System.out.println("Removed NodeIP: " + nodeIP);
+				Integer numberOfNodes = NameServer.nodeMap.size();
+				System.out.println("There are "+ numberOfNodes + "nodes left in the map.");
 			} catch (RemoteException e) {e.printStackTrace();}				
 		}
 		else//addnode
@@ -34,9 +37,9 @@ public class NameServerThread extends Thread {
 			try 
 			{
 				NameServer nameserver = new NameServer();
-				nameserver.addNode(msgs,nodeIP);
+				nameserver.addNode(message[1], nodeIP);
 				Integer numberOfNodes = NameServer.nodeMap.size(); 
-				System.out.println("Added NodeIP:" + nodeIP);
+				System.out.println("Added NodeIP: " + nodeIP);
 				String numOfNodesString = numberOfNodes.toString();				
 				Socket clientSocket;
 				try {

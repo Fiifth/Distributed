@@ -64,11 +64,15 @@ public class Node
 			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 			String[] node = msgs.split("-");
 			toLeave=Integer.parseInt(node[0]);
-			InetAddress receivedaddr=messageIn.getAddress();
-			InetAddress ownaddr=InetAddress.getLocalHost();
+			InetAddress receivedInet=messageIn.getAddress();
+			String receivedaddr = receivedInet.getHostAddress();
+			InetAddress ownInet=InetAddress.getLocalHost();
+			String ownaddr = ownInet.getHostAddress();
 			
-			//TODO if multicast is from own node and asks to remove node => out of loop
-			//received multicast is from myself
+			
+			//TODO  addressvergelijking fixen!
+			
+			
 			if(receivedaddr == ownaddr)
 			{
 				//i want to leave
