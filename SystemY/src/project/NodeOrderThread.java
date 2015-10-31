@@ -53,39 +53,60 @@ public class NodeOrderThread extends Thread {
 		//adding new node
 		else
 		{
-			//i am the previous node of new node => new node = next node
-			if(myNodeID < newNodeID && newNodeID < myNextNode)
-			{
-				System.out.println("The new node will be my new next node");
-				Node.nextNode=newNodeID;
-				sendToNode(myNodeID+"-"+myNextNode,nodeIP);
-			}
-			//i am the first node
-			else if(myPrevNode == myNextNode && myNextNode == myNodeID)
+			if(myPrevNode == myNextNode && myNextNode == myNodeID)
 			{
 				sendToNode(myNodeID+"-"+myNodeID,nodeIP);
 				Node.prevNode=newNodeID;
 				Node.nextNode=newNodeID;
+				System.out.println("I am the previous/next of the new node (second)");
 			}
-			//i am the next node of new node => new node = prev node
+			
+			
+			else if(myNodeID < newNodeID && newNodeID < myNextNode)
+			{
+				Node.nextNode=newNodeID;
+				sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+				System.out.println("I am the previous of the new node (middle)");
+			}
 			else if( myNodeID > newNodeID && newNodeID > myPrevNode)
 			{
 				Node.prevNode=newNodeID;	
-				System.out.println("The new node will be my new previous node");
+				System.out.println("I am the next of the new node (middle)");
 			}
-			//new node = between my prev and me => is new prev node
-			else if( myNodeID > myPrevNode && newNodeID > myPrevNode )
+
+			else if(myNodeID>myPrevNode && myNodeID>myNextNode)
 			{
-				Node.prevNode=newNodeID;	
-				System.out.println("The new node will be my new previous node");
+				//potential prev of new node
+				if (newNodeID>myNodeID && newNodeID>myPrevNode && newNodeID>myNextNode)
+				{
+					Node.nextNode=newNodeID;
+					sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+					System.out.println("I am the previous of the new node (end)");
+				}
+				else if (newNodeID<myNodeID && newNodeID<myPrevNode && newNodeID<myNextNode)
+				{
+					Node.nextNode=newNodeID;
+					sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+					System.out.println("I am the previous of the new node (begin)");
+				}
+				
 			}
-			//new node = between my next and me => is new next node
-			else if(myNodeID < newNodeID && myNodeID < myNextNode)
+			else if(myNodeID<myPrevNode && myNodeID<myNextNode)
 			{
-				System.out.println("The new node will be my new next node");
-				Node.nextNode=newNodeID;
-				sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+				//potential next of new node
+				if (newNodeID>myNodeID && newNodeID>myPrevNode && newNodeID>myNextNode)
+				{
+					Node.prevNode=newNodeID;	
+					System.out.println("I am the next of the new node (end)");
+				}
+				else if (newNodeID<myNodeID && newNodeID<myPrevNode && newNodeID<myNextNode)
+				{
+					Node.prevNode=newNodeID;	
+					System.out.println("I am the next of the new node (begin)");
+				}
+				
 			}
+			
 			else
 			{
 				System.out.println("doing nothing: My: "+myNodeID+" new : "+newNodeID+" my next: "+myNextNode+" my Prev: "+myPrevNode);

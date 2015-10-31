@@ -13,7 +13,7 @@ public class Node
 	
 	public static void main(String[] args)throws Exception
 	{		
-		nodeName="Node26";
+		nodeName="3";
 		MyNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
