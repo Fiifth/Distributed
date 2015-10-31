@@ -86,6 +86,10 @@ public class NodeOrderThread extends Thread {
 				Node.nextNode=newNodeID;
 				sendToNode(myNodeID+"-"+myNextNode,nodeIP);
 			}
+			else
+			{
+				System.out.println("doing nothing: My: "+myNodeID+" new : "+newNodeID+" my next: "+myNextNode+" my Prev: "+myPrevNode);
+			}
 		}
 		
 		
