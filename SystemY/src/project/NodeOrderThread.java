@@ -64,8 +64,8 @@ public class NodeOrderThread extends Thread {
 			
 			else if(myNodeID < newNodeID && newNodeID < myNextNode)
 			{
-				Node.nextNode=newNodeID;
 				sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+				Node.nextNode=newNodeID;
 				System.out.println("I am the previous of the new node (middle)");
 			}
 			else if( myNodeID > newNodeID && newNodeID > myPrevNode)
@@ -79,14 +79,14 @@ public class NodeOrderThread extends Thread {
 				//potential prev of new node
 				if (newNodeID>myNodeID && newNodeID>myPrevNode && newNodeID>myNextNode)
 				{
-					Node.nextNode=newNodeID;
 					sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+					Node.nextNode=newNodeID;
 					System.out.println("I am the previous of the new node (end)");
 				}
 				else if (newNodeID<myNodeID && newNodeID<myPrevNode && newNodeID<myNextNode)
 				{
-					Node.nextNode=newNodeID;
 					sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+					Node.nextNode=newNodeID;
 					System.out.println("I am the previous of the new node (begin)");
 				}
 				
@@ -103,14 +103,9 @@ public class NodeOrderThread extends Thread {
 				{
 					Node.prevNode=newNodeID;	
 					System.out.println("I am the next of the new node (begin)");
-				}
-				
+				}	
 			}
-			
-			else
-			{
-				System.out.println("doing nothing: My: "+myNodeID+" new : "+newNodeID+" my next: "+myNextNode+" my Prev: "+myPrevNode);
-			}
+			System.out.println("My: "+Node.myNodeID+" Next: "+Node.nextNode+" prev: "+Node.prevNode);
 		}
 		
 		

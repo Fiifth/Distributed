@@ -7,18 +7,18 @@ public class Node
 	public static String nodeName;
 	public static int prevNode;
 	public static int nextNode;
-	public static int MyNodeID;
+	public static int myNodeID;
 	public static int toLeave;
 	public static String nameServerIP;
 	
 	public static void main(String[] args)throws Exception
 	{		
-		nodeName="3";
-		MyNodeID=Math.abs(nodeName.hashCode()%32768);
+		nodeName="6";
+		myNodeID=Math.abs(nodeName.hashCode()%32768);
 		System.out.print("My name is: ");
 		System.out.println(nodeName);
 		System.out.print("My id is: ");
-		System.out.println(MyNodeID);
+		System.out.println(myNodeID);
 		System.out.println("Type quit to stop this node.");
 		
 		//hello i am new node, joining network
@@ -34,19 +34,16 @@ public class Node
 			System.out.println("Getting nodes...");
 			String nodes=getNextPrevNode();
 			String[] node = nodes.split("-");
-			nextNode=Integer.parseInt(node[0]);
-			prevNode=Integer.parseInt(node[1]);
-			System.out.println("I am node number " + numberOfNodes);
-			System.out.print("My next node: ");
-			System.out.println(nextNode);
-			System.out.print("My prev node: ");
-			System.out.println(prevNode);
+			prevNode=Integer.parseInt(node[0]);
+			nextNode=Integer.parseInt(node[1]);
+			//System.out.println("I am node number " + numberOfNodes);
+			System.out.println("My: "+myNodeID+" Next: "+nextNode+" prev: "+prevNode);
 		}
 		else
 		{
 			System.out.println("I am the first node");
-			 prevNode=MyNodeID;
-			 nextNode=MyNodeID;
+			 prevNode=myNodeID;
+			 nextNode=myNodeID;
 		}
 		
 		MulticastSocket multicastSocket =null;
@@ -79,7 +76,7 @@ public class Node
 			{
 				System.out.println("New node connecting");
 				//start thread
-				NodeOrderThread c =new NodeOrderThread(messageIn,nextNode, prevNode, MyNodeID);
+				NodeOrderThread c =new NodeOrderThread(messageIn,nextNode, prevNode, myNodeID);
 				c.start();
 			}
 			
