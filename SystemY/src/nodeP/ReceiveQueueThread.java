@@ -1,5 +1,11 @@
 package nodeP;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -24,11 +30,13 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 		
 		while(true)
 		{
+			String ipAndName = null;
 			try {
-				String ip=myQueue.take();
-			} catch (InterruptedException e) {e.printStackTrace();}
+				ipAndName=myQueue.take();
 				
-				//TODO receive file from IP by setting up TCP connection
+				
+			} catch (InterruptedException e) {e.printStackTrace();}
+			receiveFile(ipAndName);
 			}
 		}
 	
@@ -38,7 +46,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 				System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/project/NameServer.class");
 				
 				LocateRegistry.createRegistry(2000);
-				ReceiveQueueThreadInterface RecInt = (ReceiveQueueThreadInterface) new ReceiveQueueThread();
+				ReceiveQueueThreadInterface RecInt = new ReceiveQueueThread();
 				Naming.rebind("//localhost/ReceiveQueueThread", RecInt);
 				
 				System.out.println("ReceiveQueueThreadRMI is ready.");
@@ -56,5 +64,53 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 		return queue;
 	}
 
-	
+	public void receiveFile(String ipAndName)
+	{
+		String[] ipAndNameArray = ipAndName.split("-");
+		byte[] aByte = new byte[1];
+        int bytesRead;
+        String serverIP = ipAndNameArray[0];
+        int serverPort = 3248;
+        String fileOutput = ipAndNameArray[1];
+        Socket clientSocket = null;
+        InputStream is = null;
+        
+        try 
+        {
+        	System.out.println("looking for server");
+        	//nieuwe socket om te communiceren met server
+            clientSocket = new Socket(serverIP, serverPort);	
+            is = clientSocket.getInputStream();
+        } 
+        catch (IOException ex) {System.out.println("I/O error");}
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        if (is != null) 
+        {
+        	System.out.println("Server found, recieving file");
+            FileOutputStream fos = null;
+            BufferedOutputStream bos = null;
+            
+            try 
+            {
+                fos = new FileOutputStream(fileOutput);
+                bos = new BufferedOutputStream(fos);
+                bytesRead = is.read(aByte, 0, aByte.length);
+
+                do 
+                {
+                        baos.write(aByte);
+                        bytesRead = is.read(aByte);
+                } while (bytesRead != -1);
+
+                bos.write(baos.toByteArray());
+                bos.flush();
+                bos.close();
+                clientSocket.close();
+                System.out.println("File received");
+            } 
+            catch (IOException ex) {System.out.println("I/O error");}
+        }
+    }
 }
