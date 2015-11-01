@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -19,8 +20,19 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	
 	public static void main(String[] args) throws IOException
 	{
-		
 		NameServer nameServer=new NameServer();
+		nameServer.startNameServer(nameServer);
+		
+	}
+
+	protected NameServer() throws RemoteException 
+	{
+		super();
+	}
+	
+	public void startNameServer(NameServer nameServer) throws IOException
+	{
+		
 		
 		nameServer.setUpRMI(nameServer);
 		
@@ -41,11 +53,6 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			
 		}
 		//multicastSocket.close();
-	}
-
-	protected NameServer() throws RemoteException 
-	{
-		super();
 	}
 
 	public void setUpRMI(NameServer nameServer)

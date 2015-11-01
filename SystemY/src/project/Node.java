@@ -60,21 +60,16 @@ public class Node
 			//check if node wants to join or leave
 			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 			String[] msg = msgs.split("-");
-			nodedata1.setToLeave(Integer.parseInt(msg[0]));
+			
 					
 			if(nodedata1.getToLeave() == 1)
 			{
-				//if received nodename = own node name => remove node
-				if(nodedata1.getNodeName() == msg[1])
-				{
 					stay = false;
 					multicastSocket.close();
-					
-				}
-			}
+			}	
 			else
 			{
-				System.out.println("New node connecting");
+				System.out.println("Node communication detected");
 				//start thread
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();

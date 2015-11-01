@@ -18,7 +18,7 @@ public class NodeRemoveThread extends Thread
 		this.nodedata1=nodedata1;
 	}
 
-	public void run() 
+	public void run()
 	{
 		boolean stay = true;
 		System.out.println("Type quit to stop this node.");
@@ -32,6 +32,7 @@ public class NodeRemoveThread extends Thread
 			}
 			if(input.equals("quit"))
 			{
+				nodedata1.setToLeave(1);
 				nodedata1.sendMulticast("1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode());
 				stay = false;
 			}

@@ -107,10 +107,9 @@ public class NodeOrderThread extends Thread {
 					System.out.println("I am the next of the new node (begin)");
 				}	
 			}
-			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 		}
 		
-		
+		System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 		
 	}
 	public void sendToNode(String nodes, String nodeIP)
