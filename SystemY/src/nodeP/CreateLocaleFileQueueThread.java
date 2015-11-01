@@ -13,21 +13,20 @@ import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+
 
 
 public class CreateLocaleFileQueueThread extends Thread{
 	public WatchService watcher;
 	String dirToSearch = "C:\\SystemYNodeFiles";
 	Path dir = Paths.get(dirToSearch);
-	Queue<String> fnQueue;
-	ArrayList<String> fnList;	
-	public CreateLocaleFileQueueThread()
+
+	NodeData nodedata1;
+	
+	public CreateLocaleFileQueueThread(NodeData nodedata1)
 	{
-		fnQueue = new LinkedList<String>();
-		fnList = new ArrayList<String>();
+		this.nodedata1=nodedata1;
+
 		dirToSearch = "C:\\SystemYNodeFiles";
 	}
 	/*public static void main(String args[]){
@@ -40,7 +39,8 @@ public class CreateLocaleFileQueueThread extends Thread{
 		try {
 			setupWatchService();
 		} catch (IOException e) {}
-		while(true){
+		while(true)
+		{
 			WatchKey key;
 			try{
 				key = watcher.take();
@@ -61,8 +61,8 @@ public class CreateLocaleFileQueueThread extends Thread{
 				}
 				else if(kind == ENTRY_CREATE){
 					System.out.println("new file added");
-					fnQueue.add(fileName.toString());
-					fnList.add(fileName.toString());
+					nodedata1.fnQueue.add(fileName.toString());
+					nodedata1.fnList.add(fileName.toString());
 				}
 				else if(kind == ENTRY_MODIFY){
 					System.out.println("file modified");
@@ -71,7 +71,7 @@ public class CreateLocaleFileQueueThread extends Thread{
 				/*else if(kind == ENTRY_DELETE){
 					
 					System.out.println("file removed");
-					fnList.remove(fileName.toString());
+					nodedata1.fnList.remove(fileName.toString());
 					
 				}*/
 				boolean valid = key.reset();
@@ -89,8 +89,8 @@ public class CreateLocaleFileQueueThread extends Thread{
 		for (File file: listOfFilesInDir){
 			if(file.isFile()){
 				String fileName = file.getName();
-				fnQueue.add(fileName);
-				fnList.add(fileName);
+				nodedata1.fnQueue.add(fileName);
+				nodedata1.fnList.add(fileName);
 			}
 		}	
 	}

@@ -9,6 +9,9 @@ import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class NodeData {
 	private volatile String nodeName;
@@ -17,6 +20,8 @@ public class NodeData {
 	private volatile int myNodeID;
 	private volatile int toLeave;
 	private volatile String nameServerIP;
+	public volatile BlockingQueue<String> fnQueue=new ArrayBlockingQueue<String>(500);
+	public volatile ArrayList<String> fnList=new ArrayList<String>();	
 	
 	public String getNodeName() {
 		return nodeName;

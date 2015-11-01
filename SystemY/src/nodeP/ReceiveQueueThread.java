@@ -4,14 +4,14 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQueueThreadInterface, Runnable 
 {
 
 	private static final long serialVersionUID = 1L;
-	Queue<String> myQueue = new LinkedList<String>();
+	public volatile BlockingQueue<String> myQueue=new ArrayBlockingQueue<String>(500);
 	
 	public ReceiveQueueThread() throws RemoteException
 	{
@@ -24,13 +24,13 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 		
 		while(true)
 		{
-			if (myQueue.peek()!=null)
-			{
-				//String ip=myQueue.poll();
+			try {
+				String ip=myQueue.take();
+			} catch (InterruptedException e) {e.printStackTrace();}
+				
 				//TODO receive file from IP by setting up TCP connection
 			}
 		}
-	}
 	
 	private void setUpRMI() 
 	{
