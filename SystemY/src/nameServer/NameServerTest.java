@@ -8,8 +8,8 @@ public class NameServerTest {
 	public static void main(String[] args) {
 
 		NameServerInterface nameserver;
-		System.setProperty("java.security.policy","file:${workspace_loc}/Distributed/SystemY/bin/project/security.policy");
-		System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/project/NameServer.class");
+		//System.setProperty("java.security.policy","file:${workspace_loc}/Distributed/SystemY/bin/project/security.policy");
+		//System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/project/NameServer.class");
 		try{
 			
 			//System.setSecurityManager(new SecurityManager());
