@@ -11,16 +11,19 @@ public class NameServerTest {
 		System.setProperty("java.security.policy","file:${workspace_loc}/Distributed/SystemY/bin/project/security.policy");
 		System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/project/NameServer.class");
 		try{
+			
 			//System.setSecurityManager(new SecurityManager());
 			nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
 			System.out.println("Excecuting remote method:");
+			nameserver.addNode("test2", "192.168.1.2");
+			/*
 			InetAddress IPaddress=InetAddress.getLocalHost();
 			InetAddress IPaddress1 = InetAddress.getByName("192.168.1.1");
 			InetAddress IPaddress2 = InetAddress.getByName("192.168.1.2");
 			InetAddress IPaddress3 = InetAddress.getByName("192.168.1.3");
 			//voeg een Node toe met een unieke naam
-			nameserver.addNode("test2", "192.168.1.2");
-			/*
+			
+			
 			//voeg een Node toe met een naam die reeds bestaat
 			nameserver.addNode("test2", "192.168.1.2");
 			//verwijder een node uit de map

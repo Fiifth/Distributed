@@ -1,6 +1,5 @@
 package project;
 import java.net.*;
-import java.io.*;
 
 public class Node 
 {	
@@ -57,11 +56,7 @@ public class Node
 			byte[] buffer = new byte[100];
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			multicastSocket.receive(messageIn);//blocks
-			//check if node wants to join or leave
-			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-			String[] msg = msgs.split("-");
-			
-					
+			//check if I to leave
 			if(nodedata1.getToLeave() == 1)
 			{
 					stay = false;

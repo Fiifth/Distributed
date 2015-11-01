@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.rmi.RemoteException;
 
 public class NodeOrderThread extends Thread {
 	DatagramPacket messageIn;

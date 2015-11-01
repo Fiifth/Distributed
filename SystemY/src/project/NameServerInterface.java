@@ -1,8 +1,6 @@
 package project;
 
-import java.net.InetAddress;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public interface NameServerInterface extends java.rmi.Remote{
