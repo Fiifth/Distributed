@@ -4,12 +4,16 @@ import java.io.*;
 
 public class Node 
 {	
-	
-	public static void main(String[] args)throws Exception
+	public static void main(String[] args) throws Exception
 	{		
+		Node node1=new Node();
+		node1.startNieuweNode("3");
+	}
+	
+	public void startNieuweNode(String nodeNaam)throws Exception
+	{
 		final NodeData nodedata1=new NodeData();
-		final Node node1=new Node();
-		nodedata1.setNodeName("6");
+		nodedata1.setNodeName(nodeNaam);
 		nodedata1.setMyNodeID(Math.abs((nodedata1.getNodeName()).hashCode()%32768));
 		System.out.print("My name is: ");
 		System.out.println(nodedata1.getNodeName());
@@ -18,17 +22,17 @@ public class Node
 		
 		
 		//hello i am new node, joining network
-		node1.sendMulticast("0"+"-"+nodedata1.getNodeName());
+		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		
 		//removethread listens if node wants to leave
 		NodeRemoveThread rm = new NodeRemoveThread(nodedata1);
 		rm.start();
 
-		int numberOfNodes=node1.getNameServerRespons(nodedata1);
+		int numberOfNodes=nodedata1.getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
 		{
 			System.out.println("Getting nodes...");
-			String nodes=node1.getNextPrevNode();
+			String nodes=nodedata1.getNextPrevNode();
 			String[] node = nodes.split("-");
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
@@ -78,68 +82,4 @@ public class Node
 			
 		}
 	}
-	
-	public String getNextPrevNode() 
-	{
-		ServerSocket welcomeSocket = null;
-		Socket connectionSocket = null;
-		String nextPrevNode = null;
-		
-		try {
-			welcomeSocket = new ServerSocket(6770);
-			connectionSocket = welcomeSocket.accept();
-			welcomeSocket.close();
-			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			nextPrevNode = inFromNameServer.readLine();			
-			connectionSocket.close();
-		} 
-		catch (IOException e) {e.printStackTrace();	}
-		return nextPrevNode;
-		
-	}
-
-	public void sendMulticast(String name)
-	{
-		MulticastSocket multicastSocket =null;
-		byte [] m1 = name.getBytes();
-		try 
-		{	
-			InetAddress group = InetAddress.getByName("228.5.6.7");
-			multicastSocket = new MulticastSocket(6789);
-			multicastSocket.joinGroup(group);
-			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
-			multicastSocket.send(messageOut1);	
-			multicastSocket.leaveGroup(group);		
-		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
-		}catch (IOException e){System.out.println("IO: " + e.getMessage());
-		}finally {if(multicastSocket != null) multicastSocket.close();}
-	}
-	
-	public int getNameServerRespons(NodeData nodedata1)
-	{
-		ServerSocket welcomeSocket = null;
-		Socket connectionSocket = null;
-		InetAddress serverIP;
-		int nodes=0;
-		
-		try {
-			welcomeSocket = new ServerSocket(6790);
-			connectionSocket = welcomeSocket.accept();
-			welcomeSocket.close();
-			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			String amountOfNodes = inFromNameServer.readLine();
-			nodes=Integer.parseInt(amountOfNodes);
-			System.out.println("Amount of Nodes: " + amountOfNodes);
-			serverIP=connectionSocket.getInetAddress();
-			String ServerIPString=serverIP.getHostAddress();
-			nodedata1.setNameServerIP(ServerIPString);
-			
-			System.out.println("ServerIP: " + nodedata1.getNameServerIP());
-			
-			connectionSocket.close();
-		} 
-		catch (IOException e) {e.printStackTrace();	}
-		return nodes;
-	}
-
 }

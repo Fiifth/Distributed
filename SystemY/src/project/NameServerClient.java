@@ -20,6 +20,7 @@ public class NameServerClient {
 			InetAddress IPaddress3 = InetAddress.getByName("192.168.1.3");
 			//voeg een Node toe met een unieke naam
 			nameserver.addNode("test2", "192.168.1.2");
+			/*
 			//voeg een Node toe met een naam die reeds bestaat
 			nameserver.addNode("test2", "192.168.1.2");
 			//verwijder een node uit de map
@@ -36,6 +37,7 @@ public class NameServerClient {
 			System.out.println("is host reachable? " + reachable);
 			//stuur een bestandsnaam op waarvan de hash kleiner is dan de hash van de kleinste node
 			nameserver.locateFile("test0");
+			*/
 		}catch(Exception e) {
 			System.out.println("NameClient exception: " + e);
 		}

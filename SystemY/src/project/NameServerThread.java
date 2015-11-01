@@ -9,9 +9,11 @@ import java.rmi.RemoteException;
 
 public class NameServerThread extends Thread {
 	DatagramPacket messageIn;
-	public NameServerThread(DatagramPacket messageIn)
+	NameServer nameServer;
+	public NameServerThread(DatagramPacket messageIn, NameServer nameServer)
 	{
 		this.messageIn=messageIn;
+		this.nameServer=nameServer;
 		
 	}
 	
@@ -24,11 +26,10 @@ public class NameServerThread extends Thread {
 		String nodeIP = addr.getHostAddress().toString();
 		if(toLeave == 1)//rmnode
 		{
-			try {
-				NameServer nameserver = new NameServer();	
-				nameserver.rmNode(message[1],nodeIP);
+			try {	
+				nameServer.rmNode(message[1],nodeIP);
 				System.out.println("Removed NodeIP: " + nodeIP);
-				Integer numberOfNodes = NameServer.nodeMap.size();
+				Integer numberOfNodes = nameServer.getNodeMap().size();
 				System.out.println("There are "+ numberOfNodes + " nodes left in the map.");
 			} catch (RemoteException e) {e.printStackTrace();}				
 		}
@@ -36,9 +37,8 @@ public class NameServerThread extends Thread {
 		{
 			try 
 			{
-				NameServer nameserver = new NameServer();
-				nameserver.addNode(message[1], nodeIP);
-				Integer numberOfNodes = NameServer.nodeMap.size(); 
+				nameServer.addNode(message[1], nodeIP);
+				Integer numberOfNodes = nameServer.getNodeMap().size(); 
 				System.out.println("Added NodeIP: " + nodeIP);
 				String numOfNodesString = numberOfNodes.toString();				
 				Socket clientSocket;

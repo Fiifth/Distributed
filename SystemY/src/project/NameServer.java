@@ -14,13 +14,15 @@ import java.util.Map.Entry;
 
 public class NameServer extends UnicastRemoteObject implements NameServerInterface
 {
-	static TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
+	private TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
 	
 	public static void main(String[] args) throws IOException
 	{
-	
-		setUpRMI();
+		
+		NameServer nameServer=new NameServer();
+		
+		nameServer.setUpRMI(nameServer);
 		
 		MulticastSocket multicastSocket =null;
 		InetAddress group = InetAddress.getByName("228.5.6.7");
@@ -34,7 +36,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 			multicastSocket.receive(messageIn);//blocks
 			//message = 0-nodeName or 1-nodename-prevnode-nextnode
 			//NameServerThread fixes add or remove
-			NameServerThread c =new NameServerThread(messageIn);
+			NameServerThread c =new NameServerThread(messageIn,nameServer);
 			c.start(); 
 			
 		}
@@ -46,14 +48,14 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		super();
 	}
 
-	public static void setUpRMI()
+	public void setUpRMI(NameServer nameServer)
 	{
 		try{
 			System.setProperty("java.security.policy","file:${workspace_loc}/Distributed/SystemY/bin/project/security.policy");
 			System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/project/NameServer.class");
 			
 			LocateRegistry.createRegistry(1099);
-			NameServerInterface nameint = new NameServer();
+			NameServerInterface nameint = nameServer;
 			Naming.rebind("//localhost/NameServer", nameint);
 			
 			System.out.println("NameServer is ready.");
@@ -102,5 +104,13 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		int destinationKey=nodeMap.lowerKey(hashedFN);
 		if (destinationKey==0) destinationKey=nodeMap.lastKey();
 		return nodeMap.get(destinationKey);		
+	}
+
+	public TreeMap<Integer, String> getNodeMap() {
+		return nodeMap;
+	}
+
+	public void setNodeMap(TreeMap<Integer, String> nodeMap) {
+		this.nodeMap = nodeMap;
 	}
 }

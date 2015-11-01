@@ -32,27 +32,9 @@ public class NodeRemoveThread extends Thread
 			}
 			if(input.equals("quit"))
 			{
-				sendMulticast("1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode());
+				nodedata1.sendMulticast("1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode());
 				stay = false;
 			}
-		}
-		
+		}	
 	}
-	public void sendMulticast(String name)
-	{
-		MulticastSocket multicastSocket =null;
-		byte [] m1 = name.getBytes();
-		try 
-		{	
-			InetAddress group = InetAddress.getByName("228.5.6.7");
-			multicastSocket = new MulticastSocket(6789);
-			multicastSocket.joinGroup(group);
-			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
-			multicastSocket.send(messageOut1);	
-			multicastSocket.leaveGroup(group);		
-		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
-		}catch (IOException e){System.out.println("IO: " + e.getMessage());
-		}finally {if(multicastSocket != null) multicastSocket.close();}
-	}
-	
 }
