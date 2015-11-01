@@ -1,4 +1,4 @@
-package project;
+package nameServer;
 
 import java.net.InetAddress;
 import java.rmi.*;

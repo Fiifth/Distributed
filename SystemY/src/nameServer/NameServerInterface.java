@@ -1,4 +1,4 @@
-package project;
+package nameServer;
 
 import java.rmi.RemoteException;
 import java.util.TreeMap;

@@ -1,4 +1,4 @@
-package project;
+package nodeP;
 import java.net.*;
 
 public class Node 

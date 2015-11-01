@@ -1,4 +1,4 @@
-package project;
+package nodeP;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

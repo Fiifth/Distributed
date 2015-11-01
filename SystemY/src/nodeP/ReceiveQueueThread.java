@@ -1,4 +1,4 @@
-package project;
+package nodeP;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
