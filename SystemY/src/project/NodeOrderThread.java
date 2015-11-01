@@ -51,7 +51,6 @@ public class NodeOrderThread extends Thread {
 				nodedata1.setNextNode(newNextID);
 			}
 		}
-		
 		//adding new node
 		else
 		{

@@ -3,7 +3,7 @@ package project;
 import java.net.InetAddress;
 import java.rmi.*;
 //TODO alle testen die in ppt besproken werden moeten hier in komen
-public class NameServerClient {
+public class NameServerTest {
 
 	public static void main(String[] args) {
 
