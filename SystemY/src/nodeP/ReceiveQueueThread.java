@@ -76,7 +76,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
         int bytesRead;
         String serverIP = ipAndNameArray[0];
         int serverPort = 3248;
-        String fileOutput = ipAndNameArray[1];
+        String fileOutput = "C:\\"+ipAndNameArray[1];
         Socket clientSocket = null;
         InputStream is = null;
         
