@@ -4,46 +4,42 @@ import java.io.*;
 
 public class Node 
 {	
-	public static String nodeName;
-	public static int prevNode;
-	public static int nextNode;
-	public static int myNodeID;
-	public static int toLeave;
-	public static String nameServerIP;
 	
 	public static void main(String[] args)throws Exception
 	{		
-		nodeName="6";
-		myNodeID=Math.abs(nodeName.hashCode()%32768);
+		final NodeData nodedata1=new NodeData();
+		final Node node1=new Node();
+		nodedata1.setNodeName("6");
+		nodedata1.setMyNodeID(Math.abs((nodedata1.getNodeName()).hashCode()%32768));
 		System.out.print("My name is: ");
-		System.out.println(nodeName);
+		System.out.println(nodedata1.getNodeName());
 		System.out.print("My id is: ");
-		System.out.println(myNodeID);
-		System.out.println("Type quit to stop this node.");
+		System.out.println(nodedata1.getMyNodeID());
+		
 		
 		//hello i am new node, joining network
-		sendMulticast("0"+"-"+nodeName);
+		node1.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		
 		//removethread listens if node wants to leave
-		NodeRemoveThread rm = new NodeRemoveThread(nodeName, prevNode, nextNode);
+		NodeRemoveThread rm = new NodeRemoveThread(nodedata1);
 		rm.start();
-		
-		int numberOfNodes=getNameServerRespons();
+
+		int numberOfNodes=node1.getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
 		{
 			System.out.println("Getting nodes...");
-			String nodes=getNextPrevNode();
+			String nodes=node1.getNextPrevNode();
 			String[] node = nodes.split("-");
-			prevNode=Integer.parseInt(node[0]);
-			nextNode=Integer.parseInt(node[1]);
+			nodedata1.setPrevNode(Integer.parseInt(node[0]));
+			nodedata1.setNextNode(Integer.parseInt(node[1]));
 			//System.out.println("I am node number " + numberOfNodes);
-			System.out.println("My: "+myNodeID+" Next: "+nextNode+" prev: "+prevNode);
+			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 		}
 		else
 		{
 			System.out.println("I am the first node");
-			 prevNode=myNodeID;
-			 nextNode=myNodeID;
+			 nodedata1.setPrevNode(nodedata1.getMyNodeID());
+			 nodedata1.setNextNode(nodedata1.getMyNodeID());
 		}
 		
 		MulticastSocket multicastSocket =null;
@@ -60,12 +56,12 @@ public class Node
 			//check if node wants to join or leave
 			String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 			String[] msg = msgs.split("-");
-			toLeave=Integer.parseInt(msg[0]);
+			nodedata1.setToLeave(Integer.parseInt(msg[0]));
 					
-			if(toLeave == 1)
+			if(nodedata1.getToLeave() == 1)
 			{
 				//if received nodename = own node name => remove node
-				if(Node.nodeName == msg[1])
+				if(nodedata1.getNodeName() == msg[1])
 				{
 					stay = false;
 					multicastSocket.close();
@@ -76,14 +72,14 @@ public class Node
 			{
 				System.out.println("New node connecting");
 				//start thread
-				NodeOrderThread c =new NodeOrderThread(messageIn,nextNode, prevNode, myNodeID);
+				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();
 			}
 			
 		}
 	}
 	
-	private static String getNextPrevNode() 
+	public String getNextPrevNode() 
 	{
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
@@ -102,7 +98,7 @@ public class Node
 		
 	}
 
-	public static void sendMulticast(String name)
+	public void sendMulticast(String name)
 	{
 		MulticastSocket multicastSocket =null;
 		byte [] m1 = name.getBytes();
@@ -119,7 +115,7 @@ public class Node
 		}finally {if(multicastSocket != null) multicastSocket.close();}
 	}
 	
-	public static int getNameServerRespons()
+	public int getNameServerRespons(NodeData nodedata1)
 	{
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
@@ -135,8 +131,10 @@ public class Node
 			nodes=Integer.parseInt(amountOfNodes);
 			System.out.println("Amount of Nodes: " + amountOfNodes);
 			serverIP=connectionSocket.getInetAddress();
-			nameServerIP=serverIP.getHostAddress();
-			System.out.println("ServerIP: " + nameServerIP);
+			String ServerIPString=serverIP.getHostAddress();
+			nodedata1.setNameServerIP(ServerIPString);
+			
+			System.out.println("ServerIP: " + nodedata1.getNameServerIP());
 			
 			connectionSocket.close();
 		} 
