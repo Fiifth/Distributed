@@ -108,7 +108,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		int hashedFN = Math.abs(filename.hashCode()%32768);
 		int destinationKey=nodeMap.lowerKey(hashedFN);
 		if (destinationKey==0) destinationKey=nodeMap.lastKey();
-		return nodeMap.get(destinationKey);		
+		return nodeMap.get(destinationKey)+"-"+destinationKey;		
 	}
 
 	public TreeMap<Integer, String> getNodeMap() {

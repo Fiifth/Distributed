@@ -18,10 +18,12 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 
 	private static final long serialVersionUID = 1L;
 	public static BlockingQueue<String> myQueue=new ArrayBlockingQueue<String>(500);
+	NodeData nodedata1;
 	
-	public ReceiveQueueThread() throws RemoteException
+	public ReceiveQueueThread(NodeData nodedata1) throws RemoteException
 	{
 		super();
+		this.nodedata1=nodedata1;
 	}
 	/*public static void main(String args[]) throws RemoteException
 	{
@@ -32,7 +34,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 	
 	public void run() 
 	{
-		setUpRMI();
+		setUpRMI(nodedata1);
 		
 		while(true)
 		{
@@ -41,16 +43,17 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 				ipAndName=myQueue.take();
 			} catch (InterruptedException e) {e.printStackTrace();}
 			receiveFile(ipAndName);
+			nodedata1.replFiles.add(ipAndName);
 			}
 		}
 	
-	private void setUpRMI() 
+	private void setUpRMI(NodeData nodedata1) 
 	{
 			try{
 				System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/nodeP/ReceiveQueueThread.class");
 
 				LocateRegistry.createRegistry(2000);
-				ReceiveQueueThreadInterface RecInt = new ReceiveQueueThread();
+				ReceiveQueueThreadInterface RecInt = new ReceiveQueueThread(nodedata1);
 				Naming.rebind("//localhost:2000/ReceiveQueueThread", RecInt);
 				
 				System.out.println("ReceiveQueueThreadRMI is ready.");

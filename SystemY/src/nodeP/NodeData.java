@@ -21,7 +21,8 @@ public class NodeData {
 	private volatile int toLeave;
 	private volatile String nameServerIP;
 	public volatile BlockingQueue<String> fnQueue=new ArrayBlockingQueue<String>(500);
-	public volatile ArrayList<String> fnList=new ArrayList<String>();	
+	public volatile ArrayList<String> localFiles=new ArrayList<String>();	
+	public volatile ArrayList<String> replFiles=new ArrayList<String>();
 	
 	public String getNodeName() {
 		return nodeName;

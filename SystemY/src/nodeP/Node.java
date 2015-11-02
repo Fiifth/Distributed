@@ -47,7 +47,7 @@ public class Node
 		
 		CreateLocaleFileQueueThread CLFQ =new CreateLocaleFileQueueThread(nodedata1);
 		CLFQ.start();
-		ReceiveQueueThread RQT=new ReceiveQueueThread() ;
+		ReceiveQueueThread RQT=new ReceiveQueueThread(nodedata1) ;
 		(new Thread(RQT)).start();
 		SendReplicateFileThread SRFT = new SendReplicateFileThread(nodedata1);
 		SRFT.start();

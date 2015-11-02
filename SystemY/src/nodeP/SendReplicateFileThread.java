@@ -10,9 +10,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -47,27 +49,35 @@ public class SendReplicateFileThread extends Thread
 			e.printStackTrace();
 		}
 		try {
-			nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
+			nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String ip = null;
+		String ipAndId = null;
 		try {
-			ip = nameserver.locateFile(filename);
+			ipAndId = nameserver.locateFile(filename);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		String[] ipAndIdArray = ipAndId.split("-");
+		String ip = ipAndIdArray[0];
 		try {
-			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//localhost:2000/ReceiveQueueThread");
+			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//"+ip+":2000/ReceiveQueueThread");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String myIP=null;
 		try {
-			recInt.addIP(ip+"-"+filename);
+			myIP=InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			recInt.addIP(myIP+"-"+filename);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -62,7 +62,7 @@ public class CreateLocaleFileQueueThread extends Thread{
 				else if(kind == ENTRY_CREATE){
 					System.out.println("new file added");
 					nodedata1.fnQueue.add(fileName.toString());
-					nodedata1.fnList.add(fileName.toString());
+					nodedata1.localFiles.add(fileName.toString());
 				}
 				else if(kind == ENTRY_MODIFY){
 					System.out.println("file modified");
@@ -90,7 +90,7 @@ public class CreateLocaleFileQueueThread extends Thread{
 			if(file.isFile()){
 				String fileName = file.getName();
 				nodedata1.fnQueue.add(fileName);
-				nodedata1.fnList.add(fileName);
+				nodedata1.localFiles.add(fileName);
 			}
 		}	
 	}
