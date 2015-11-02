@@ -99,6 +99,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
             
             try 
             {
+            	
                 fos = new FileOutputStream(fileOutput);
                 bos = new BufferedOutputStream(fos);
                 bytesRead = is.read(aByte, 0, aByte.length);
@@ -115,7 +116,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
                 clientSocket.close();
                 System.out.println("File received");
             } 
-            catch (IOException ex) {System.out.println("I/O error");}
+            catch (IOException ex) {System.out.println("I/O error2");}
         }
     }
 }

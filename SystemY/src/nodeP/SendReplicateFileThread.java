@@ -19,7 +19,7 @@ import java.rmi.RemoteException;
 
 import nameServer.NameServerInterface;
 
-public class SendReplicateFileThread 
+public class SendReplicateFileThread extends Thread
 {
 	NodeData nodedata1;
 	NameServerInterface nameserver;
@@ -29,24 +29,57 @@ public class SendReplicateFileThread
 	{
 		this.nodedata1=nodedata1;
 	}
-	public void run() throws InterruptedException, MalformedURLException, RemoteException, NotBoundException
+	public void run()
 	{
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		while(nodedata1.getToLeave()==0)
 		{
-		String filename =nodedata1.fnQueue.take();
-		nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
-		String ip=nameserver.locateFile(filename);
+		String filename = null;
+		try {
+			filename = nodedata1.fnQueue.take();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			nameserver = (NameServerInterface)Naming.lookup("//localhost:1099/NameServer");
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String ip = null;
+		try {
+			ip = nameserver.locateFile(filename);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		recInt = (ReceiveQueueThreadInterface)Naming.lookup("//localhost:2000/ReceiveQueueThread");
-		recInt.addIP(ip+"-"+filename);
+		try {
+			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//localhost:2000/ReceiveQueueThread");
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			recInt.addIP(ip+"-"+filename);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		sendFile(filename);
 		}
 
 	}
 	public void sendFile(String filename)
 	{
-		String fileToSend = "C:\\SystemYNodeFiles\""+filename;
-
+		String fileToSend = "C:\\SystemYNodeFiles\\" + filename;
+System.out.println(fileToSend);
         while (true) {
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;
@@ -63,6 +96,7 @@ public class SendReplicateFileThread
             }
 
             if (outToClient != null) {
+            	System.out.println("sending file");
                 File myFile = new File( fileToSend );
                 byte[] mybytearray = new byte[(int) myFile.length()];
 

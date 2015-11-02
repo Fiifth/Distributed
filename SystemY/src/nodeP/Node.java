@@ -45,6 +45,13 @@ public class Node
 			 nodedata1.setNextNode(nodedata1.getMyNodeID());
 		}
 		
+		CreateLocaleFileQueueThread CLFQ =new CreateLocaleFileQueueThread(nodedata1);
+		CLFQ.start();
+		ReceiveQueueThread RQT=new ReceiveQueueThread() ;
+		(new Thread(RQT)).start();
+		SendReplicateFileThread SRFT = new SendReplicateFileThread(nodedata1);
+		SRFT.start();
+		
 		MulticastSocket multicastSocket =null;
 		InetAddress group = InetAddress.getByName("228.5.6.7");
 		multicastSocket = new MulticastSocket(6789);
