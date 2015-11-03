@@ -87,13 +87,14 @@ public class SendReplicateFileThread extends Thread
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sendFile(ipAndIdArray);
+		String [] FileNameAndDirA=FileNameAndDir.split("-");
+		sendFile(FileNameAndDirA);
 		}
 
 	}
-	public void sendFile(String[] ipAndIdArray)
+	public void sendFile(String[] FileNameAndDir)
 	{
-		String fileToSend = ipAndIdArray[1] +"\\"+ ipAndIdArray[0];
+		String fileToSend = FileNameAndDir[1] +"\\"+ FileNameAndDir[0];
 		System.out.println(fileToSend);
         while (true) {
             ServerSocket welcomeSocket = null;
