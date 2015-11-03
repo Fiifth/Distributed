@@ -105,10 +105,22 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	
 	public String locateFile(String filename)throws RemoteException
 	{
+		int destinationKey=0;
 		int hashedFN = Math.abs(filename.hashCode()%32768);
-		int destinationKey=nodeMap.lowerKey(hashedFN);
+		System.out.println(hashedFN);
+
+		if(nodeMap.lowerKey(hashedFN)==null)
+		{
+			destinationKey=0;
+		}
+		else
+			destinationKey=nodeMap.lowerKey(hashedFN);
+		System.out.println(destinationKey);
 		if (destinationKey==0) destinationKey=nodeMap.lastKey();
-		return nodeMap.get(destinationKey)+"-"+destinationKey;		
+		
+		String toSend=nodeMap.get(destinationKey)+"-"+destinationKey;
+
+		return (toSend);		
 	}
 
 	public TreeMap<Integer, String> getNodeMap() {

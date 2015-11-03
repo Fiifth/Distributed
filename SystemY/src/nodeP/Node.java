@@ -6,7 +6,7 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("10");
+		node1.startNieuweNode("5.txt");
 	}
 	public void startNieuweNode(String nodeNaam)throws Exception
 	{
@@ -17,8 +17,8 @@ public class Node
 		System.out.println(nodedata1.getNodeName());
 		System.out.print("My id is: ");
 		System.out.println(nodedata1.getMyNodeID());
-		
-		
+
+
 		//hello i am new node, joining network
 		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		

@@ -34,6 +34,12 @@ public class SendReplicateFileThread extends Thread
 	public void run()
 	{
 		try {
+			try {
+				nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
+			} catch (MalformedURLException | RemoteException | NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Thread.sleep(5000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
@@ -50,14 +56,10 @@ public class SendReplicateFileThread extends Thread
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
-		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		String ipAndId = null;
 		try {
+			System.out.println(FileNameAndDirArray[0]);
 			ipAndId = nameserver.locateFile(FileNameAndDirArray[0]);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
