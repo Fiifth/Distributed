@@ -89,8 +89,8 @@ public class CreateLocaleFileQueueThread extends Thread{
 		for (File file: listOfFilesInDir){
 			if(file.isFile()){
 				String fileName = file.getName();
-				nodedata1.fnQueue.add(fileName);
-				nodedata1.localFiles.add(fileName);
+				nodedata1.fnQueue.add(fileName+"-"+dirToSearch);
+				nodedata1.localFiles.add(fileName+"-"+dirToSearch);
 			}
 		}	
 	}

@@ -38,12 +38,13 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 		
 		while(true)
 		{
-			String ipAndName = null;
+			String ipAndNameAndDir = null;
 			try {
-				ipAndName=myQueue.take();
+				ipAndNameAndDir=myQueue.take();
 			} catch (InterruptedException e) {e.printStackTrace();}
-			receiveFile(ipAndName);
-			nodedata1.replFiles.add(ipAndName);
+			receiveFile(ipAndNameAndDir);
+			System.out.println(ipAndNameAndDir);
+			nodedata1.replFiles.add(ipAndNameAndDir);
 			}
 		}
 	
@@ -73,14 +74,15 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 		return queue;
 	}
 
-	public void receiveFile(String ipAndName)
+	public void receiveFile(String ipAndNameAndDir)
 	{
-		String[] ipAndNameArray = ipAndName.split("-");
+		String[] ipAndNameAndDirArray = ipAndNameAndDir.split("-");
 		byte[] aByte = new byte[1];
         int bytesRead;
-        String serverIP = ipAndNameArray[0];
+        String serverIP = ipAndNameAndDirArray[0];
         int serverPort = 3248;
-        String fileOutput = "C:\\"+ipAndNameArray[1];
+        String fileOutput = "c:\\SystemYNodeFilesRep\\"+ipAndNameAndDirArray[1];
+        System.out.println(fileOutput);
         Socket clientSocket = null;
         InputStream is = null;
         

@@ -41,9 +41,11 @@ public class SendReplicateFileThread extends Thread
 		}
 		while(nodedata1.getToLeave()==0)
 		{
-		String filename = null;
+		String FileNameAndDir = null;
+		String[] FileNameAndDirArray=null;
 		try {
-			filename = nodedata1.fnQueue.take();
+			FileNameAndDir = nodedata1.fnQueue.take();
+			FileNameAndDirArray = FileNameAndDir.split("-");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,7 +58,7 @@ public class SendReplicateFileThread extends Thread
 		}
 		String ipAndId = null;
 		try {
-			ipAndId = nameserver.locateFile(filename);
+			ipAndId = nameserver.locateFile(FileNameAndDirArray[0]);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,19 +80,19 @@ public class SendReplicateFileThread extends Thread
 			e1.printStackTrace();
 		}
 		try {
-			recInt.addIP(myIP+"-"+filename);
+			recInt.addIP(myIP+"-"+FileNameAndDir);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sendFile(filename);
+		sendFile(ipAndIdArray);
 		}
 
 	}
-	public void sendFile(String filename)
+	public void sendFile(String[] ipAndIdArray)
 	{
-		String fileToSend = "C:\\SystemYNodeFiles\\" + filename;
-System.out.println(fileToSend);
+		String fileToSend = ipAndIdArray[1] +"\\"+ ipAndIdArray[0];
+		System.out.println(fileToSend);
         while (true) {
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;
