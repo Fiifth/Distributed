@@ -51,6 +51,7 @@ public class Node
 		SendReplicateFileThread SRFT = new SendReplicateFileThread(nodedata1);
 		SRFT.start();
 		
+		
 		MulticastSocket multicastSocket =null;
 		InetAddress group = InetAddress.getByName("228.5.6.7");
 		multicastSocket = new MulticastSocket(6789);
@@ -74,6 +75,8 @@ public class Node
 				//start thread
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();
+				CheckOwnershipThread COT =new CheckOwnershipThread(nodedata1);
+				COT.start();
 			}
 			
 		}

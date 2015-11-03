@@ -43,6 +43,7 @@ public class CheckOwnershipThread extends Thread
 		{
 			try {
 				nodedata1.fnQueue.put(temp+"-"+fileLocation);
+				System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
