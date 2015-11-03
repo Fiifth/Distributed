@@ -1,13 +1,9 @@
 package nodeP;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -20,7 +16,7 @@ public class NodeData {
 	private volatile int myNodeID;
 	private volatile int toLeave;
 	private volatile String nameServerIP;
-	public volatile BlockingQueue<String> fnQueue=new ArrayBlockingQueue<String>(500);
+	public volatile BlockingQueue<String> toSendFileNameAndDirList=new ArrayBlockingQueue<String>(500);
 	public volatile ArrayList<String> localFiles=new ArrayList<String>();	
 	public volatile ArrayList<String> replFiles=new ArrayList<String>();
 	

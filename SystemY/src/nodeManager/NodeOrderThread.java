@@ -116,9 +116,7 @@ public class NodeOrderThread extends Thread {
 	{
 		Socket clientSocket;
 		try {
-			Thread.sleep(1000);
-			//mss ffkes sleepe zoda nieuwe node eerst tijd heeft gekrege om eerst aantal nodes op te vragen bij nameserver
-			//voorlopig zonder sleep
+			Thread.sleep(300);
 			clientSocket = new Socket(nodeIP,6770);
 			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 			outToNode.writeBytes(nodes+ "\n");

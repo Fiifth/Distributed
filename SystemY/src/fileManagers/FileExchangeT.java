@@ -34,60 +34,43 @@ public class FileExchangeT extends Thread
 	}
 	public void run()
 	{
-		try {
+		String ipAndId = null;
+		String myIP=null;
+		
 			try {
 				nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
-			} catch (MalformedURLException | RemoteException | NotBoundException e) {
+				Thread.sleep(1000);
+			} catch (MalformedURLException | RemoteException | NotBoundException|InterruptedException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			Thread.sleep(1000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+			
+		
 		while(nodedata1.getToLeave()==0)
 		{
 		String FileNameAndDir = null;
 		String[] FileNameAndDirArray=null;
 		try {
-			FileNameAndDir = nodedata1.fnQueue.take();
+			FileNameAndDir = nodedata1.toSendFileNameAndDirList.take();
 			FileNameAndDirArray = FileNameAndDir.split("-");
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e1) {System.out.println("interrupted while waiting for queue");}
 		
-		String ipAndId = null;
+		
 		try {
 			ipAndId = nameserver.locateFile(FileNameAndDirArray[0]);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String[] ipAndIdArray = ipAndId.split("-");
-		String ip = ipAndIdArray[0];
-		try {
+			String[] ipAndIdArray = ipAndId.split("-");
+			String ip = ipAndIdArray[0];
 			recInt = (FileReceiverInt)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
-		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String myIP=null;
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {System.out.println("RMI error");}
+		
 		try {
 			myIP=InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e1) {
+			recInt.addIP(myIP+"-"+FileNameAndDir);
+		} catch (UnknownHostException | RemoteException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try {
-			recInt.addIP(myIP+"-"+FileNameAndDir);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String [] FileNameAndDirA=FileNameAndDir.split("-");
-		sendFile(FileNameAndDirA);
+
+		sendFile(FileNameAndDirArray);
 		}
 
 	}
@@ -120,7 +103,7 @@ public class FileExchangeT extends Thread
                 try {
                     fis = new FileInputStream(myFile);
                 } catch (FileNotFoundException ex) {
-                	System.out.println("AJ2");
+                	System.out.println("File wasn't found");
                 }
                 BufferedInputStream bis = new BufferedInputStream(fis);
 
@@ -133,8 +116,13 @@ public class FileExchangeT extends Thread
                     // File sent, exit the main method
                     return;
                 } catch (IOException ex) {
-                	System.out.println("AJ3");
+                	System.out.println("Sending file failed");
                 }
+                try {
+					fis.close();
+					 bis.close();
+				} catch (IOException e) {System.out.println("couldn't close files");}
+               
             }
         }
 

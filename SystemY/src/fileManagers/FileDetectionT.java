@@ -63,7 +63,7 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_CREATE){
 					System.out.println("new file added");
-					nodedata1.fnQueue.add((fileName.toString())+"-"+dirToSearch);
+					nodedata1.toSendFileNameAndDirList.add((fileName.toString())+"-"+dirToSearch);
 					nodedata1.localFiles.add(fileName.toString());
 				}
 				else if(kind == ENTRY_MODIFY){
@@ -91,7 +91,7 @@ public class FileDetectionT extends Thread{
 		for (File file: listOfFilesInDir){
 			if(file.isFile()){
 				String fileName = file.getName();
-				nodedata1.fnQueue.add(fileName+"-"+dirToSearch);
+				nodedata1.toSendFileNameAndDirList.add(fileName+"-"+dirToSearch);
 				nodedata1.localFiles.add(fileName+"-"+dirToSearch);
 			}
 		}	

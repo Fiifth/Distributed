@@ -27,12 +27,6 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 		super();
 		this.nodedata1=nodedata1;
 	}
-	/*public static void main(String args[]) throws RemoteException
-	{
-		
-		ReceiveQueueThread receiveQueueThread=new ReceiveQueueThread();
-		receiveQueueThread.run();
-	}*/
 	
 	public void run() 
 	{
@@ -44,7 +38,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 			try {
 				ipAndNameAndDir=myQueue.take();
 				System.out.println("new entry in queue found(ip-name-dir):"+ipAndNameAndDir );
-			} catch (InterruptedException e) {e.printStackTrace();}
+			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
 			receiveFile(ipAndNameAndDir);
 			nodedata1.replFiles.add(ipAndNameAndDir);
 			}
@@ -56,14 +50,9 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 				LocateRegistry.createRegistry(nodedata1.getMyNodeID());
 				FileReceiverInt RecInt = new FileReceiverT(nodedata1);
 				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/ReceiveQueueThread", RecInt);
-				
 				System.out.println("ReceiveQueueThreadRMI is ready.");
 				}
-				catch(Exception e)
-				{
-				System.out.println("ReceiveQueueThreadRMI error: " + e.getMessage());
-				e.printStackTrace();
-				}
+				catch(Exception e){System.out.println("couldn't start RMI");}
 	}
 
 	public boolean addIP(String ip) throws RemoteException 
@@ -91,8 +80,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
             clientSocket = new Socket(serverIP, serverPort);	
             is = clientSocket.getInputStream();
         } 
-        catch (IOException ex) {System.out.println("I/O error");}
-        
+        catch (IOException ex) {System.out.println("couldn't open socket");}
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if (is != null) 
@@ -100,14 +88,11 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
         	System.out.println("Server found, recieving file");
             FileOutputStream fos = null;
             BufferedOutputStream bos = null;
-            
             try 
             {
-            	
                 fos = new FileOutputStream(fileOutput);
                 bos = new BufferedOutputStream(fos);
                 bytesRead = is.read(aByte, 0, aByte.length);
-
                 do 
                 {
                         baos.write(aByte);
@@ -120,7 +105,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
                 clientSocket.close();
                 System.out.println("File received");
             } 
-            catch (IOException ex) {System.out.println("I/O error2");}
+            catch (IOException ex) {System.out.println("File not found or error sending it");}
         }
     }
 }
