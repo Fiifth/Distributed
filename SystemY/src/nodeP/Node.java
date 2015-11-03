@@ -6,9 +6,8 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("3");
+		node1.startNieuweNode("10");
 	}
-	
 	public void startNieuweNode(String nodeNaam)throws Exception
 	{
 		final NodeData nodedata1=new NodeData();

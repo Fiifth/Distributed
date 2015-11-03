@@ -52,9 +52,10 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 			try{
 				System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/nodeP/ReceiveQueueThread.class");
 
-				LocateRegistry.createRegistry(2000);
+				LocateRegistry.createRegistry(nodedata1.getMyNodeID());
 				ReceiveQueueThreadInterface RecInt = new ReceiveQueueThread(nodedata1);
-				Naming.rebind("//localhost:2000/ReceiveQueueThread", RecInt);
+				System.out.println(nodedata1.getMyNodeID());
+				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/ReceiveQueueThread", RecInt);
 				
 				System.out.println("ReceiveQueueThreadRMI is ready.");
 				}

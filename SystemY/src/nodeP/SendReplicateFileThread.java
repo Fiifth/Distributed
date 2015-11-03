@@ -64,7 +64,8 @@ public class SendReplicateFileThread extends Thread
 		String[] ipAndIdArray = ipAndId.split("-");
 		String ip = ipAndIdArray[0];
 		try {
-			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//"+ip+":2000/ReceiveQueueThread");
+			System.out.println(ipAndIdArray[1]);
+			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
