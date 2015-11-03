@@ -1,10 +1,7 @@
 package nodeP;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.SocketException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -24,6 +21,7 @@ public class NodeData {
 		return nodeName;
 	}
 	public void setNodeName(String nodeName) {
+		setMyNodeID(Math.abs(nodeName.hashCode()%32768));
 		this.nodeName = nodeName;
 	}
 	public int getPrevNode() {
