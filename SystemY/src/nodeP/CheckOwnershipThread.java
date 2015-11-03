@@ -30,6 +30,7 @@ public class CheckOwnershipThread extends Thread
 		}
 	for (String temp : nodedata1.replFiles) 
 	{
+		String [] tempArray=temp.split("-");
 		System.out.println(temp);
 		String ipAndID = null;
 		try {
@@ -39,18 +40,19 @@ public class CheckOwnershipThread extends Thread
 			e.printStackTrace();
 		}
 		try {
-			ipAndID = nameserver.locateFile(temp);
+			ipAndID = nameserver.locateFile(tempArray[1]);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String[] ipAndIDArray = ipAndID.split("-");
-		
+		System.out.println(ipAndID);
+		System.out.println(nodedata1.getMyNodeID());
 		if (Integer.parseInt(ipAndIDArray[1])!=nodedata1.getMyNodeID())
 		{
 			System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
 			
-				nodedata1.replFiles.add(temp+"Rep");
+				nodedata1.fnQueue.add(tempArray[3]+"Rep"+tempArray[2]);
 			
 			nodedata1.replFiles.remove(temp);
 		}
