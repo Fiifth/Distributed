@@ -1,7 +1,9 @@
-package nameServer;
+package testCode;
 
 import java.net.InetAddress;
 import java.rmi.*;
+
+import nameServer.NameServerInterface;
 //TODO alle testen die in ppt besproken werden moeten hier in komen
 public class NameServerTest {
 

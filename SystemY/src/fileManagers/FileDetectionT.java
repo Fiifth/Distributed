@@ -1,4 +1,4 @@
-package nodeP;
+package fileManagers;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -14,16 +14,18 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
+import nodeP.NodeData;
 
 
-public class CreateLocaleFileQueueThread extends Thread{
+
+public class FileDetectionT extends Thread{
 	public WatchService watcher;
 	String dirToSearch = "C:\\SystemYNodeFiles";
 	Path dir = Paths.get(dirToSearch);
 
 	NodeData nodedata1;
 	
-	public CreateLocaleFileQueueThread(NodeData nodedata1)
+	public FileDetectionT(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
 

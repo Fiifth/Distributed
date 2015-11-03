@@ -1,4 +1,4 @@
-package hashcode;
+package testCode;
 	public class FileToHash {
 		//hashes fileName
 		public static void main(String args[]){

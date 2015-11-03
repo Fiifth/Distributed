@@ -60,24 +60,7 @@ public class NodeData {
 	public void setNameServerIP(String nameServerIP) {
 		this.nameServerIP = nameServerIP;
 	}
-	public String getNextPrevNode() 
-	{
-		ServerSocket welcomeSocket = null;
-		Socket connectionSocket = null;
-		String nextPrevNode = null;
-		
-		try {
-			welcomeSocket = new ServerSocket(6770);
-			connectionSocket = welcomeSocket.accept();
-			welcomeSocket.close();
-			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			nextPrevNode = inFromNameServer.readLine();			
-			connectionSocket.close();
-		} 
-		catch (IOException e) {e.printStackTrace();	}
-		return nextPrevNode;
-		
-	}
+	
 
 	public void sendMulticast(String name)
 	{
@@ -96,32 +79,7 @@ public class NodeData {
 		}finally {if(multicastSocket != null) multicastSocket.close();}
 	}
 	
-	public int getNameServerRespons(NodeData nodedata1)
-	{
-		ServerSocket welcomeSocket = null;
-		Socket connectionSocket = null;
-		InetAddress serverIP;
-		int nodes=0;
-		
-		try {
-			welcomeSocket = new ServerSocket(6790);
-			connectionSocket = welcomeSocket.accept();
-			welcomeSocket.close();
-			BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			String amountOfNodes = inFromNameServer.readLine();
-			nodes=Integer.parseInt(amountOfNodes);
-			System.out.println("Amount of Nodes: " + amountOfNodes);
-			serverIP=connectionSocket.getInetAddress();
-			String ServerIPString=serverIP.getHostAddress();
-			nodedata1.setNameServerIP(ServerIPString);
-			
-			System.out.println("ServerIP: " + nodedata1.getNameServerIP());
-			
-			connectionSocket.close();
-		} 
-		catch (IOException e) {e.printStackTrace();	}
-		return nodes;
-	}
+	
 
 	
 }

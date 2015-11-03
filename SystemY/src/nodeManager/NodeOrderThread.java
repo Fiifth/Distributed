@@ -1,10 +1,12 @@
-package nodeP;
+package nodeManager;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.Socket;
+
+import nodeP.NodeData;
 
 public class NodeOrderThread extends Thread {
 	DatagramPacket messageIn;

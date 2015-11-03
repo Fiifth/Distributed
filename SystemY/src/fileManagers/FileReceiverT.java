@@ -1,4 +1,4 @@
-package nodeP;
+package fileManagers;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,14 +13,16 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQueueThreadInterface, Runnable 
+import nodeP.NodeData;
+
+public class FileReceiverT extends UnicastRemoteObject implements FileReceiverInt, Runnable 
 {
 
 	private static final long serialVersionUID = 1L;
 	public static BlockingQueue<String> myQueue=new ArrayBlockingQueue<String>(500);
 	NodeData nodedata1;
 	
-	public ReceiveQueueThread(NodeData nodedata1) throws RemoteException
+	public FileReceiverT(NodeData nodedata1) throws RemoteException
 	{
 		super();
 		this.nodedata1=nodedata1;
@@ -44,7 +46,6 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 				System.out.println("new entry in queue found(ip-name-dir):"+ipAndNameAndDir );
 			} catch (InterruptedException e) {e.printStackTrace();}
 			receiveFile(ipAndNameAndDir);
-			System.out.println(ipAndNameAndDir);
 			nodedata1.replFiles.add(ipAndNameAndDir);
 			}
 		}
@@ -52,11 +53,8 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 	private void setUpRMI(NodeData nodedata1) 
 	{
 			try{
-				System.setProperty("java.rmi.server.codebase","file:${workspace_loc}/Distributed/SystemY/bin/nodeP/ReceiveQueueThread.class");
-
 				LocateRegistry.createRegistry(nodedata1.getMyNodeID());
-				ReceiveQueueThreadInterface RecInt = new ReceiveQueueThread(nodedata1);
-				System.out.println(nodedata1.getMyNodeID());
+				FileReceiverInt RecInt = new FileReceiverT(nodedata1);
 				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/ReceiveQueueThread", RecInt);
 				
 				System.out.println("ReceiveQueueThreadRMI is ready.");

@@ -1,15 +1,17 @@
-package nodeP;
+package nodeManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class NodeRemoveThread extends Thread
+import nodeP.NodeData;
+
+public class ShutdownT extends Thread
 {
 	NodeData nodedata1;
 	String input;
 	
-	public NodeRemoveThread(NodeData nodedata1)
+	public ShutdownT(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
 	}

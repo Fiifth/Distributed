@@ -1,13 +1,15 @@
-package nodeP;
+package fileManagers;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import nameServer.NameServerInterface;
+import nodeP.NodeData;
 
-public class CheckOwnershipThread extends Thread
+public class FileOwnershipT extends Thread
 {
 	//TODO bij nieuwe node controleren of gerepliceerde bestanden een nieuwe eigenaar moeten hebben
 	//bij received files alles bijhouden en lijst afgaan via RMI of de ontvange files
@@ -15,7 +17,7 @@ public class CheckOwnershipThread extends Thread
 	NodeData nodedata1;
 	NameServerInterface nameserver;
 	//String fileLocation="C:\\SystemYNodeFilesRep";
-	public CheckOwnershipThread(NodeData nodedata1)
+	public FileOwnershipT(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
 	}
@@ -28,6 +30,7 @@ public class CheckOwnershipThread extends Thread
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		ArrayList<String> removeFileList=new ArrayList<String>();
 	for (String temp : nodedata1.replFiles) 
 	{
 		String [] tempArray=temp.split("-");
@@ -49,10 +52,14 @@ public class CheckOwnershipThread extends Thread
 		{
 			System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
 			nodedata1.fnQueue.add(tempArray[1]+"-"+tempArray[2]+"Rep");
-			nodedata1.replFiles.remove(temp);
-			//TODO preform remove after for loop otherwise ConcurrentModificationException
+			removeFileList.add(temp);
 		}
 	}
+		for (String temp:removeFileList)
+		{
+			nodedata1.replFiles.remove(temp);
+			//TODO remove the file from folder after sending
+		}
 	
 	}
 }

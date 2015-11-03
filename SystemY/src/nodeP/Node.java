@@ -1,5 +1,15 @@
 package nodeP;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
+
+import fileManagers.FileDetectionT;
+import fileManagers.FileExchangeT;
+import fileManagers.FileOwnershipT;
+import fileManagers.FileReceiverT;
+import nodeManager.NodeOrderThread;
+import nodeManager.ShutdownT;
 
 public class Node 
 {	
@@ -23,14 +33,14 @@ public class Node
 		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		
 		//removethread listens if node wants to leave
-		NodeRemoveThread rm = new NodeRemoveThread(nodedata1);
+		ShutdownT rm = new ShutdownT(nodedata1);
 		rm.start();
 
-		int numberOfNodes=nodedata1.getNameServerRespons(nodedata1);
+		int numberOfNodes=getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
 		{
 			System.out.println("Getting nodes...");
-			String nodes=nodedata1.getNextPrevNode();
+			String nodes=getNextPrevNode();
 			String[] node = nodes.split("-");
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
@@ -44,11 +54,11 @@ public class Node
 			 nodedata1.setNextNode(nodedata1.getMyNodeID());
 		}
 		
-		CreateLocaleFileQueueThread CLFQ =new CreateLocaleFileQueueThread(nodedata1);
+		FileDetectionT CLFQ =new FileDetectionT(nodedata1);
 		CLFQ.start();
-		ReceiveQueueThread RQT=new ReceiveQueueThread(nodedata1) ;
+		FileReceiverT RQT=new FileReceiverT(nodedata1) ;
 		(new Thread(RQT)).start();
-		SendReplicateFileThread SRFT = new SendReplicateFileThread(nodedata1);
+		FileExchangeT SRFT = new FileExchangeT(nodedata1);
 		SRFT.start();
 		
 		
@@ -75,10 +85,56 @@ public class Node
 				//start thread
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();
-				CheckOwnershipThread COT =new CheckOwnershipThread(nodedata1);
+				FileOwnershipT COT =new FileOwnershipT(nodedata1);
 				COT.start();
 			}
 			
 		}
+		
 	}
+
+		public String getNextPrevNode() 
+		{
+			ServerSocket welcomeSocket = null;
+			Socket connectionSocket = null;
+			String nextPrevNode = null;
+			
+			try {
+				welcomeSocket = new ServerSocket(6770);
+				connectionSocket = welcomeSocket.accept();
+				welcomeSocket.close();
+				BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+				nextPrevNode = inFromNameServer.readLine();			
+				connectionSocket.close();
+			} 
+			catch (IOException e) {e.printStackTrace();	}
+			return nextPrevNode;		
+		}
+		
+		public int getNameServerRespons(NodeData nodedata1)
+		{
+			ServerSocket welcomeSocket = null;
+			Socket connectionSocket = null;
+			InetAddress serverIP;
+			int nodes=0;
+			
+			try {
+				welcomeSocket = new ServerSocket(6790);
+				connectionSocket = welcomeSocket.accept();
+				welcomeSocket.close();
+				BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+				String amountOfNodes = inFromNameServer.readLine();
+				nodes=Integer.parseInt(amountOfNodes);
+				System.out.println("Amount of Nodes: " + amountOfNodes);
+				serverIP=connectionSocket.getInetAddress();
+				String ServerIPString=serverIP.getHostAddress();
+				nodedata1.setNameServerIP(ServerIPString);
+				
+				System.out.println("ServerIP: " + nodedata1.getNameServerIP());
+				
+				connectionSocket.close();
+			} 
+			catch (IOException e) {e.printStackTrace();	}
+			return nodes;
+		}
 }

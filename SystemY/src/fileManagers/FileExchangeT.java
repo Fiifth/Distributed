@@ -1,4 +1,4 @@
-package nodeP;
+package fileManagers;
 //TODO gaat queue af met files die gerepliceerd moeten worden, hierna vraagt deze via RMI
 //naar nameserver op met waar deze file naartoe zou moeten
 //daarna maakt hij een RMI connectie met de node in kwestie om zijn IP adres in een lijst te plaatsen
@@ -20,14 +20,15 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import nameServer.NameServerInterface;
+import nodeP.NodeData;
 
-public class SendReplicateFileThread extends Thread
+public class FileExchangeT extends Thread
 {
 	NodeData nodedata1;
 	NameServerInterface nameserver;
-	ReceiveQueueThreadInterface recInt;
+	FileReceiverInt recInt;
 	
-	public SendReplicateFileThread(NodeData nodedata1)
+	public FileExchangeT(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
 	}
@@ -67,7 +68,7 @@ public class SendReplicateFileThread extends Thread
 		String[] ipAndIdArray = ipAndId.split("-");
 		String ip = ipAndIdArray[0];
 		try {
-			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
+			recInt = (FileReceiverInt)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
