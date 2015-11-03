@@ -14,7 +14,7 @@ public class CheckOwnershipThread extends Thread
 	//een nieuwe eigenaar hebben
 	NodeData nodedata1;
 	NameServerInterface nameserver;
-	String fileLocation="C:\\SystemYNodeFilesRep\\";
+	String fileLocation="C:\\SystemYNodeFilesRep";
 	public CheckOwnershipThread(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
@@ -22,8 +22,15 @@ public class CheckOwnershipThread extends Thread
 	
 	public void run()
 	{
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	for (String temp : nodedata1.replFiles) 
 	{
+		System.out.println(temp);
 		String ipAndID = null;
 		try {
 			nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
@@ -41,13 +48,10 @@ public class CheckOwnershipThread extends Thread
 		
 		if (Integer.parseInt(ipAndIDArray[1])!=nodedata1.getMyNodeID())
 		{
-			try {
-				nodedata1.fnQueue.put(temp+"-"+fileLocation);
-				System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
+			
+				nodedata1.replFiles.add(temp+"Rep");
+			
 			nodedata1.replFiles.remove(temp);
 		}
 		System.out.println(temp);
