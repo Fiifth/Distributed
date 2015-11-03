@@ -41,6 +41,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 			String ipAndNameAndDir = null;
 			try {
 				ipAndNameAndDir=myQueue.take();
+				System.out.println("new entry in queue found(ip-name-dir):"+ipAndNameAndDir );
 			} catch (InterruptedException e) {e.printStackTrace();}
 			receiveFile(ipAndNameAndDir);
 			System.out.println(ipAndNameAndDir);
@@ -70,7 +71,6 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
 	public boolean addIP(String ip) throws RemoteException 
 	{
 		boolean queue=myQueue.offer(ip);
-		System.out.println("addedSomething");
 		return queue;
 	}
 
@@ -82,7 +82,7 @@ public class ReceiveQueueThread extends UnicastRemoteObject implements ReceiveQu
         String serverIP = ipAndNameAndDirArray[0];
         int serverPort = 3248;
         String fileOutput = "c:\\SystemYNodeFilesRep\\"+ipAndNameAndDirArray[1];
-        System.out.println(fileOutput);
+        System.out.println("receiveing file: "+fileOutput);
         Socket clientSocket = null;
         InputStream is = null;
         

@@ -40,7 +40,7 @@ public class SendReplicateFileThread extends Thread
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -59,7 +59,6 @@ public class SendReplicateFileThread extends Thread
 		
 		String ipAndId = null;
 		try {
-			System.out.println(FileNameAndDirArray[0]);
 			ipAndId = nameserver.locateFile(FileNameAndDirArray[0]);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -68,7 +67,6 @@ public class SendReplicateFileThread extends Thread
 		String[] ipAndIdArray = ipAndId.split("-");
 		String ip = ipAndIdArray[0];
 		try {
-			System.out.println(ipAndIdArray[1]);
 			recInt = (ReceiveQueueThreadInterface)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block
@@ -95,7 +93,7 @@ public class SendReplicateFileThread extends Thread
 	public void sendFile(String[] FileNameAndDir)
 	{
 		String fileToSend = FileNameAndDir[1] +"\\"+ FileNameAndDir[0];
-		System.out.println(fileToSend);
+		System.out.println("Sending following file:"+ fileToSend);
         while (true) {
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;

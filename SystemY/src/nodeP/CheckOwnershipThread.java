@@ -31,7 +31,6 @@ public class CheckOwnershipThread extends Thread
 	for (String temp : nodedata1.replFiles) 
 	{
 		String [] tempArray=temp.split("-");
-		System.out.println(temp);
 		String ipAndID = null;
 		try {
 			nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
@@ -46,18 +45,14 @@ public class CheckOwnershipThread extends Thread
 			e.printStackTrace();
 		}
 		String[] ipAndIDArray = ipAndID.split("-");
-		System.out.println(ipAndID);
-		System.out.println(nodedata1.getMyNodeID());
 		if (Integer.parseInt(ipAndIDArray[1])!=nodedata1.getMyNodeID())
 		{
 			System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
-			System.out.println(temp);
-			
-				nodedata1.fnQueue.add(tempArray[1]+"-"+tempArray[1]+"Rep\\");
-			
+			nodedata1.fnQueue.add(tempArray[1]+"-"+tempArray[2]+"Rep");
 			nodedata1.replFiles.remove(temp);
+			//TODO preform remove after for loop otherwise ConcurrentModificationException
 		}
-		System.out.println(temp);
 	}
+	
 	}
 }
