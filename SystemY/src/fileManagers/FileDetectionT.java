@@ -16,11 +16,12 @@ import java.nio.file.WatchService;
 
 import nodeP.NodeData;
 
-
-
 public class FileDetectionT extends Thread{
 	public WatchService watcher;
 	String dirToSearch = "C:\\SystemYNodeFiles";
+	//TODO addNodeName to filePath
+	//TODO create filepath if this doesn't exist
+	//TODO add these paths to nodeData and make wildly available (repl folder as well)
 	Path dir = Paths.get(dirToSearch);
 
 	NodeData nodedata1;
@@ -28,16 +29,11 @@ public class FileDetectionT extends Thread{
 	public FileDetectionT(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
-
-		dirToSearch = "C:\\SystemYNodeFiles";
 	}
-	/*public static void main(String args[]){
-		CreateLocaleFileQueueThread q = new CreateLocaleFileQueueThread();
-		q.run();
-	}*/
+	
 	public void run(){
 		//vul lijst en queue met nieuwe map
-		searchFilesToAdd();
+		firstSearchFilesToAdd();
 		try {
 			setupWatchService();
 		} catch (IOException e) {}
@@ -84,7 +80,7 @@ public class FileDetectionT extends Thread{
 		}
 	}
 	//bij startup de lijst en queue vullen me alle bestanden
-	public void searchFilesToAdd()
+	public void firstSearchFilesToAdd()
 	{
 		File folder = new File(dirToSearch);
 		File[] listOfFilesInDir = folder.listFiles();
@@ -97,19 +93,6 @@ public class FileDetectionT extends Thread{
 		}	
 	}
 	
-	//waarschijnlijk nie meer nodig
-	/*public void updateQueueWithNewFiles(){
-		File folder = new File(dirToSearch);
-		File[] listOfFilesInDir = folder.listFiles();
-		for (File file: listOfFilesInDir){
-			if(file.isFile()){
-				String fileName = file.getName();
-				if(!fnList.contains(fileName)){
-					fnQueue.add(fileName);
-				}
-			}
-		}	
-	}*/
 	//start watcher
 	public void setupWatchService() throws IOException{
 		watcher = FileSystems.getDefault().newWatchService();

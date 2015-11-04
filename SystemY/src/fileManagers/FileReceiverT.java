@@ -36,11 +36,11 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 		{
 			String ipAndNameAndDir = null;
 			try {
-				ipAndNameAndDir=myQueue.take();
+				ipAndNameAndDir=myQueue.take();//Wait until entry is found
 				System.out.println("new entry in queue found(ip-name-dir):"+ipAndNameAndDir );
 			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
 			receiveFile(ipAndNameAndDir);
-			nodedata1.replFiles.add(ipAndNameAndDir);
+			
 			}
 		}
 	
@@ -63,20 +63,26 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 
 	public void receiveFile(String ipAndNameAndDir)
 	{
-		String[] ipAndNameAndDirArray = ipAndNameAndDir.split("-");
-		byte[] aByte = new byte[1];
-        int bytesRead;
-        String serverIP = ipAndNameAndDirArray[0];
-        int serverPort = 3248;
-        String fileOutput = "c:\\SystemYNodeFilesRep\\"+ipAndNameAndDirArray[1];
-        System.out.println("receiveing file: "+fileOutput);
+		
+		FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
         Socket clientSocket = null;
         InputStream is = null;
-        
+		byte[] aByte = new byte[1];
+        int bytesRead;
+        String DirReplFiles="c:\\SystemYNodeFilesRep";
+		//TODO change dir to personalised node map 
+		String[] ipAndNameAndDirArray = ipAndNameAndDir.split("-");
+        String serverIP = ipAndNameAndDirArray[0];
+        int serverPort = 3248;
+        String fileOutput = DirReplFiles+"\\"+ipAndNameAndDirArray[1];
+        System.out.println("receiveing file: "+fileOutput);
+        //TODO before adding check if the file is present in the list already
+        nodedata1.replFiles.add(ipAndNameAndDirArray[1]+"-"+DirReplFiles);
+ 
         try 
         {
         	System.out.println("looking for server");
-        	//nieuwe socket om te communiceren met server
             clientSocket = new Socket(serverIP, serverPort);	
             is = clientSocket.getInputStream();
         } 
@@ -86,8 +92,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
         if (is != null) 
         {
         	System.out.println("Server found, recieving file");
-            FileOutputStream fos = null;
-            BufferedOutputStream bos = null;
+           
             try 
             {
                 fos = new FileOutputStream(fileOutput);

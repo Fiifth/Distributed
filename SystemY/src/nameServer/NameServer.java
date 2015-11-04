@@ -104,15 +104,12 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	{
 		int destinationKey=0;
 		int hashedFN = Math.abs(filename.hashCode()%32768);
-		System.out.println(hashedFN);
-
 		if(nodeMap.lowerKey(hashedFN)==null)
 		{
 			destinationKey=0;
 		}
 		else
 			destinationKey=nodeMap.lowerKey(hashedFN);
-		System.out.println(destinationKey);
 		if (destinationKey==0) destinationKey=nodeMap.lastKey();
 		
 		String toSend=nodeMap.get(destinationKey)+"-"+destinationKey;
