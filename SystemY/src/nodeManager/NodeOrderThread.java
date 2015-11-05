@@ -55,6 +55,7 @@ public class NodeOrderThread extends Thread {
 		//adding new node
 		else
 		{
+			//TODO if new node == myprev/mynext/myid-->do nothing
 			if(myPrevNode == myNextNode && myNextNode == myNodeID)
 			{
 				sendToNode(myNodeID+"-"+myNodeID,nodeIP);

@@ -14,7 +14,6 @@ public class NameServerThread extends Thread {
 	{
 		this.messageIn=messageIn;
 		this.nameServer=nameServer;
-		
 	}
 	
 	public void run() {
@@ -38,6 +37,7 @@ public class NameServerThread extends Thread {
 			try 
 			{
 				nameServer.addNode(message[1], nodeIP);
+				//TODO if node already exists send 0
 				Integer numberOfNodes = nameServer.getNodeMap().size(); 
 				System.out.println("Added NodeIP: " + nodeIP);
 				String numOfNodesString = numberOfNodes.toString();				

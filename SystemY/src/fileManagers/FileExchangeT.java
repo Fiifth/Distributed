@@ -33,10 +33,7 @@ public class FileExchangeT extends Thread
 	{
 		try {
 			Thread.sleep(2000);
-		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+		} catch (InterruptedException e1) {System.out.println("interrupted sleep");}
 		while(nodedata1.getToLeave()==0)
 			{
 			
@@ -53,6 +50,7 @@ public class FileExchangeT extends Thread
 			{
 				newRepOwner= true;
 			}
+			
 			if (newRepOwner)
 			{
 				try {

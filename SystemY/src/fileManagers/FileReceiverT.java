@@ -76,6 +76,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
         String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
         //TODO before adding check if the file is present in the list already
+        file1.setSourcePath(DirReplFiles);
         nodedata1.replFiles.add(file1);
  
         try 

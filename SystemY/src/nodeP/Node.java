@@ -41,11 +41,15 @@ public class Node
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
 			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 		}
-		else
+		else if(numberOfNodes==1)
 		{
 			System.out.println("I am the first node");
 			 nodedata1.setPrevNode(nodedata1.getMyNodeID());
 			 nodedata1.setNextNode(nodedata1.getMyNodeID());
+		}
+		else
+		{
+			//TODO node already exists
 		}
 
 		try {

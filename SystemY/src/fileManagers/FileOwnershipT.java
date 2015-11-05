@@ -1,7 +1,4 @@
 package fileManagers;
-//TODO make this thread a manager that runs in the backgrounds an waits from an entry from 
-//a blocking queue before checking all the replFiles
-import java.rmi.Naming;
 import java.util.ArrayList;
 
 import nameServer.NameServerInterface;

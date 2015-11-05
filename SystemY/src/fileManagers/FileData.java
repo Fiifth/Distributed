@@ -8,9 +8,6 @@ import nodeP.NodeData;
 
 public class FileData implements Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private volatile String fileName;
 	private volatile String sourcePath="C:\\SystemYNodeFiles";
