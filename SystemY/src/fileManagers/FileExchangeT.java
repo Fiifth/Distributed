@@ -13,14 +13,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.rmi.Naming;
-import nameServer.NameServerInterface;
 import nodeP.NodeData;
 
 public class FileExchangeT extends Thread
 {
 	NodeData nodedata1;
-	NameServerInterface nameserver;
 	FileReceiverInt recInt;
 	
 	public FileExchangeT(NodeData nodedata1)
@@ -29,39 +31,56 @@ public class FileExchangeT extends Thread
 	}
 	public void run()
 	{
-		String ipAndId = null;
-		
-			try {
-				nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
-				Thread.sleep(1000);
-			} catch (Exception e) {System.out.println("failed connect to RMI of the server");}
-			
-		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		while(nodedata1.getToLeave()==0)
 			{
-			String FileNameAndDir = null;
-			String[] FileNameAndDirArray=null;
-			try {
-				FileNameAndDir = nodedata1.toSendFileNameAndDirList.take();
-				FileNameAndDirArray = FileNameAndDir.split("-");
-			} catch (InterruptedException e1) {System.out.println("interrupted while waiting for queue");}
 			
+			FileData file1=null;
+			boolean newRepOwner=true;
+			try {
+				file1 = nodedata1.toSendFileNameAndDirList.take();
+			} catch (InterruptedException e1) {System.out.println("interrupted while waiting for queue");}
+			if (!file1.getReplicateDataSet())
+			{
+				newRepOwner=file1.refreshReplicateOwner(nodedata1,file1);
+			}
+			else
+			{
+				newRepOwner= true;
+			}
+			if (newRepOwner)
+			{
 				try {
-					ipAndId = nameserver.locateFile(FileNameAndDirArray[0]);
-					String[] ipAndIdArray = ipAndId.split("-");
-					String ip = ipAndIdArray[0];
-					recInt = (FileReceiverInt)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
-					recInt.addIP(nodedata1.getMyIP()+"-"+FileNameAndDir);
+					recInt = (FileReceiverInt)Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/FileReceiverT");
+					recInt.addIP(file1);
 				} catch (Exception e) {System.out.println("failed connect to RMI of the node");}
 				
-				sendFile(FileNameAndDirArray);
+				sendFile(file1);
 			}
+			else
+			{
+				System.out.print("the file exist locally: ");
+				Path source = Paths.get(file1.getSourcePath()+"\\"+file1.getFileName());
+				Path destination = Paths.get("c:\\SystemYNodeFilesRep\\"+file1.getFileName());
+				try {
+					Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
+					System.out.println("copy is done");
+					nodedata1.replFiles.add(file1);
+				} catch (IOException e) {System.out.println("couln't copy file");}
+				
+			}
+		}
 
 	}
-	public void sendFile(String[] FileNameAndDir)
+	public void sendFile(FileData file1)
 	{
-		String filePath = FileNameAndDir[1] +"\\"+ FileNameAndDir[0];
-		System.out.println("Sending following file:"+ filePath);
+		String filePath = file1.getSourcePath()+"\\"+file1.getFileName();
+		System.out.println("Sending following file: "+ filePath);
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;
             BufferedOutputStream outToClient = null;

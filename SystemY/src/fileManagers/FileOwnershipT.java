@@ -18,33 +18,25 @@ public class FileOwnershipT extends Thread
 	
 	public void run()
 	{
-		ArrayList<String> removeFileList=new ArrayList<String>();
+		ArrayList<FileData> removeFileList=new ArrayList<FileData>();
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {e1.printStackTrace();
 		}
-	for (String fileNameAndDir : nodedata1.replFiles) 
+	for (FileData file1 : nodedata1.replFiles) 
 	{
-		//replFiles cointains ipAndNameAndDirArray[1]+DirReplFiles
-		String[] fileNameAndDirArray=fileNameAndDir.split("-");
-		String ipAndID = null;
-		try {
-			nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
-			ipAndID = nameserver.locateFile(fileNameAndDirArray[0]);
-		} catch (Exception e) {System.out.println("failed connect to RMI of the server and get ip");}
 		
-		String[] ipAndIDArray = ipAndID.split("-");
-
-		if (Integer.parseInt(ipAndIDArray[1])!=nodedata1.getMyNodeID())
+		boolean newRepOwner =file1.refreshReplicateOwner(nodedata1,file1);
+		if (newRepOwner)
 		{
-			System.out.println("Changing owner to:"+ Integer.parseInt(ipAndIDArray[1]));
-			nodedata1.toSendFileNameAndDirList.add(fileNameAndDir);
-			removeFileList.add(fileNameAndDir);
+			System.out.println("Changing owner to:"+ file1.getReplicateOwnerID());
+			nodedata1.toSendFileNameAndDirList.add(file1);
+			removeFileList.add(file1);
 		}
 	}
-		for (String temp:removeFileList)
+		for (FileData file1:removeFileList)
 		{
-			nodedata1.replFiles.remove(temp);
+			nodedata1.replFiles.remove(file1);
 			//TODO remove the file from folder after sending (remove file manager)
 		}
 	

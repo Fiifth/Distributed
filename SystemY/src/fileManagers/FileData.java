@@ -1,33 +1,42 @@
 package fileManagers;
 
+import java.io.Serializable;
 import java.rmi.Naming;
 
 import nameServer.NameServerInterface;
 import nodeP.NodeData;
 
-public class FileData 
+public class FileData implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private volatile String fileName;
-	private volatile String localPath="C:\\SystemYNodeFiles";
+	private volatile String sourcePath="C:\\SystemYNodeFiles";
 	private volatile String localOwnerIP;
-	private volatile int localOwnerID;
+	private volatile int localOwnerID; //TODO keep list of localOwners
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
-	private volatile String replicatePath="c:\\SystemYNodeFilesRep";
+	private volatile boolean replicateDataSet=false;
 	
 	public void setNewFileData(String fileName, String localPath, NodeData nodedata1)
 	{
 		this.fileName=fileName;
-		this.localPath=localPath;
+		this.sourcePath=localPath;
 		localOwnerIP=nodedata1.getMyIP();
 		localOwnerID=nodedata1.getMyNodeID();
 	}
 	
+	public void setSourcePath(String sourcePath) {
+		this.sourcePath = sourcePath;
+	}
+
 	public String getFileName() {
 		return fileName;
 	}
-	public String getLocalPath() {
-		return localPath;
+	public String getSourcePath() {
+		return sourcePath;
 	}
 	public String getLocalOwnerIP() {
 		return localOwnerIP;
@@ -41,12 +50,16 @@ public class FileData
 	public String getReplicateOwnerIP() {
 		return replicateOwnerIP;
 	}
-	public String getReplicatePath() {
-		return replicatePath;
+	
+	public boolean getReplicateDataSet() {
+		return replicateDataSet;
 	}
-	
-	
-	public boolean refreshReplicateOwner(NodeData nodedata1)
+
+	public void setReplicateDataSet(boolean b) {
+		this.replicateDataSet = b;
+	}
+
+	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
 	{
 		String[] ipAndIDArray=null;
 		try {
@@ -54,10 +67,11 @@ public class FileData
 			String ipAndID = nameserver.locateFile(getFileName());
 			ipAndIDArray=ipAndID.split("-");
 		} catch (Exception e) {System.out.println("failed connect to RMI of the server and get ip");}
-		replicateOwnerIP=ipAndIDArray[0];
-		replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
-		if (replicateOwnerIP==nodedata1.getMyIP()&&(replicateOwnerID==nodedata1.getMyNodeID()))
-			return false;
-			else return true;
+		filedata1.replicateOwnerIP=ipAndIDArray[0];
+		filedata1.replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
+		filedata1.setReplicateDataSet(true);
+		//System.out.println(replicateOwnerIP+nodedata1.getMyIP()+replicateOwnerID+nodedata1.getMyNodeID());
+		 return !(replicateOwnerID==nodedata1.getMyNodeID());
+			
 	}
 }

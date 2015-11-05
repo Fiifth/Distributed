@@ -4,5 +4,5 @@ import java.rmi.RemoteException;
 
 public interface FileReceiverInt extends java.rmi.Remote
 {
-boolean addIP(String ip) throws RemoteException;
+boolean addIP(FileData file1) throws RemoteException;
 }

@@ -5,16 +5,27 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import fileManagers.FileData;
 import fileManagers.FileReceiverInt;
 
 public class ReceiveQueueRMITest {
 
-	public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException 
+	public static void main(String[] args)
 	{
-		FileReceiverInt RecInt;
-		RecInt = (FileReceiverInt)Naming.lookup("//localhost:2000/ReceiveQueueThread");
+		FileData fileData1=null;
+		FileReceiverInt RecInt=null;
+		try {
+			RecInt = (FileReceiverInt)Naming.lookup("//localhost:14393/ReceiveQueueThread");
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			System.out.println("test");
+			e.printStackTrace();
+		}
 		System.out.println("Excecuting remote method:");
-		RecInt.addIP("192.168.1.1-test.jpg");
+		try {
+			RecInt.addIP(fileData1);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

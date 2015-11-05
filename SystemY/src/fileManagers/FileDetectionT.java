@@ -22,7 +22,6 @@ public class FileDetectionT extends Thread{
 	//TODO addNodeName to filePath (+ in FileData)
 	//TODO create filepath if this doesn't exist
 	//TODO add these paths to nodeData and make wildly available (repl folder as well)
-	//TODO implement the class FileData to all managers
 	Path dir = Paths.get(dirToSearch);
 
 	NodeData nodedata1;
@@ -60,8 +59,10 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_CREATE){
 					System.out.println("new file added");
-					nodedata1.toSendFileNameAndDirList.add((fileName.toString())+"-"+dirToSearch);
-					nodedata1.localFiles.add(fileName.toString());
+					FileData file1=new FileData();
+					file1.setNewFileData(fileName.toString(), dirToSearch, nodedata1);
+					nodedata1.toSendFileNameAndDirList.add(file1);
+					nodedata1.localFiles.add(file1);
 				}
 				else if(kind == ENTRY_MODIFY){
 					System.out.println("file modified");
@@ -89,8 +90,11 @@ public class FileDetectionT extends Thread{
 		for (File file: listOfFilesInDir){
 			if(file.isFile()){
 				String fileName = file.getName();
-				nodedata1.toSendFileNameAndDirList.add(fileName+"-"+dirToSearch);
-				nodedata1.localFiles.add(fileName+"-"+dirToSearch);
+				FileData file1=new FileData();
+				file1.setNewFileData(fileName, dirToSearch, nodedata1);
+				
+				nodedata1.toSendFileNameAndDirList.add(file1);
+				nodedata1.localFiles.add(file1);
 			}
 		}	
 	}

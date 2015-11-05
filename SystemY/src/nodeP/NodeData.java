@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import fileManagers.FileData;
+
 public class NodeData {
 	private volatile String nodeName;
 	private volatile int prevNode;
@@ -14,9 +16,9 @@ public class NodeData {
 	private volatile int toLeave;
 	private volatile String nameServerIP;
 	private volatile String myIP;
-	public volatile BlockingQueue<String> toSendFileNameAndDirList=new ArrayBlockingQueue<String>(500);
-	public volatile ArrayList<String> localFiles=new ArrayList<String>();	
-	public volatile ArrayList<String> replFiles=new ArrayList<String>();
+	public volatile BlockingQueue<FileData> toSendFileNameAndDirList=new ArrayBlockingQueue<FileData>(500);
+	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
+	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
 	
 	public String getNodeName() {
 		return nodeName;

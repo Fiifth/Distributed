@@ -19,7 +19,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 {
 
 	private static final long serialVersionUID = 1L;
-	public static BlockingQueue<String> myQueue=new ArrayBlockingQueue<String>(500);
+	public static BlockingQueue<FileData> myQueue=new ArrayBlockingQueue<FileData>(500);
 	NodeData nodedata1;
 	
 	public FileReceiverT(NodeData nodedata1) throws RemoteException
@@ -35,11 +35,11 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 		while(true)
 		{
 			String ipAndNameAndDir = null;
+			FileData file1=null;
 			try {
-				ipAndNameAndDir=myQueue.take();//Wait until entry is found
-				System.out.println("new entry in queue found(ip-name-dir):"+ipAndNameAndDir );
+				file1=myQueue.take();//Wait until entry is found
 			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
-			receiveFile(ipAndNameAndDir);
+			receiveFile(file1);
 			
 			}
 		}
@@ -49,19 +49,19 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 			try{
 				LocateRegistry.createRegistry(nodedata1.getMyNodeID());
 				FileReceiverInt RecInt = new FileReceiverT(nodedata1);
-				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/ReceiveQueueThread", RecInt);
+				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/FileReceiverT", RecInt);
 				System.out.println("ReceiveQueueThreadRMI is ready.");
 				}
 				catch(Exception e){System.out.println("couldn't start RMI");}
 	}
 
-	public boolean addIP(String ip) throws RemoteException 
+	public boolean addIP(FileData file1) throws RemoteException 
 	{
-		boolean queue=myQueue.offer(ip);
+		boolean queue=myQueue.offer(file1);
 		return queue;
 	}
 
-	public void receiveFile(String ipAndNameAndDir)
+	public void receiveFile(FileData file1)
 	{
 		
 		FileOutputStream fos = null;
@@ -72,18 +72,16 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
         int bytesRead;
         String DirReplFiles="c:\\SystemYNodeFilesRep";
 		//TODO change dir to personalised node map 
-		String[] ipAndNameAndDirArray = ipAndNameAndDir.split("-");
-        String serverIP = ipAndNameAndDirArray[0];
         int serverPort = 3248;
-        String fileOutput = DirReplFiles+"\\"+ipAndNameAndDirArray[1];
+        String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
         //TODO before adding check if the file is present in the list already
-        nodedata1.replFiles.add(ipAndNameAndDirArray[1]+"-"+DirReplFiles);
+        nodedata1.replFiles.add(file1);
  
         try 
         {
         	System.out.println("looking for server");
-            clientSocket = new Socket(serverIP, serverPort);	
+            clientSocket = new Socket(file1.getLocalOwnerIP(), serverPort);	
             is = clientSocket.getInputStream();
         } 
         catch (IOException ex) {System.out.println("couldn't open socket");}
