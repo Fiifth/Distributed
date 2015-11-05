@@ -13,6 +13,7 @@ public class NodeData {
 	private volatile int myNodeID;
 	private volatile int toLeave;
 	private volatile String nameServerIP;
+	private volatile String myIP;
 	public volatile BlockingQueue<String> toSendFileNameAndDirList=new ArrayBlockingQueue<String>(500);
 	public volatile ArrayList<String> localFiles=new ArrayList<String>();	
 	public volatile ArrayList<String> replFiles=new ArrayList<String>();
@@ -22,6 +23,9 @@ public class NodeData {
 	}
 	public void setNodeName(String nodeName) {
 		setMyNodeID(Math.abs(nodeName.hashCode()%32768));
+		try {
+			setMyIP(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {}
 		this.nodeName = nodeName;
 	}
 	public int getPrevNode() {
@@ -56,6 +60,12 @@ public class NodeData {
 	}
 	
 
+	public String getMyIP() {
+		return myIP;
+	}
+	public void setMyIP(String myIP) {
+		this.myIP = myIP;
+	}
 	public void sendMulticast(String name)
 	{
 		MulticastSocket multicastSocket =null;

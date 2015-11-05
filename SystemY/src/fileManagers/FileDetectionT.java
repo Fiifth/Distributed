@@ -19,9 +19,10 @@ import nodeP.NodeData;
 public class FileDetectionT extends Thread{
 	public WatchService watcher;
 	String dirToSearch = "C:\\SystemYNodeFiles";
-	//TODO addNodeName to filePath
+	//TODO addNodeName to filePath (+ in FileData)
 	//TODO create filepath if this doesn't exist
 	//TODO add these paths to nodeData and make wildly available (repl folder as well)
+	//TODO implement the class FileData to all managers
 	Path dir = Paths.get(dirToSearch);
 
 	NodeData nodedata1;
@@ -66,6 +67,7 @@ public class FileDetectionT extends Thread{
 					System.out.println("file modified");
 				}
 				//TODO replicating node inlichten over removal
+				//TODO remove file manager
 				/*else if(kind == ENTRY_DELETE){
 					
 					System.out.println("file removed");

@@ -45,7 +45,7 @@ public class FileOwnershipT extends Thread
 		for (String temp:removeFileList)
 		{
 			nodedata1.replFiles.remove(temp);
-			//TODO remove the file from folder after sending
+			//TODO remove the file from folder after sending (remove file manager)
 		}
 	
 	}

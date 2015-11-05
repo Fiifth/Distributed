@@ -11,13 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
-
 import nameServer.NameServerInterface;
 import nodeP.NodeData;
 
@@ -34,7 +30,6 @@ public class FileExchangeT extends Thread
 	public void run()
 	{
 		String ipAndId = null;
-		String myIP=null;
 		
 			try {
 				nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
@@ -56,13 +51,9 @@ public class FileExchangeT extends Thread
 					String[] ipAndIdArray = ipAndId.split("-");
 					String ip = ipAndIdArray[0];
 					recInt = (FileReceiverInt)Naming.lookup("//"+ip+":"+ipAndIdArray[1]+"/ReceiveQueueThread");
+					recInt.addIP(nodedata1.getMyIP()+"-"+FileNameAndDir);
 				} catch (Exception e) {System.out.println("failed connect to RMI of the node");}
 				
-				try {
-					myIP=InetAddress.getLocalHost().getHostAddress();
-					recInt.addIP(myIP+"-"+FileNameAndDir);
-				} catch (UnknownHostException | RemoteException e1) {System.out.println("failed connect place data in queue");}
-		
 				sendFile(FileNameAndDirArray);
 			}
 
@@ -71,8 +62,6 @@ public class FileExchangeT extends Thread
 	{
 		String filePath = FileNameAndDir[1] +"\\"+ FileNameAndDir[0];
 		System.out.println("Sending following file:"+ filePath);
-		        while (true) 
-        {
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;
             BufferedOutputStream outToClient = null;
@@ -105,8 +94,7 @@ public class FileExchangeT extends Thread
                     fis.close();
 					bis.close();
                 } catch (IOException ex) {System.out.println("Sending file failed!"); } 
-            }
-            return;
+
         }
 	}
 }
