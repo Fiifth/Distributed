@@ -18,11 +18,8 @@ import nodeP.NodeData;
 
 public class FileDetectionT extends Thread{
 	public WatchService watcher;
-	String dirToSearch = "C:\\SystemYNodeFiles";
-	//TODO addNodeName to filePath (+ in FileData)
-	//TODO create filepath if this doesn't exist
-	//TODO add these paths to nodeData and make wildly available (repl folder as well)
-	Path dir = Paths.get(dirToSearch);
+	String dirToSearch;
+	Path dir;
 
 	NodeData nodedata1;
 	
@@ -32,6 +29,8 @@ public class FileDetectionT extends Thread{
 	}
 	
 	public void run(){
+		dirToSearch = nodedata1.getMyLocalFolder();
+		dir = Paths.get(dirToSearch);
 		//vul lijst en queue met nieuwe map
 		firstSearchFilesToAdd();
 		try {
@@ -86,18 +85,23 @@ public class FileDetectionT extends Thread{
 	public void firstSearchFilesToAdd()
 	{
 		File folder = new File(dirToSearch);
+		if (!folder.exists())
+			folder.mkdir();
+
 		File[] listOfFilesInDir = folder.listFiles();
-		for (File file: listOfFilesInDir){
-			if(file.isFile()){
-				String fileName = file.getName();
-				FileData file1=new FileData();
-				file1.setNewFileData(fileName, dirToSearch, nodedata1);
-				
-				nodedata1.toSendFileNameAndDirList.add(file1);
-				nodedata1.localFiles.add(file1);
-			}
-		}	
-	}
+			for (File file: listOfFilesInDir)
+			{
+				if(file.isFile())
+				{
+					String fileName = file.getName();
+					FileData file1=new FileData();
+					file1.setNewFileData(fileName, dirToSearch, nodedata1);
+					nodedata1.toSendFileNameAndDirList.add(file1);
+					nodedata1.localFiles.add(file1);
+				}
+			}	
+		}
+	
 	
 	//start watcher
 	public void setupWatchService() throws IOException{

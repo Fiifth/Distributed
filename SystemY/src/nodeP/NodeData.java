@@ -16,6 +16,8 @@ public class NodeData {
 	private volatile int toLeave;
 	private volatile String nameServerIP;
 	private volatile String myIP;
+	private volatile String myLocalFolder;
+	private volatile String myReplFolder;
 	public volatile BlockingQueue<FileData> toSendFileNameAndDirList=new ArrayBlockingQueue<FileData>(500);
 	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
 	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
@@ -29,6 +31,8 @@ public class NodeData {
 			setMyIP(InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {}
 		this.nodeName = nodeName;
+		setMyReplFolder("c:\\SystemYNodeFilesRep"+getMyNodeID());
+		setMyLocalFolder("c:\\SystemYNodeFiles"+getMyNodeID());
 	}
 	public int getPrevNode() {
 		return prevNode;
@@ -67,6 +71,18 @@ public class NodeData {
 	}
 	public void setMyIP(String myIP) {
 		this.myIP = myIP;
+	}
+	public String getMyLocalFolder() {
+		return myLocalFolder;
+	}
+	public void setMyLocalFolder(String myLocalFolder) {
+		this.myLocalFolder = myLocalFolder;
+	}
+	public String getMyReplFolder() {
+		return myReplFolder;
+	}
+	public void setMyReplFolder(String myReplFolder) {
+		this.myReplFolder = myReplFolder;
 	}
 	public void sendMulticast(String name)
 	{

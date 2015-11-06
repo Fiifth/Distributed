@@ -17,7 +17,7 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("5.txt");
+		node1.startNieuweNode("7.txt");
 	}
 	public void startNieuweNode(String nodeNaam)
 	{
@@ -27,10 +27,7 @@ public class Node
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
 
 		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());
-		
-		//removethread listens if node wants to leave
-		ShutdownT rm = new ShutdownT(nodedata1);
-		rm.start();
+
 
 		int numberOfNodes=getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
@@ -47,12 +44,20 @@ public class Node
 			 nodedata1.setPrevNode(nodedata1.getMyNodeID());
 			 nodedata1.setNextNode(nodedata1.getMyNodeID());
 		}
+		else if(numberOfNodes==0)
+		{
+			System.out.println("this node name already exists please try again with a different name");
+			return;
+		}
 		else
 		{
-			//TODO node already exists
-		}
+			System.out.println("no nameserver was found");
+			return;
+		}	
 
 		try {
+			ShutdownT rm = new ShutdownT(nodedata1);
+			rm.start();
 			FileDetectionT CLFQ =new FileDetectionT(nodedata1);
 			CLFQ.start();
 			FileReceiverT RQT;
@@ -117,10 +122,11 @@ public class Node
 			ServerSocket welcomeSocket = null;
 			Socket connectionSocket = null;
 			InetAddress serverIP;
-			int nodes=0;
+			int nodes=-1;
 			
 			try {
 				welcomeSocket = new ServerSocket(6790);
+				welcomeSocket.setSoTimeout(5000);
 				connectionSocket = welcomeSocket.accept();
 				welcomeSocket.close();
 				BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
@@ -131,7 +137,7 @@ public class Node
 				nodedata1.setNameServerIP(ServerIPString);
 				connectionSocket.close();
 			} 
-			catch (IOException e) {e.printStackTrace();	}
+			catch (IOException e) {}
 			return nodes;
 		}
 }

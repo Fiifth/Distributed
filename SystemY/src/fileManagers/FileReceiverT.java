@@ -2,6 +2,7 @@ package fileManagers;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,16 +31,19 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 	
 	public void run() 
 	{
+		String DirReplFiles=nodedata1.getMyReplFolder();
+		File folder = new File(DirReplFiles);
+		if (!folder.exists())
+			folder.mkdir();
 		setUpRMI(nodedata1);
 		
 		while(true)
 		{
-			String ipAndNameAndDir = null;
 			FileData file1=null;
 			try {
 				file1=myQueue.take();//Wait until entry is found
 			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
-			receiveFile(file1);
+			receiveFile(file1,DirReplFiles);
 			
 			}
 		}
@@ -55,13 +59,17 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 				catch(Exception e){System.out.println("couldn't start RMI");}
 	}
 
-	public boolean addIP(FileData file1) throws RemoteException 
+	public boolean receiveThisFile(FileData file1) throws RemoteException 
 	{
 		boolean queue=myQueue.offer(file1);
 		return queue;
 	}
+	public boolean removeThisFile(FileData file1) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-	public void receiveFile(FileData file1)
+	public void receiveFile(FileData file1, String DirReplFiles)
 	{
 		
 		FileOutputStream fos = null;
@@ -70,13 +78,12 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
         InputStream is = null;
 		byte[] aByte = new byte[1];
         int bytesRead;
-        String DirReplFiles="c:\\SystemYNodeFilesRep";
-		//TODO change dir to personalised node map 
+        
         int serverPort = 3248;
         String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
         //TODO before adding check if the file is present in the list already
-        file1.setSourcePath(DirReplFiles);
+        file1.setFolderLocation(DirReplFiles);
         nodedata1.replFiles.add(file1);
  
         try 
@@ -112,4 +119,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
             catch (IOException ex) {System.out.println("File not found or error sending it");}
         }
     }
+
+
+	
 }

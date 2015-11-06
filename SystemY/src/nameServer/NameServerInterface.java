@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 public interface NameServerInterface extends java.rmi.Remote{
 	
-	void addNode(String nodeName, String nodeIP) throws RemoteException;
+	boolean addNode(String nodeName, String nodeIP) throws RemoteException;
 	
 	void rmNode(String nodeName, String nodeIP) throws RemoteException;
 	

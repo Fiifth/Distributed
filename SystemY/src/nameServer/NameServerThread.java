@@ -34,24 +34,28 @@ public class NameServerThread extends Thread {
 		}
 		else//addnode
 		{
+			String numOfNodesString=null;
 			try 
 			{
-				nameServer.addNode(message[1], nodeIP);
-				//TODO if node already exists send 0
-				Integer numberOfNodes = nameServer.getNodeMap().size(); 
-				System.out.println("Added NodeIP: " + nodeIP);
-				String numOfNodesString = numberOfNodes.toString();				
+				boolean isNewNode=nameServer.addNode(message[1], nodeIP);
+				if (isNewNode)
+				{
+					Integer numberOfNodes = nameServer.getNodeMap().size(); 
+					System.out.println("Added NodeIP: " + nodeIP);
+					numOfNodesString = numberOfNodes.toString();	
+				}
+				else
+				{
+					numOfNodesString="0";
+				}
 				Socket clientSocket;
 				try {
 					clientSocket = new Socket(nodeIP,6790);
 					DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 					outToNode.writeBytes(numOfNodesString + "\n");
 					clientSocket.close();
-				} catch (IOException e) {e.printStackTrace();}
-			} catch (RemoteException e) {e.printStackTrace();}
+					} catch (IOException e) {e.printStackTrace();}
+			}catch (RemoteException e) {e.printStackTrace();}		
 		}
-		
-			
 	}
-
 }

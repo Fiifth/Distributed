@@ -22,7 +22,7 @@ public class ReceiveQueueRMITest {
 		}
 		System.out.println("Excecuting remote method:");
 		try {
-			RecInt.addIP(fileData1);
+			RecInt.receiveThisFile(fileData1);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

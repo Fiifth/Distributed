@@ -55,8 +55,11 @@ public class NodeOrderThread extends Thread {
 		//adding new node
 		else
 		{
-			//TODO if new node == myprev/mynext/myid-->do nothing
-			if(myPrevNode == myNextNode && myNextNode == myNodeID)
+			if (myNodeID == newNodeID || newNodeID==myNextNode ||newNodeID==myPrevNode )
+			{
+				System.out.println("the new node already existed and won't be added");
+			}
+			else if(myPrevNode == myNextNode && myNextNode == myNodeID)
 			{
 				sendToNode(myNodeID+"-"+myNodeID,nodeIP);
 				nodedata1.setPrevNode(newNodeID);

@@ -69,17 +69,24 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	}
 	
 
-	public void addNode(String nodeName, String nodeIP) throws RemoteException {
+	public boolean addNode(String nodeName, String nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
-    	nodeMap.put(hashedNN,nodeIP);
-    	
-    	System.out.println("************");
-    	System.out.println("CURRENT MAP:");
-    	for (Entry<Integer, String> entry : nodeMap.entrySet()) 
-    	{
-    	     System.out.println("Key: " + entry.getKey() + ", NodeIP: " + entry.getValue());
-    	}
-    	System.out.println("************");
+		if (!nodeMap.containsKey(hashedNN))
+		{
+	    	nodeMap.put(hashedNN,nodeIP);
+	    	
+	    	System.out.println("************");
+	    	System.out.println("CURRENT MAP:");
+	    	for (Entry<Integer, String> entry : nodeMap.entrySet()) 
+	    	{
+	    	     System.out.println("Key: " + entry.getKey() + ", NodeIP: " + entry.getValue());
+	    	}
+	    	System.out.println("************");
+	    	return true;
+		}
+		else
+			System.out.println("This node name already exists");
+		return false;
 	}
 
 	public void rmNode(String nodeName, String nodeIP) throws RemoteException {

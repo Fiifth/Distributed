@@ -55,7 +55,7 @@ public class FileExchangeT extends Thread
 			{
 				try {
 					recInt = (FileReceiverInt)Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/FileReceiverT");
-					recInt.addIP(file1);
+					recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connect to RMI of the node");}
 				
 				sendFile(file1);
@@ -63,8 +63,8 @@ public class FileExchangeT extends Thread
 			else
 			{
 				System.out.print("the file exist locally: ");
-				Path source = Paths.get(file1.getSourcePath()+"\\"+file1.getFileName());
-				Path destination = Paths.get("c:\\SystemYNodeFilesRep\\"+file1.getFileName());
+				Path source = Paths.get(nodedata1.getMyLocalFolder());
+				Path destination = Paths.get(nodedata1.getMyReplFolder());
 				try {
 					Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
 					System.out.println("copy is done");
@@ -77,7 +77,7 @@ public class FileExchangeT extends Thread
 	}
 	public void sendFile(FileData file1)
 	{
-		String filePath = file1.getSourcePath()+"\\"+file1.getFileName();
+		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
 		System.out.println("Sending following file: "+ filePath);
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;

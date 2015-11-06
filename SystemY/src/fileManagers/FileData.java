@@ -10,30 +10,30 @@ public class FileData implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private volatile String fileName;
-	private volatile String sourcePath="C:\\SystemYNodeFiles";
+	private volatile String folderLocation="C:\\SystemYNodeFiles";
 	private volatile String localOwnerIP;
 	private volatile int localOwnerID; //TODO keep list of localOwners
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
 	private volatile boolean replicateDataSet=false;
 	
-	public void setNewFileData(String fileName, String localPath, NodeData nodedata1)
+	public void setNewFileData(String fileName, String folderLocation, NodeData nodedata1)
 	{
 		this.fileName=fileName;
-		this.sourcePath=localPath;
+		this.folderLocation=folderLocation;
 		localOwnerIP=nodedata1.getMyIP();
 		localOwnerID=nodedata1.getMyNodeID();
 	}
 	
-	public void setSourcePath(String sourcePath) {
-		this.sourcePath = sourcePath;
+	public void setFolderLocation(String folderLocation) {
+		this.folderLocation = folderLocation;
 	}
 
 	public String getFileName() {
 		return fileName;
 	}
-	public String getSourcePath() {
-		return sourcePath;
+	public String getFolderLocation() {
+		return folderLocation;
 	}
 	public String getLocalOwnerIP() {
 		return localOwnerIP;
