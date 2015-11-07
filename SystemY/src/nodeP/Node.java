@@ -46,7 +46,7 @@ public class Node
 		}
 		else if(numberOfNodes==0)
 		{
-			System.out.println("this node name already exists please try again with a different name");
+			System.out.println("this node name already exists, please try again with a different name");
 			return;
 		}
 		else

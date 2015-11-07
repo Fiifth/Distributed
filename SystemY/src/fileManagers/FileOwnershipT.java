@@ -26,7 +26,7 @@ public class FileOwnershipT extends Thread
 		boolean newRepOwner =file1.refreshReplicateOwner(nodedata1,file1);
 		if (newRepOwner)
 		{
-			System.out.println("Changing owner to:"+ file1.getReplicateOwnerID());
+			System.out.println("Changing owner to: "+ file1.getReplicateOwnerID());
 			nodedata1.toSendFileNameAndDirList.add(file1);
 			removeFileList.add(file1);
 		}

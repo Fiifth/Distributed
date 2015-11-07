@@ -64,7 +64,7 @@ public class NodeOrderThread extends Thread {
 				sendToNode(myNodeID+"-"+myNodeID,nodeIP);
 				nodedata1.setPrevNode(newNodeID);
 				nodedata1.setNextNode(newNodeID);
-				System.out.println("I am the previous/next of the new node (second)");
+				System.out.println("I am the previous and next of the new node (second)");
 			}
 			
 			

@@ -97,7 +97,7 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 
         if (is != null) 
         {
-        	System.out.println("Server found, recieving file");
+        	System.out.println("Server found, receiving file");
            
             try 
             {
