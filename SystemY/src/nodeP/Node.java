@@ -99,7 +99,7 @@ public class Node
 		}
 	}
 
-		public String getNextPrevNode() 
+	public String getNextPrevNode() 
 		{
 			ServerSocket welcomeSocket = null;
 			Socket connectionSocket = null;
@@ -117,7 +117,7 @@ public class Node
 			return nextPrevNode;		
 		}
 		
-		public int getNameServerRespons(NodeData nodedata1)
+	public int getNameServerRespons(NodeData nodedata1)
 		{
 			ServerSocket welcomeSocket = null;
 			Socket connectionSocket = null;

@@ -15,7 +15,7 @@ public class FileData implements Serializable
 	private volatile int localOwnerID; //TODO keep list of localOwners
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
-	private volatile boolean replicateDataSet=false;
+	private volatile boolean destinationUpToDate=false;
 	
 	public void setNewFileData(String fileName, String folderLocation, NodeData nodedata1)
 	{
@@ -48,12 +48,12 @@ public class FileData implements Serializable
 		return replicateOwnerIP;
 	}
 	
-	public boolean getReplicateDataSet() {
-		return replicateDataSet;
+	public boolean getDestinationUpToDate() {
+		return destinationUpToDate;
 	}
 
-	public void setReplicateDataSet(boolean b) {
-		this.replicateDataSet = b;
+	public void setDestinationUpToDate(boolean b) {
+		this.destinationUpToDate = b;
 	}
 
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
@@ -66,7 +66,7 @@ public class FileData implements Serializable
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
 		filedata1.replicateOwnerIP=ipAndIDArray[0];
 		filedata1.replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
-		filedata1.setReplicateDataSet(true);
+		filedata1.setDestinationUpToDate(true);
 		//System.out.println(replicateOwnerIP+nodedata1.getMyIP()+replicateOwnerID+nodedata1.getMyNodeID());
 		 return !(replicateOwnerID==nodedata1.getMyNodeID());
 			

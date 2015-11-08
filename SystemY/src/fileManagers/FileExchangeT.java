@@ -38,20 +38,16 @@ public class FileExchangeT extends Thread
 			{
 			
 			FileData file1=null;
-			boolean newRepOwner=true;
+			boolean notLocalNode=true;
 			try {
 				file1 = nodedata1.toSendFileNameAndDirList.take();
 			} catch (InterruptedException e1) {System.out.println("interrupted while waiting for queue");}
-			if (!file1.getReplicateDataSet())
+			if (!file1.getDestinationUpToDate())
 			{
-				newRepOwner=file1.refreshReplicateOwner(nodedata1,file1);
-			}
-			else
-			{
-				newRepOwner= true;
+				notLocalNode=file1.refreshReplicateOwner(nodedata1,file1);
 			}
 			
-			if (newRepOwner)
+			if (notLocalNode)
 			{
 				try {
 					recInt = (FileReceiverInt)Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/FileReceiverT");
@@ -70,7 +66,6 @@ public class FileExchangeT extends Thread
 					System.out.println("copy is done");
 					nodedata1.replFiles.add(file1);
 				} catch (IOException e) {System.out.println("couldn't copy file");}
-				
 			}
 		}
 
@@ -94,7 +89,7 @@ public class FileExchangeT extends Thread
             if (outToClient != null) 
             {
             	System.out.println("sending file");
-                File myFile = new File( filePath );
+                File myFile = new File(filePath);
                 byte[] mybytearray = new byte[(int) myFile.length()];
 
                 try {
