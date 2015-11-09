@@ -9,6 +9,7 @@ import fileManagers.FileDetectionT;
 import fileManagers.Sender;
 import fileManagers.FileOwnershipT;
 import fileManagers.Receiver;
+import fileManagers.Remover;
 import nodeManager.NodeOrderThread;
 import nodeManager.ShutdownT;
 
@@ -64,7 +65,8 @@ public class Node
 			rm.start();
 			FileDetectionT CLFQ =new FileDetectionT(nodedata1);
 			CLFQ.start();
-			 
+			Remover rem =new Remover(nodedata1);
+			rem.start();
 			 Receiver RQT = new Receiver(nodedata1);
 			(new Thread(RQT)).start();
 			Sender SRFT = new Sender(nodedata1);

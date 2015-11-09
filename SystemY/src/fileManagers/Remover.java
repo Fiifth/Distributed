@@ -1,37 +1,45 @@
 package fileManagers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 import nodeP.NodeData;
 
 public class Remover extends Thread 
 {
 	NodeData nodedata1;
-	Remover(NodeData nodedata1)
+	public Remover(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
 	}
 	public void run()
 	{
-		//queue removeQueue afgaan
-		//een file(object FileData wordt in removeQueue gezet als de lijst van zijn local owner
-		//leeg is
-		//in dit geval gaat het gewoon op 0 komen te staan als er een locale owner weg gaat
-		//aangezien we nog geen lijst gaan voorzien omdat er niet meer dan 1 persoon
-		//de file lokaal kan hebben staan (via rmi zegt owner tege replication dat hij de file
-		//weg doet(bij shutdown)
-		
-		//je kan ook in de lijst komen te staan wanneer een replicate file naar een andere node
-		//verzonden wordt
+		while(nodedata1.getToLeave()==0)
+		{
+			FileData file1=null;
+			try {
+				file1=nodedata1.removeQueue.take();
+			} catch (InterruptedException e) {e.printStackTrace();}
+			
+			nodedata1.replFiles.remove(file1);
+			Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
+			try {
+				Files.delete(source);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//TODO in fileData --> als localowner op 0 wordt gezet via RMIcommunication moet de file in kwestie
+			//ook hier geplaatst worden
+			//TODO er moet nog een extra check in gevoerd worden zodat hij pas verwijderd wordt wanneer de file
+			//niet meer in gebruik is (belangrijk bij het verzenden van replicatie bestanden naar nieuwe replicatie
+			//eigenaar (extra atomic boolean, nu opgelost met delay)
+		}
 		
 	}
-	/*TODO OF ALL TODO's
-
-
-when someone downloads a file he gets added to the list on the replicate node
-when a local owner deletes the file he gets removed from the list
-the fileDataRemoveLocalOwner function will put the file in a queue with a 
-delete file field active
-
-fileData object name has to be the same as file name 
-
-	 */
 }

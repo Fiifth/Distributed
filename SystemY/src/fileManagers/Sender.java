@@ -107,6 +107,7 @@ public class Sender extends Thread
 		try {
 			Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
 			System.out.println("copy is done");
+			file1.setFolderLocation(nodedata1.getMyReplFolder());
 			nodedata1.replFiles.add(file1);
 		} catch (IOException e) {System.out.println("couldn't copy file");}
 	}

@@ -67,8 +67,8 @@ public class FileDetectionT extends Thread{
 				else if(kind == ENTRY_MODIFY){
 					System.out.println("file modified");
 				}
-				//TODO replicating node inlichten over removal
-				//TODO remove file manager
+				//TODO met RMI aan replicatie eigenaar laten weten dat een lokale eigenaar de file verwijderd heeft
+				//aan de hand van de filenaam het filedata1 object opzoeken en zo de data doorsturen naar replicatie eigenaar
 				/*else if(kind == ENTRY_DELETE){
 					
 					System.out.println("file removed");
