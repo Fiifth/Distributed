@@ -6,16 +6,16 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import fileManagers.FileData;
-import fileManagers.FileReceiverInt;
+import nodeP.RMICommunicationInt;
 
 public class ReceiveQueueRMITest {
 
 	public static void main(String[] args)
 	{
 		FileData fileData1=null;
-		FileReceiverInt RecInt=null;
+		RMICommunicationInt RecInt=null;
 		try {
-			RecInt = (FileReceiverInt)Naming.lookup("//localhost:14393/ReceiveQueueThread");
+			RecInt = (RMICommunicationInt) Naming.lookup("//localhost:14393/ReceiveQueueThread");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			System.out.println("test");
 			e.printStackTrace();

@@ -2,28 +2,18 @@ package fileManagers;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 import nodeP.NodeData;
 
-public class FileReceiverT extends UnicastRemoteObject implements FileReceiverInt, Runnable 
+public class Receiver implements Runnable 
 {
 
-	private static final long serialVersionUID = 1L;
-	public static BlockingQueue<FileData> myQueue=new ArrayBlockingQueue<FileData>(500);
-	NodeData nodedata1;
+		NodeData nodedata1;
 	
-	public FileReceiverT(NodeData nodedata1) throws RemoteException
+	public Receiver(NodeData nodedata1)
 	{
 		super();
 		this.nodedata1=nodedata1;
@@ -31,44 +21,17 @@ public class FileReceiverT extends UnicastRemoteObject implements FileReceiverIn
 	
 	public void run() 
 	{
-		String DirReplFiles=nodedata1.getMyReplFolder();
-		File folder = new File(DirReplFiles);
-		if (!folder.exists())
-			folder.mkdir();
-		setUpRMI(nodedata1);
-		
-		while(true)
+		while(nodedata1.getToLeave()==0)
 		{
 			FileData file1=null;
 			try {
-				file1=myQueue.take();//Wait until entry is found
+				file1=nodedata1.receiveQueue.take();//Wait until entry is found
 			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
-			receiveFile(file1,DirReplFiles);
 			
+			receiveFile(file1,nodedata1.getMyReplFolder());
 			}
 		}
 	
-	private void setUpRMI(NodeData nodedata1) 
-	{
-			try{
-				LocateRegistry.createRegistry(nodedata1.getMyNodeID());
-				FileReceiverInt RecInt = new FileReceiverT(nodedata1);
-				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/FileReceiverT", RecInt);
-				System.out.println("ReceiveQueueThreadRMI is ready.");
-				}
-				catch(Exception e){System.out.println("couldn't start RMI");}
-	}
-
-	public boolean receiveThisFile(FileData file1) throws RemoteException 
-	{
-		boolean queue=myQueue.offer(file1);
-		return queue;
-	}
-	public boolean removeThisFile(FileData file1) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public void receiveFile(FileData file1, String DirReplFiles)
 	{
 		

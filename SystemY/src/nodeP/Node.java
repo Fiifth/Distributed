@@ -6,9 +6,9 @@ import java.net.*;
 import java.rmi.RemoteException;
 
 import fileManagers.FileDetectionT;
-import fileManagers.FileExchangeT;
+import fileManagers.Sender;
 import fileManagers.FileOwnershipT;
-import fileManagers.FileReceiverT;
+import fileManagers.Receiver;
 import nodeManager.NodeOrderThread;
 import nodeManager.ShutdownT;
 
@@ -17,7 +17,7 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("7.txt");
+		node1.startNieuweNode("5.txt");
 	}
 	public void startNieuweNode(String nodeNaam)
 	{
@@ -54,19 +54,22 @@ public class Node
 			System.out.println("no nameserver was found");
 			return;
 		}	
-
 		try {
+			RMICommunication rmi=new RMICommunication(nodedata1);
+			rmi.setUpRMI();
+			
+		} catch (RemoteException e1) {e1.printStackTrace();}
+		
 			ShutdownT rm = new ShutdownT(nodedata1);
 			rm.start();
 			FileDetectionT CLFQ =new FileDetectionT(nodedata1);
 			CLFQ.start();
-			FileReceiverT RQT;
-			RQT = new FileReceiverT(nodedata1);
+			 
+			 Receiver RQT = new Receiver(nodedata1);
 			(new Thread(RQT)).start();
-			FileExchangeT SRFT = new FileExchangeT(nodedata1);
+			Sender SRFT = new Sender(nodedata1);
 			SRFT.start();
-		} catch (RemoteException e) {System.out.println("failed to start receive manager");}
-
+		
 		MulticastSocket multicastSocket =null;
 		
 		try {

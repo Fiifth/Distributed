@@ -18,9 +18,10 @@ public class NodeData {
 	private volatile String myIP;
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
-	public volatile BlockingQueue<FileData> toSendFileNameAndDirList=new ArrayBlockingQueue<FileData>(500);
+	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
 	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
+	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	
 	public String getNodeName() {
 		return nodeName;

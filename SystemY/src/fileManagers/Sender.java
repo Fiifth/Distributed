@@ -19,13 +19,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.rmi.Naming;
 import nodeP.NodeData;
+import nodeP.RMICommunicationInt;
 
-public class FileExchangeT extends Thread
+public class Sender extends Thread
 {
 	NodeData nodedata1;
-	FileReceiverInt recInt;
 	
-	public FileExchangeT(NodeData nodedata1)
+	public Sender(NodeData nodedata1)
 	{
 		this.nodedata1=nodedata1;
 	}
@@ -38,19 +38,16 @@ public class FileExchangeT extends Thread
 			{
 			
 			FileData file1=null;
-			boolean notLocalNode=true;
+			 RMICommunicationInt recInt=null;
 			try {
-				file1 = nodedata1.toSendFileNameAndDirList.take();
+				file1 = nodedata1.sendQueue.take();
 			} catch (InterruptedException e1) {System.out.println("interrupted while waiting for queue");}
-			if (!file1.getDestinationUpToDate())
-			{
-				notLocalNode=file1.refreshReplicateOwner(nodedata1,file1);
-			}
+
 			
-			if (notLocalNode)
+			if (file1.getLocalOwnerID()!=file1.getReplicateOwnerID())
 			{
 				try {
-					recInt = (FileReceiverInt)Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/FileReceiverT");
+					recInt = (RMICommunicationInt) Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/RMICommunication");
 					recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
 				
@@ -59,13 +56,7 @@ public class FileExchangeT extends Thread
 			else
 			{
 				System.out.print("the file exist locally: ");
-				Path source = Paths.get(nodedata1.getMyLocalFolder());
-				Path destination = Paths.get(nodedata1.getMyReplFolder());
-				try {
-					Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
-					System.out.println("copy is done");
-					nodedata1.replFiles.add(file1);
-				} catch (IOException e) {System.out.println("couldn't copy file");}
+				copyFileLocally(nodedata1,file1);
 			}
 		}
 
@@ -108,5 +99,15 @@ public class FileExchangeT extends Thread
                 } catch (IOException ex) {System.out.println("Sending file failed!"); } 
 
         }
+	}
+	public void copyFileLocally(NodeData nodedata1,FileData file1)
+	{
+		Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+		Path destination = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
+		try {
+			Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
+			System.out.println("copy is done");
+			nodedata1.replFiles.add(file1);
+		} catch (IOException e) {System.out.println("couldn't copy file");}
 	}
 }

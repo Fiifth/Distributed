@@ -60,7 +60,8 @@ public class FileDetectionT extends Thread{
 					System.out.println("new file added");
 					FileData file1=new FileData();
 					file1.setNewFileData(fileName.toString(), dirToSearch, nodedata1);
-					nodedata1.toSendFileNameAndDirList.add(file1);
+					file1.refreshReplicateOwner(nodedata1, file1);
+					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}
 				else if(kind == ENTRY_MODIFY){
@@ -84,6 +85,11 @@ public class FileDetectionT extends Thread{
 	//bij startup de lijst en queue vullen me alle bestanden
 	public void firstSearchFilesToAdd()
 	{
+		String DirReplFiles=nodedata1.getMyReplFolder();
+		File folder1 = new File(DirReplFiles);
+		if (!folder1.exists())
+			folder1.mkdir();
+		
 		File folder = new File(dirToSearch);
 		if (!folder.exists())
 			folder.mkdir();
@@ -96,7 +102,8 @@ public class FileDetectionT extends Thread{
 					String fileName = file.getName();
 					FileData file1=new FileData();
 					file1.setNewFileData(fileName, dirToSearch, nodedata1);
-					nodedata1.toSendFileNameAndDirList.add(file1);
+					file1.refreshReplicateOwner(nodedata1, file1);
+					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}
 			}	
