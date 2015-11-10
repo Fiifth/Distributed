@@ -58,15 +58,16 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_CREATE){
 					System.out.println("new file added");
+				}
+				else if(kind == ENTRY_MODIFY){
+					System.out.println("file modified");
+					
 					FileData file1=new FileData();
 					file1.setNewFileData(fileName.toString(), dirToSearch, nodedata1);
 					file1.setSourceIP(file1.getLocalOwnerIP());
 					file1.refreshReplicateOwner(nodedata1, file1);
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
-				}
-				else if(kind == ENTRY_MODIFY){
-					System.out.println("file modified");
 				}
 				//TODO met RMI aan replicatie eigenaar laten weten dat een lokale eigenaar de file verwijderd heeft
 				//aan de hand van de filenaam het filedata1 object opzoeken en zo de data doorsturen naar replicatie eigenaar

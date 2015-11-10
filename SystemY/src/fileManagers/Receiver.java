@@ -58,7 +58,7 @@ public class Receiver implements Runnable
 
         	System.out.println("looking for server");
             try {
-				clientSocket = new Socket(file1.getLocalOwnerIP(), serverPort);
+				clientSocket = new Socket(file1.getSourceIP(), serverPort);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
