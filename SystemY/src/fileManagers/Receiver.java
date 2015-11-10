@@ -29,6 +29,12 @@ public class Receiver implements Runnable
 			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
 			
 			receiveFile(file1,nodedata1.getMyReplFolder());
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			}
 		}
 	

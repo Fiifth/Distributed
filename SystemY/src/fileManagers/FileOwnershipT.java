@@ -19,7 +19,8 @@ public class FileOwnershipT extends Thread
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {e1.printStackTrace();
 		}
-	for (FileData file1 : nodedata1.replFiles) 
+		ArrayList<FileData> tempreplFiles=(ArrayList<FileData>) nodedata1.replFiles.clone();
+	for (FileData file1 : tempreplFiles) 
 	{
 		
 		boolean newRepOwner =file1.refreshReplicateOwner(nodedata1,file1);
