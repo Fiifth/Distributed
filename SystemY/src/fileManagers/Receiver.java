@@ -51,9 +51,21 @@ public class Receiver implements Runnable
         int serverPort = file1.getReplicateOwnerID()+32768;
         String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
-        //TODO before adding check if the file is present in the list already
-        file1.setFolderLocation(DirReplFiles);
-        nodedata1.replFiles.add(file1);
+        
+        //check if filename already exists, if not add to dir
+        boolean fnExists = false;
+        for (FileData tempfile : nodedata1.replFiles) 
+    	{
+        	if(tempfile.getFileName().equals(file1.getFileName()))
+        	{
+        		fnExists = true;
+       		}
+    	}
+        
+        if(!fnExists){
+        	file1.setFolderLocation(DirReplFiles);
+        	nodedata1.replFiles.add(file1);
+        }
  
 
         	System.out.println("looking for server");
