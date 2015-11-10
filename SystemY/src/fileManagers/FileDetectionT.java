@@ -70,12 +70,10 @@ public class FileDetectionT extends Thread{
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}
-				//TODO met RMI aan replicatie eigenaar laten weten dat een lokale eigenaar de file verwijderd heeft
 				//aan de hand van de filenaam het filedata1 object opzoeken en zo de data doorsturen naar replicatie eigenaar
 				/*else if(kind == ENTRY_DELETE){
 					
 					System.out.println("file removed");
-					nodedata1.fnList.remove(fileName.toString());
 					
 				}*/
 				boolean valid = key.reset();

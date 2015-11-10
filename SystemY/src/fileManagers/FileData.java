@@ -10,13 +10,14 @@ public class FileData implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private volatile String fileName;
-	private volatile String folderLocation="C:\\SystemYNodeFiles";
+	private volatile String folderLocation;
 	private volatile String localOwnerIP;
+	private volatile int localOwnerID;
 	private volatile String sourceIP;
 	private volatile int sourceID;
-	private volatile int localOwnerID; //TODO keep list of localOwners
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
+	private volatile boolean removeAfterSend;
 
 	
 	public void setNewFileData(String fileName, String folderLocation, NodeData nodedata1)
@@ -64,6 +65,14 @@ public class FileData implements Serializable
 
 	public void setSourceID(int sourceID) {
 		this.sourceID = sourceID;
+	}
+
+	public boolean getRemoveAfterSend() {
+		return removeAfterSend;
+	}
+
+	public void setRemoveAfterSend(boolean removeAfterSend) {
+		this.removeAfterSend = removeAfterSend;
 	}
 
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)

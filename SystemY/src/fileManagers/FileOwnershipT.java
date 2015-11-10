@@ -29,9 +29,10 @@ public class FileOwnershipT extends Thread
 			System.out.println("Changing owner to: "+ file1.getReplicateOwnerID());
 			if(nodedata1.replFiles.contains(file1))
 			{
+				file1.setRemoveAfterSend(true);
 			nodedata1.sendQueue.add(file1);
+			nodedata1.replFiles.remove(file1);
 			
-			nodedata1.removeQueue.add(file1);
 			}
 		}
 	}

@@ -54,6 +54,11 @@ public class Sender extends Thread
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
 				
 				sendFile(file1);
+				if (file1.getRemoveAfterSend())
+						{
+					nodedata1.removeQueue.add(file1);
+					
+						}
 			}
 			else
 			{
@@ -66,7 +71,7 @@ public class Sender extends Thread
 	public void sendFile(FileData file1)
 	{
 		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
-		System.out.println("Sending following file: "+ filePath+": ");
+		System.out.print("Sending following file: "+ filePath+": ");
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;
             BufferedOutputStream outToClient = null;

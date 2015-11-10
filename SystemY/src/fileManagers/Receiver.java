@@ -58,6 +58,7 @@ public class Receiver implements Runnable
         
         if(!fnExists){
         	file1.setFolderLocation(DirReplFiles);
+        	file1.setRemoveAfterSend(false);
         	nodedata1.replFiles.add(file1);
         }
  
@@ -65,16 +66,9 @@ public class Receiver implements Runnable
         	System.out.println("looking for server");
             try {
 				clientSocket = new Socket(file1.getSourceIP(), serverPort);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-            try {
 				is = clientSocket.getInputStream();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} catch (IOException e) {System.out.println("couldn't open socket");}	
+           
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

@@ -1,0 +1,12 @@
+
+* Wanneer een file verwijderd wordt (nu enkel wanneer host weg wilt gaan)!shudownmanager
+LOKAAL
+	1) met RMI aan de nameserver opvragen waar de replicatie van de file zich bevindt (IP adres)
+	2) met een RMI connectie naar deze node zeggen dat de file verwijderd wordt (doorsturen van filenaam)
+REPLICATIE
+	*) Er wordt met RMI een removeLocalOwnerFunctie opgeroepen (filenaam is gekend)
+		1) Haal het object filedata op van het bestand in kwestie (replicatie lijst afgaan tot filenaam is gevonden)
+		2) verwijder filedata uit replicatie lijst
+		3) voeg filedata toe aan removequeue
+
+* bij shutdown ervoor zorgen dat alle threads afgesloten worden
