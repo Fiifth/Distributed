@@ -27,6 +27,8 @@ public class FileOwnershipT extends Thread
 		if (newRepOwner)
 		{
 			System.out.println("Changing owner to: "+ file1.getReplicateOwnerID());
+			if(nodedata1.replFiles.contains(file1))
+			{
 			nodedata1.sendQueue.add(file1);
 			try {
 				Thread.sleep(5000);
@@ -35,6 +37,7 @@ public class FileOwnershipT extends Thread
 				e.printStackTrace();
 			}
 			nodedata1.removeQueue.add(file1);
+			}
 		}
 	}
 
