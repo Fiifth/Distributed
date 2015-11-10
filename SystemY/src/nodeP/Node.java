@@ -18,7 +18,7 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("80.txt");
+		node1.startNieuweNode("kwintenNEW");
 	}
 	public void startNieuweNode(String nodeNaam)
 	{
