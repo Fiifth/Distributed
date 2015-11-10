@@ -25,12 +25,16 @@ public class Remover extends Thread
 			try {
 				file1=nodedata1.removeQueue.take();
 			} catch (InterruptedException e) {e.printStackTrace();}
-			while(nodedata1.replFiles.contains(file1))
-			{
-				System.out.println(file1.getFileName());
+			
 				nodedata1.replFiles.remove(file1);
 			
-			}
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
 			try {
 				Files.delete(source);

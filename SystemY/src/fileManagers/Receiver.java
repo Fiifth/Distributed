@@ -29,12 +29,6 @@ public class Receiver implements Runnable
 			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
 			
 			receiveFile(file1,nodedata1.getMyReplFolder());
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			}
 		}
 	
@@ -48,7 +42,7 @@ public class Receiver implements Runnable
 		byte[] aByte = new byte[1];
         int bytesRead;
         
-        int serverPort = file1.getReplicateOwnerID()+32768;
+        int serverPort = file1.getSourceID()+32768;
         String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
         
@@ -70,7 +64,6 @@ public class Receiver implements Runnable
 
         	System.out.println("looking for server");
             try {
-            	System.out.println(file1.getSourceIP()+ serverPort); //TODO remove
 				clientSocket = new Socket(file1.getSourceIP(), serverPort);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -87,7 +80,7 @@ public class Receiver implements Runnable
 
         if (is != null) 
         {
-        	System.out.println("Server found, receiving file");
+        	System.out.print("Server found: ");
            
             try 
             {

@@ -30,12 +30,7 @@ public class FileOwnershipT extends Thread
 			if(nodedata1.replFiles.contains(file1))
 			{
 			nodedata1.sendQueue.add(file1);
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			nodedata1.removeQueue.add(file1);
 			}
 		}

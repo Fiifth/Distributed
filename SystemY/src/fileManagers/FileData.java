@@ -13,6 +13,7 @@ public class FileData implements Serializable
 	private volatile String folderLocation="C:\\SystemYNodeFiles";
 	private volatile String localOwnerIP;
 	private volatile String sourceIP;
+	private volatile int sourceID;
 	private volatile int localOwnerID; //TODO keep list of localOwners
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
@@ -55,6 +56,14 @@ public class FileData implements Serializable
 
 	public void setSourceIP(String sourceIP) {
 		this.sourceIP = sourceIP;
+	}
+
+	public int getSourceID() {
+		return sourceID;
+	}
+
+	public void setSourceID(int sourceID) {
+		this.sourceID = sourceID;
 	}
 
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)

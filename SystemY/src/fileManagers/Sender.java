@@ -49,6 +49,7 @@ public class Sender extends Thread
 				try {
 					recInt = (RMICommunicationInt) Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/RMICommunication");
 					file1.setSourceIP(nodedata1.getMyIP());
+					file1.setSourceID(nodedata1.getMyNodeID());
 					recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
 				
@@ -65,14 +66,14 @@ public class Sender extends Thread
 	public void sendFile(FileData file1)
 	{
 		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
-		System.out.println("Sending following file: "+ filePath);
+		System.out.println("Sending following file: "+ filePath+": ");
             ServerSocket welcomeSocket = null;
             Socket connectionSocket = null;
             BufferedOutputStream outToClient = null;
             FileInputStream fis = null;
 
             try {
-                welcomeSocket = new ServerSocket(file1.getReplicateOwnerID()+32768);
+                welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
                 connectionSocket = welcomeSocket.accept();
                 outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
                 welcomeSocket.close();
@@ -80,7 +81,7 @@ public class Sender extends Thread
 
             if (outToClient != null) 
             {
-            	System.out.println("sending file");
+            	
                 File myFile = new File(filePath);
                 byte[] mybytearray = new byte[(int) myFile.length()];
 
@@ -98,7 +99,7 @@ public class Sender extends Thread
                     fis.close();
 					bis.close();
                 } catch (IOException ex) {System.out.println("Sending file failed!"); } 
-
+                System.out.println("file send!");
         }
 	}
 	public void copyFileLocally(NodeData nodedata1,FileData file1)

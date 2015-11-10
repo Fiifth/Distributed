@@ -65,6 +65,7 @@ public class FileDetectionT extends Thread{
 					FileData file1=new FileData();
 					file1.setNewFileData(fileName.toString(), dirToSearch, nodedata1);
 					file1.setSourceIP(file1.getLocalOwnerIP());
+					file1.setSourceID(nodedata1.getMyNodeID());
 					file1.refreshReplicateOwner(nodedata1, file1);
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
