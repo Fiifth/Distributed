@@ -55,13 +55,21 @@ public class Receiver implements Runnable
         file1.setFolderLocation(DirReplFiles);
         nodedata1.replFiles.add(file1);
  
-        try 
-        {
+
         	System.out.println("looking for server");
-            clientSocket = new Socket(file1.getLocalOwnerIP(), serverPort);	
-            is = clientSocket.getInputStream();
-        } 
-        catch (IOException ex) {System.out.println("couldn't open socket");}
+            try {
+				clientSocket = new Socket(file1.getLocalOwnerIP(), serverPort);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+            try {
+				is = clientSocket.getInputStream();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if (is != null) 

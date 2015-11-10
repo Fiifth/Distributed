@@ -48,6 +48,7 @@ public class Sender extends Thread
 			{
 				try {
 					recInt = (RMICommunicationInt) Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/RMICommunication");
+					file1.setSourceIP(nodedata1.getMyIP());
 					recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
 				
