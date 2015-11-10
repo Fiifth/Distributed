@@ -71,7 +71,7 @@ public class Sender extends Thread
             FileInputStream fis = null;
 
             try {
-                welcomeSocket = new ServerSocket(3248);
+                welcomeSocket = new ServerSocket(file1.getReplicateOwnerID()+32768);
                 connectionSocket = welcomeSocket.accept();
                 outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
                 welcomeSocket.close();

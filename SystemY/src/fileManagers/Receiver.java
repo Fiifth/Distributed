@@ -42,7 +42,7 @@ public class Receiver implements Runnable
 		byte[] aByte = new byte[1];
         int bytesRead;
         
-        int serverPort = 3248;
+        int serverPort = file1.getReplicateOwnerID()+32768;
         String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
         //TODO before adding check if the file is present in the list already

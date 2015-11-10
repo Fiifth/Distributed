@@ -36,7 +36,6 @@ public class FileOwnershipT extends Thread
 			nodedata1.removeQueue.add(file1);
 		}
 	}
-	
-	
+
 	}
 }
