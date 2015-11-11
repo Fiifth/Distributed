@@ -1,12 +1,5 @@
 package fileManagers;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-
 import neworkFunctions.TCP;
 import nodeP.NodeData;
 
@@ -34,20 +27,14 @@ TCP tcp=new TCP();
 			}
 		}
 	
-	public void receiveFile(FileData file1, String DirReplFiles) //TODO change to TCP.receiveFile
+	public void receiveFile(FileData file1, String DirReplFiles) 
 	{
-		FileOutputStream fos = null;
-        BufferedOutputStream bos = null;
-        Socket clientSocket = null;
-        InputStream is = null;
-		byte[] aByte = new byte[1];
-        int bytesRead;
         
         int serverPort = file1.getSourceID()+32768;
         String fileOutput = DirReplFiles+"\\"+file1.getFileName();
         System.out.println("receiveing file: "+fileOutput);
         
-        //check if filename already exists, if not add to dir
+        //check if filename already exists, if not add to replFiles
         boolean fnExists = false;
         for (FileData tempfile : nodedata1.replFiles) 
     	{
@@ -61,8 +48,6 @@ TCP tcp=new TCP();
         	file1.setRemoveAfterSend(false);
         	nodedata1.replFiles.add(file1);
         }
- 
-
         	System.out.println("looking for server");
         	tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput);
            

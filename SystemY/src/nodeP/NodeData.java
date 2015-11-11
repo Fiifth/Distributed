@@ -65,7 +65,6 @@ public class NodeData {
 	public void setNameServerIP(String nameServerIP) {
 		this.nameServerIP = nameServerIP;
 	}
-	
 
 	public String getMyIP() {
 		return myIP;

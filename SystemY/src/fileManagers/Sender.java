@@ -47,7 +47,13 @@ public class Sender extends Thread
 			} catch (InterruptedException e1) {return;}
 
 			
-			if (file1.getLocalOwnerID()!=file1.getReplicateOwnerID())
+			if (file1.getLocalOwnerID()==file1.getReplicateOwnerID()&&file1.getLocalOwnerID()==nodedata1.getMyNodeID())
+			{
+				System.out.print("the file exist locally: ");
+				copyFileLocally(nodedata1,file1);
+				
+			}
+			else
 			{
 				try {
 					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getReplicateOwnerID(), file1.getReplicateOwnerIP(), "RMICommunication");
@@ -62,11 +68,6 @@ public class Sender extends Thread
 					nodedata1.removeQueue.add(file1);
 					
 						}
-			}
-			else
-			{
-				System.out.print("the file exist locally: ");
-				copyFileLocally(nodedata1,file1);
 			}
 		}
 

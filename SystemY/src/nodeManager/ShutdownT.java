@@ -66,13 +66,25 @@ public class ShutdownT extends Thread
 					multi.sendMulticast(text);
 
 					stay = false;
-
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						
+						e.printStackTrace();
+					}
+					
 					FileOwnershipT COT =new FileOwnershipT(nodedata1);
 					COT.start();
 
 					while(COT.isAlive()){}
 					
 					while(!nodedata1.sendQueue.isEmpty()){}
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO flag als laatste zending klaar is ipv sleep
+						e.printStackTrace();
+					}
 					multi.LeaveMulticast();
 					stopThreads();
 					

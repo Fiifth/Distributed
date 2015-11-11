@@ -2,22 +2,16 @@ package nodeP;
 import java.net.*;
 import java.rmi.RemoteException;
 
-import fileManagers.FileDetectionT;
-import fileManagers.Sender;
-import neworkFunctions.Multicast;
-import neworkFunctions.TCP;
-import fileManagers.FileOwnershipT;
-import fileManagers.Receiver;
-import fileManagers.Remover;
-import nodeManager.NodeOrderThread;
-import nodeManager.ShutdownT;
+import fileManagers.*;
+import neworkFunctions.*;
+import nodeManager.*;
 
 public class Node 
 {	TCP tcp=new TCP();
 	Multicast multi=new Multicast("228.5.6.7", 6789);
 	
 	public static void main(String[] args) throws Exception
-	{		String name="7";
+	{		String name="3";
 		Node node1=new Node();
 		final NodeData nodedata1=new NodeData();
 		node1.startNieuweNode(name,nodedata1);
@@ -58,40 +52,21 @@ public class Node
 			return;
 		}	
 		try {
-			RMICommunication rmi=new RMICommunication(nodedata1);
-			rmi.setUpRMI();
-			
+			RMICommunication rmiCom=new RMICommunication(nodedata1);
+			rmiCom.setUpRMI();
 		} catch (RemoteException e1) {e1.printStackTrace();}
-		
-			
-			FileDetectionT CLFQ =new FileDetectionT(nodedata1);
-			CLFQ.start();
-			Remover rem =new Remover(nodedata1);
-			rem.start();
-			 Receiver RQT = new Receiver(nodedata1);
-			RQT.start();
-			Sender SRFT = new Sender(nodedata1);
-			SRFT.start();
-			ShutdownT rm = new ShutdownT(nodedata1,CLFQ,rem,RQT,SRFT,multi);
-			rm.start();
-		
-			multi.joinMulticastGroup();
-		while(nodedata1.getToLeave() == 0)
-		{
-			DatagramPacket messageIn = multi.receiveMulticast();
-			System.out.println("Node communication detected");
-			
-			if(nodedata1.getToLeave() == 0)
-			{
-				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
-				c.start();
-
-				FileOwnershipT COT =new FileOwnershipT(nodedata1);
-				COT.start();
-			}
-		}
-
-		System.out.println("stopped");
+		FileDetectionT CLFQ =new FileDetectionT(nodedata1);
+		CLFQ.start();
+		Remover rem =new Remover(nodedata1);
+		rem.start();
+		 Receiver RQT = new Receiver(nodedata1);
+		RQT.start();
+		Sender SRFT = new Sender(nodedata1);
+		SRFT.start();
+		ShutdownT rm = new ShutdownT(nodedata1,CLFQ,rem,RQT,SRFT,multi);
+		rm.start();
+		NodeDetection nd =new NodeDetection(nodedata1,multi);
+		nd.start();
 	}
 
 		
@@ -103,4 +78,5 @@ public class Node
 		nodes=Integer.parseInt(received[0]);
 			return nodes;
 		}
+
 }
