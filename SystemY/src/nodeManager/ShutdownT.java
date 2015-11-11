@@ -14,6 +14,7 @@ import fileManagers.FileOwnershipT;
 import fileManagers.Receiver;
 import fileManagers.Remover;
 import fileManagers.Sender;
+import neworkFunctions.Multicast;
 import nodeP.NodeData;
 import nodeP.RMICommunicationInt;
 
@@ -25,13 +26,15 @@ public class ShutdownT extends Thread
 	Remover rem;
 	Receiver rQT;
 	Sender sRFT;
-	public ShutdownT(NodeData nodedata1, FileDetectionT cLFQ, Remover rem, Receiver rQT, Sender sRFT)
+	Multicast multi;
+	public ShutdownT(NodeData nodedata1, FileDetectionT cLFQ, Remover rem, Receiver rQT, Sender sRFT, Multicast multi)
 	{
 		this.nodedata1=nodedata1;
 		this.cLFQ=cLFQ;
 		this.rem=rem;
 		this.rQT=rQT;
 		this.sRFT=sRFT;
+		this.multi=multi;
 	}
 
 	public void run()
@@ -58,8 +61,11 @@ public class ShutdownT extends Thread
 						} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
 		    	}
 				
-					nodedata1.setToLeave(1); //TODO change to TCP.sendMulticast
-					nodedata1.sendMulticast("1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode());
+					nodedata1.setToLeave(1);
+					String text="1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode();
+					
+					multi.sendMulticast(text);
+
 					stay = false;
 
 					FileOwnershipT COT =new FileOwnershipT(nodedata1);
@@ -68,8 +74,9 @@ public class ShutdownT extends Thread
 					while(COT.isAlive()){}
 					
 					while(!nodedata1.sendQueue.isEmpty()){}
-
+					multi.LeaveMulticast();
 					stopThreads();
+					
 					System.exit(1);
 				}
 			}	

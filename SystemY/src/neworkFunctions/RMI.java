@@ -1,4 +1,4 @@
-package Functions;
+package neworkFunctions;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

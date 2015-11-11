@@ -47,7 +47,7 @@ public class NodeOrderThread extends Thread {
 				nodedata1.setPrevNode(newPrevID);
 			}
 			//if mynext == his id => mynext to his next
-			else if(myNextNode == newNodeID)
+			if(myNextNode == newNodeID)
 			{
 				nodedata1.setNextNode(newNextID);
 			}

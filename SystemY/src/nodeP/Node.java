@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.rmi.RemoteException;
+
 import fileManagers.FileDetectionT;
 import fileManagers.Sender;
+import neworkFunctions.Multicast;
 import fileManagers.FileOwnershipT;
 import fileManagers.Receiver;
 import fileManagers.Remover;
@@ -14,20 +16,23 @@ import nodeManager.ShutdownT;
 
 public class Node 
 {	
+	Multicast multi=new Multicast("228.5.6.7", 6789);
+	
 	public static void main(String[] args) throws Exception
-	{		
+	{		String name="15";
 		Node node1=new Node();
-		node1.startNieuweNode("5");
-	}
-	public void startNieuweNode(String nodeNaam)
-	{
 		final NodeData nodedata1=new NodeData();
+		node1.startNieuweNode(name,nodedata1);
+	}
+	public void startNieuweNode(String nodeNaam,NodeData nodedata1)
+	{
 		nodedata1.setNodeName(nodeNaam);
 		System.out.println("My name is: "+nodedata1.getNodeName());
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
 
-		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());	//TODO change to TCP.sendMulticast
-
+		multi.joinMulticastGroup();
+		multi.sendMulticast("0"+"-"+nodedata1.getNodeName());
+		multi.LeaveMulticast();
 
 		int numberOfNodes=getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
@@ -69,43 +74,22 @@ public class Node
 			RQT.start();
 			Sender SRFT = new Sender(nodedata1);
 			SRFT.start();
-			ShutdownT rm = new ShutdownT(nodedata1,CLFQ,rem,RQT,SRFT);
+			ShutdownT rm = new ShutdownT(nodedata1,CLFQ,rem,RQT,SRFT,multi);
 			rm.start();
 		
-		MulticastSocket multicastSocket =null;
-		
-		try {	//TODO change to mulicast.joinmulitcast
-			InetAddress group = InetAddress.getByName("228.5.6.7");
-			multicastSocket = new MulticastSocket(6789);
-			multicastSocket.joinGroup(group);
-		} catch (IOException e) {System.out.println("failed to join multicast group");}
-		
-		boolean stay = true;
-		while(stay == true)
+			multi.joinMulticastGroup();
+		while(nodedata1.getToLeave() == 0)
 		{
-			byte[] buffer = new byte[100]; //TODO change to mulicast.receivemulticast
-			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
-			try {
-				multicastSocket.receive(messageIn); //blocks
-			} catch (IOException e) {System.out.println("failed to receive multicast message");}
+			DatagramPacket messageIn = multi.receiveMulticast();
 			System.out.println("Node communication detected");
-			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-			//message = 0-nodeName or 1-nodename-prevnode-nextnode
-;
-			String[] msgs = msg.split("-");
-			if(nodedata1.getToLeave() == 1)
-			{
-					stay = false;
-					multicastSocket.close();
-			}	
-			else
+			
+			if(nodedata1.getToLeave() == 0)
 			{
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();
 
 				FileOwnershipT COT =new FileOwnershipT(nodedata1);
 				COT.start();
-
 			}
 		}
 

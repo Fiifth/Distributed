@@ -1,6 +1,5 @@
 package nodeP;
 
-import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -86,24 +85,5 @@ public class NodeData {
 	public void setMyReplFolder(String myReplFolder) {
 		this.myReplFolder = myReplFolder;
 	}
-	public void sendMulticast(String name)
-	{
-		MulticastSocket multicastSocket =null;
-		byte [] m1 = name.getBytes();
-		try 
-		{	
-			InetAddress group = InetAddress.getByName("228.5.6.7");
-			multicastSocket = new MulticastSocket(6789);
-			multicastSocket.joinGroup(group);
-			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, 6789);
-			multicastSocket.send(messageOut1);	
-			multicastSocket.leaveGroup(group);		
-		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
-		}catch (IOException e){System.out.println("IO: " + e.getMessage());
-		}finally {if(multicastSocket != null) multicastSocket.close();}
-	}
-	
-	
-
 	
 }

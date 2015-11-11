@@ -1,4 +1,4 @@
-package Functions;
+package neworkFunctions;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

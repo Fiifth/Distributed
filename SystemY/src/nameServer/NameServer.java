@@ -3,16 +3,17 @@ package nameServer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
+import neworkFunctions.Multicast;
+
 public class NameServer extends UnicastRemoteObject implements NameServerInterface
 {
+	Multicast multi=new Multicast("228.5.6.7", 6789);
 	private TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
 	
@@ -20,7 +21,6 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	{
 		NameServer nameServer=new NameServer();
 		nameServer.startNameServer(nameServer);
-		
 	}
 
 	protected NameServer() throws RemoteException 
@@ -31,23 +31,15 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	public void startNameServer(NameServer nameServer) throws IOException
 	{
 		
+		nameServer.setUpRMI(nameServer); //TODO change RMI.setup
 		
-		nameServer.setUpRMI(nameServer); //TODO change to multicast.receiveMulticast/joinmulticast
-		
-		MulticastSocket multicastSocket =null;
-		InetAddress group = InetAddress.getByName("228.5.6.7");
-		multicastSocket = new MulticastSocket(6789);
-		multicastSocket.joinGroup(group);
+		multi.joinMulticastGroup();
 		
 		while(true)
 		{
-			byte[] buffer = new byte[100];
-			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
-			multicastSocket.receive(messageIn);//blocks
-			//message = 0-nodeName or 1-nodename-prevnode-nextnode
+			DatagramPacket messageIn = multi.receiveMulticast();
 			NameServerThread c =new NameServerThread(messageIn,nameServer);
 			c.start(); 
-			
 		}
 		//multicastSocket.close();
 	}

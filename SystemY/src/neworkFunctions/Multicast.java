@@ -1,4 +1,4 @@
-package Functions;
+package neworkFunctions;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -8,31 +8,38 @@ import java.net.SocketException;
 
 public class Multicast 
 {
-	public MulticastSocket joinMulticastGroup(String multicastAdress,int socket)
+	int socket;
+	String multicastAddress;
+	MulticastSocket multicastSocket;
+	
+	public Multicast(String multicastAddress,int socket)
 	{
-		MulticastSocket multicastSocket=null;
+		this.multicastAddress=multicastAddress;
+		this.socket=socket;
+	}
+	public void joinMulticastGroup()
+	{
 		InetAddress group;
 		try {
-			group = InetAddress.getByName(multicastAdress);
+			group = InetAddress.getByName(multicastAddress);
 			multicastSocket = new MulticastSocket(socket);
 			multicastSocket.joinGroup(group);
 		} catch (IOException e) {	}
 		
-		return multicastSocket;
+
 	}
-	public void sendMulticast(String text,MulticastSocket multicastSocket,String multicastAdress,int socket)
+	public void sendMulticast(String text)
 	{
 		byte [] m1 = text.getBytes();
 		try 
 		{
-			InetAddress group = InetAddress.getByName(multicastAdress);
+			InetAddress group = InetAddress.getByName(multicastAddress);
 			DatagramPacket messageOut1 = new DatagramPacket(m1, m1.length, group, socket);
-			multicastSocket.send(messageOut1);	
-			multicastSocket.leaveGroup(group);		
+			multicastSocket.send(messageOut1);		
 		}catch (SocketException e){System.out.println("Socket: " + e.getMessage());
 		}catch (IOException e){System.out.println("IO: " + e.getMessage());}
 	}
-	public String receiveMulticast(MulticastSocket multicastSocket)
+	public DatagramPacket receiveMulticast()
 	{
 		byte[] buffer = new byte[100];
 		DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
@@ -40,15 +47,15 @@ public class Multicast
 			multicastSocket.receive(messageIn);
 		} catch (IOException e) {e.printStackTrace();
 		}
-		String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+		//String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 		
-		return msgs;
+		return messageIn;
 	}
-	public void LeaveMulticast(MulticastSocket multicastSocket,String multicastAdress)
+	public void LeaveMulticast()
 	{
 		InetAddress group;
 		try {
-			group = InetAddress.getByName(multicastAdress);
+			group = InetAddress.getByName(multicastAddress);
 			multicastSocket.leaveGroup(group);
 			multicastSocket.close();
 		} catch (IOException e) {	e.printStackTrace();
