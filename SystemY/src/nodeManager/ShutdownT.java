@@ -48,40 +48,33 @@ public class ShutdownT extends Thread
 			}
 			if(input.equals("quit"))
 				{
+				for (FileData tempfile : nodedata1.localFiles) 
+		    	{
+						tempfile.refreshReplicateOwner(nodedata1, tempfile);
+				        RMICommunicationInt recInt=null;
+				        try {//TODO change to RMI.getRMIObject
+							recInt = (RMICommunicationInt) Naming.lookup("//"+tempfile.getReplicateOwnerIP()+":"+tempfile.getReplicateOwnerID()+"/RMICommunication");
+							recInt.removeOwner(tempfile);
+						} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
+		    	}
+				
 					nodedata1.setToLeave(1); //TODO change to TCP.sendMulticast
 					nodedata1.sendMulticast("1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode());
 					stay = false;
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {//wachten tot nameserver is bijgewerkt}
-					
+
 					FileOwnershipT COT =new FileOwnershipT(nodedata1);
 					COT.start();
+
 					while(COT.isAlive()){}
 					
 					while(!nodedata1.sendQueue.isEmpty()){}
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e2) {
-						//flag zetten als een verzending gedaan is en deze controleren wanneer queue empty is
-						//als flag klaar is dan verder gaan (zo kan deze delay weg)
-						}
-					}
-					for (FileData tempfile : nodedata1.localFiles) 
-			    	{
-						tempfile.refreshReplicateOwner(nodedata1, tempfile);
-			        RMICommunicationInt recInt=null;
-			        try {//TODO change to RMI.getRMIObject
-						recInt = (RMICommunicationInt) Naming.lookup("//"+tempfile.getReplicateOwnerIP()+":"+tempfile.getReplicateOwnerID()+"/RMICommunication");
-						recInt.removeOwner(tempfile);
-					} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
-			    	}
-					
+
 					stopThreads();
 					System.exit(1);
 				}
 			}	
 	}
+	
 	public void stopThreads()
 	{
 		cLFQ.interrupt();

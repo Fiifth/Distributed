@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.rmi.RemoteException;
-import java.util.concurrent.ExecutorService;
-
 import fileManagers.FileDetectionT;
 import fileManagers.Sender;
 import fileManagers.FileOwnershipT;
@@ -19,7 +17,7 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("7");
+		node1.startNieuweNode("5");
 	}
 	public void startNieuweNode(String nodeNaam)
 	{
@@ -91,6 +89,10 @@ public class Node
 				multicastSocket.receive(messageIn); //blocks
 			} catch (IOException e) {System.out.println("failed to receive multicast message");}
 			System.out.println("Node communication detected");
+			String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
+			//message = 0-nodeName or 1-nodename-prevnode-nextnode
+;
+			String[] msgs = msg.split("-");
 			if(nodedata1.getToLeave() == 1)
 			{
 					stay = false;
@@ -100,8 +102,10 @@ public class Node
 			{
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();
+
 				FileOwnershipT COT =new FileOwnershipT(nodedata1);
 				COT.start();
+
 			}
 		}
 
