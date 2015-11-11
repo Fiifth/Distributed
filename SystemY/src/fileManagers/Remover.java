@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 import nodeP.NodeData;
 
 public class Remover extends Thread 
@@ -19,12 +15,12 @@ public class Remover extends Thread
 	}
 	public void run()
 	{
-		while(nodedata1.getToLeave()==0)
+		while(true)
 		{
 			FileData file1=null;
 			try {
 				file1=nodedata1.removeQueue.take();
-			} catch (InterruptedException e) {e.printStackTrace();}
+			} catch (InterruptedException e) {return;}
 			Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
 			try {
 				Files.delete(source);

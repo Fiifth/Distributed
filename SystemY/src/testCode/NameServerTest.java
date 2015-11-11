@@ -1,6 +1,5 @@
 package testCode;
 
-import java.net.InetAddress;
 import java.rmi.*;
 
 import nameServer.NameServerInterface;

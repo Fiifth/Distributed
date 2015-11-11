@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
 
 import fileManagers.FileDetectionT;
 import fileManagers.Sender;
@@ -18,7 +19,7 @@ public class Node
 	public static void main(String[] args) throws Exception
 	{		
 		Node node1=new Node();
-		node1.startNieuweNode("6");
+		node1.startNieuweNode("7");
 	}
 	public void startNieuweNode(String nodeNaam)
 	{
@@ -61,16 +62,17 @@ public class Node
 			
 		} catch (RemoteException e1) {e1.printStackTrace();}
 		
-			ShutdownT rm = new ShutdownT(nodedata1);
-			rm.start();
+			
 			FileDetectionT CLFQ =new FileDetectionT(nodedata1);
 			CLFQ.start();
 			Remover rem =new Remover(nodedata1);
 			rem.start();
 			 Receiver RQT = new Receiver(nodedata1);
-			(new Thread(RQT)).start();
+			RQT.start();
 			Sender SRFT = new Sender(nodedata1);
 			SRFT.start();
+			ShutdownT rm = new ShutdownT(nodedata1,CLFQ,rem,RQT,SRFT);
+			rm.start();
 		
 		MulticastSocket multicastSocket =null;
 		
@@ -102,6 +104,8 @@ public class Node
 				COT.start();
 			}
 		}
+
+		System.out.println("stopped");
 	}
 
 	public String getNextPrevNode() 

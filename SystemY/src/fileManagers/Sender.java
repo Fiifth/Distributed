@@ -34,14 +34,14 @@ public class Sender extends Thread
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e1) {System.out.println("interrupted sleep");}
-		while(nodedata1.getToLeave()==0)
+		while(true)
 			{
 			
 			FileData file1=null;
 			 RMICommunicationInt recInt=null;
 			try {
 				file1 = nodedata1.sendQueue.take();
-			} catch (InterruptedException e1) {System.out.println("interrupted while waiting for queue");}
+			} catch (InterruptedException e1) {return;}
 
 			
 			if (file1.getLocalOwnerID()!=file1.getReplicateOwnerID())

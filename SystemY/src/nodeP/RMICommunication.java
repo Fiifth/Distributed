@@ -32,7 +32,17 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		return queue;
 	}
 	public boolean removeOwner(FileData file1) throws RemoteException {
-		// TODO Auto-generated method stub
+		System.out.println("I should remove: "+file1.getFileName());
+		FileData removedFile=null;
+        for (FileData tempfile : nodedata1.replFiles) 
+    	{
+        	if(tempfile.getFileName().equals(file1.getFileName()))
+        	{
+        		removedFile = tempfile;
+       		}
+    	}
+        nodedata1.replFiles.remove(removedFile);
+        nodedata1.removeQueue.add(removedFile);
 		return false;
 	}
 	@Override

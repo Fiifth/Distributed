@@ -7,14 +7,19 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 import nodeP.NodeData;
+import nodeP.RMICommunicationInt;
 
 public class FileDetectionT extends Thread{
 	public WatchService watcher;
@@ -29,6 +34,7 @@ public class FileDetectionT extends Thread{
 	}
 	
 	public void run(){
+		
 		dirToSearch = nodedata1.getMyLocalFolder();
 		dir = Paths.get(dirToSearch);
 		//vul lijst en queue met nieuwe map
@@ -36,11 +42,12 @@ public class FileDetectionT extends Thread{
 		try {
 			setupWatchService();
 		} catch (IOException e) {}
-		while(true)
+		while(true&&!Thread.interrupted())
 		{
 			WatchKey key;
 			try{
 				key = watcher.take();
+				
 			} catch(InterruptedException ex) {
 				return;
 			}
@@ -71,17 +78,33 @@ public class FileDetectionT extends Thread{
 					nodedata1.localFiles.add(file1);
 				}
 				//aan de hand van de filenaam het filedata1 object opzoeken en zo de data doorsturen naar replicatie eigenaar
-				/*else if(kind == ENTRY_DELETE){
-					
+				else if(kind == ENTRY_DELETE)
+				{
 					System.out.println("file removed");
-					
-				}*/
+					FileData removedFile=null;
+			        for (FileData tempfile : nodedata1.localFiles) 
+			    	{
+			        	if(tempfile.getFileName().equals(fileName.toString()))
+			        	{
+			        		removedFile = tempfile;
+			       		}
+			    	}
+			        nodedata1.localFiles.remove(removedFile);
+			        removedFile.refreshReplicateOwner(nodedata1, removedFile);
+			        RMICommunicationInt recInt=null;
+			        try {
+						recInt = (RMICommunicationInt) Naming.lookup("//"+removedFile.getReplicateOwnerIP()+":"+removedFile.getReplicateOwnerID()+"/RMICommunication");
+						recInt.removeOwner(removedFile);
+					} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
+			        
+				}
 				boolean valid = key.reset();
 				if(!valid){
-					break;
+					return;
 				}
 			}
 		}
+		
 	}
 	//bij startup de lijst en queue vullen me alle bestanden
 	public void firstSearchFilesToAdd()
@@ -115,6 +138,7 @@ public class FileDetectionT extends Thread{
 	public void setupWatchService() throws IOException{
 		watcher = FileSystems.getDefault().newWatchService();
 		dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+		
 	}
 
 }	

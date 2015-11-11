@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import nodeP.NodeData;
 
-public class Receiver implements Runnable 
+public class Receiver extends Thread 
 {
 
 		NodeData nodedata1;
@@ -21,12 +21,12 @@ public class Receiver implements Runnable
 	
 	public void run() 
 	{
-		while(nodedata1.getToLeave()==0)
+		while(true)
 		{
 			FileData file1=null;
 			try {
 				file1=nodedata1.receiveQueue.take();//Wait until entry is found
-			} catch (InterruptedException e) {System.out.println("interupted while waiting for queue entry");}
+			} catch (InterruptedException e) {return;}
 			
 			receiveFile(file1,nodedata1.getMyReplFolder());
 			}
