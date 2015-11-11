@@ -46,7 +46,7 @@ public class Sender extends Thread
 			
 			if (file1.getLocalOwnerID()!=file1.getReplicateOwnerID())
 			{
-				try {
+				try {//TODO change to RMI.getRMIObject
 					recInt = (RMICommunicationInt) Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/RMICommunication");
 					file1.setSourceIP(nodedata1.getMyIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
@@ -68,7 +68,7 @@ public class Sender extends Thread
 		}
 
 	}
-	public void sendFile(FileData file1)
+	public void sendFile(FileData file1) //TODO change to TCP.sendFile
 	{
 		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
 		System.out.print("Sending following file: "+ filePath+": ");

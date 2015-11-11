@@ -92,7 +92,7 @@ public class FileDetectionT extends Thread{
 			        nodedata1.localFiles.remove(removedFile);
 			        removedFile.refreshReplicateOwner(nodedata1, removedFile);
 			        RMICommunicationInt recInt=null;
-			        try {
+			        try {//TODO change to RMI.getRMIObject
 						recInt = (RMICommunicationInt) Naming.lookup("//"+removedFile.getReplicateOwnerIP()+":"+removedFile.getReplicateOwnerID()+"/RMICommunication");
 						recInt.removeOwner(removedFile);
 					} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}

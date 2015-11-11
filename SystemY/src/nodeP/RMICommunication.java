@@ -14,7 +14,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		super();
 		this.nodedata1=nodedata1;
 	}
-	public void setUpRMI() 
+	public void setUpRMI() //TODO change to RMI.bind
 	{
 			try{
 				LocateRegistry.createRegistry(nodedata1.getMyNodeID());

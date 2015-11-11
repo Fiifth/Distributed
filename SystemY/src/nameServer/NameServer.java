@@ -32,7 +32,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	{
 		
 		
-		nameServer.setUpRMI(nameServer);
+		nameServer.setUpRMI(nameServer); //TODO change to multicast.receiveMulticast/joinmulticast
 		
 		MulticastSocket multicastSocket =null;
 		InetAddress group = InetAddress.getByName("228.5.6.7");

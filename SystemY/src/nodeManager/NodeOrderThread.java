@@ -116,7 +116,7 @@ public class NodeOrderThread extends Thread {
 		System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 		
 	}
-	public void sendToNode(String nodes, String nodeIP)
+	public void sendToNode(String nodes, String nodeIP) //TODO change to TCP.sendText
 	{
 		Socket clientSocket;
 		try {

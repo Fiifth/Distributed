@@ -28,7 +28,7 @@ public class Node
 		System.out.println("My name is: "+nodedata1.getNodeName());
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
 
-		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());
+		nodedata1.sendMulticast("0"+"-"+nodedata1.getNodeName());	//TODO change to TCP.sendMulticast
 
 
 		int numberOfNodes=getNameServerRespons(nodedata1);
@@ -76,7 +76,7 @@ public class Node
 		
 		MulticastSocket multicastSocket =null;
 		
-		try {
+		try {	//TODO change to mulicast.joinmulitcast
 			InetAddress group = InetAddress.getByName("228.5.6.7");
 			multicastSocket = new MulticastSocket(6789);
 			multicastSocket.joinGroup(group);
@@ -85,7 +85,7 @@ public class Node
 		boolean stay = true;
 		while(stay == true)
 		{
-			byte[] buffer = new byte[100];
+			byte[] buffer = new byte[100]; //TODO change to mulicast.receivemulticast
 			DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
 			try {
 				multicastSocket.receive(messageIn); //blocks
@@ -108,7 +108,7 @@ public class Node
 		System.out.println("stopped");
 	}
 
-	public String getNextPrevNode() 
+	public String getNextPrevNode() //TODO change to TCP.receiveText
 		{
 			ServerSocket welcomeSocket = null;
 			Socket connectionSocket = null;
@@ -126,7 +126,7 @@ public class Node
 			return nextPrevNode;		
 		}
 		
-	public int getNameServerRespons(NodeData nodedata1)
+	public int getNameServerRespons(NodeData nodedata1) //TODO change to TCP.receiveText
 		{
 			ServerSocket welcomeSocket = null;
 			Socket connectionSocket = null;

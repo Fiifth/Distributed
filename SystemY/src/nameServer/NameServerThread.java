@@ -49,7 +49,7 @@ public class NameServerThread extends Thread {
 					numOfNodesString="0";
 				}
 				Socket clientSocket;
-				try {
+				try {	//TODO change to TCP.sendText
 					clientSocket = new Socket(nodeIP,6790);
 					DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
 					outToNode.writeBytes(numOfNodesString + "\n");

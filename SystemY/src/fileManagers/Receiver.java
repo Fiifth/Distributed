@@ -32,7 +32,7 @@ public class Receiver extends Thread
 			}
 		}
 	
-	public void receiveFile(FileData file1, String DirReplFiles)
+	public void receiveFile(FileData file1, String DirReplFiles) //TODO change to TCP.receiveFile
 	{
 		
 		FileOutputStream fos = null;

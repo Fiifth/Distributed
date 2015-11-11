@@ -48,7 +48,7 @@ public class ShutdownT extends Thread
 			}
 			if(input.equals("quit"))
 				{
-					nodedata1.setToLeave(1);
+					nodedata1.setToLeave(1); //TODO change to TCP.sendMulticast
 					nodedata1.sendMulticast("1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode());
 					stay = false;
 					try {
@@ -71,7 +71,7 @@ public class ShutdownT extends Thread
 			    	{
 						tempfile.refreshReplicateOwner(nodedata1, tempfile);
 			        RMICommunicationInt recInt=null;
-			        try {
+			        try {//TODO change to RMI.getRMIObject
 						recInt = (RMICommunicationInt) Naming.lookup("//"+tempfile.getReplicateOwnerIP()+":"+tempfile.getReplicateOwnerID()+"/RMICommunication");
 						recInt.removeOwner(tempfile);
 					} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
