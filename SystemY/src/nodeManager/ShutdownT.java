@@ -3,9 +3,6 @@ package nodeManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import fileManagers.FileData;
@@ -15,6 +12,7 @@ import fileManagers.Receiver;
 import fileManagers.Remover;
 import fileManagers.Sender;
 import neworkFunctions.Multicast;
+import neworkFunctions.RMI;
 import nodeP.NodeData;
 import nodeP.RMICommunicationInt;
 
@@ -27,6 +25,7 @@ public class ShutdownT extends Thread
 	Receiver rQT;
 	Sender sRFT;
 	Multicast multi;
+	RMI rmi=new RMI();
 	public ShutdownT(NodeData nodedata1, FileDetectionT cLFQ, Remover rem, Receiver rQT, Sender sRFT, Multicast multi)
 	{
 		this.nodedata1=nodedata1;
@@ -55,10 +54,10 @@ public class ShutdownT extends Thread
 		    	{
 						tempfile.refreshReplicateOwner(nodedata1, tempfile);
 				        RMICommunicationInt recInt=null;
-				        try {//TODO change to RMI.getRMIObject
-							recInt = (RMICommunicationInt) Naming.lookup("//"+tempfile.getReplicateOwnerIP()+":"+tempfile.getReplicateOwnerID()+"/RMICommunication");
+				        try {
+				        	recInt = (RMICommunicationInt) rmi.getRMIObject(tempfile.getReplicateOwnerID(), tempfile.getReplicateOwnerIP(), "RMICommunication");
 							recInt.removeOwner(tempfile);
-						} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
+						} catch (RemoteException e) {e.printStackTrace();}
 		    	}
 				
 					nodedata1.setToLeave(1);

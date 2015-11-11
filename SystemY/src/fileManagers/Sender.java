@@ -17,12 +17,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.rmi.Naming;
+import neworkFunctions.RMI;
+import neworkFunctions.TCP;
 import nodeP.NodeData;
 import nodeP.RMICommunicationInt;
 
 public class Sender extends Thread
 {
+	TCP tcp=new TCP();
+	RMI rmi=new RMI();
 	NodeData nodedata1;
 	
 	public Sender(NodeData nodedata1)
@@ -46,8 +49,8 @@ public class Sender extends Thread
 			
 			if (file1.getLocalOwnerID()!=file1.getReplicateOwnerID())
 			{
-				try {//TODO change to RMI.getRMIObject
-					recInt = (RMICommunicationInt) Naming.lookup("//"+file1.getReplicateOwnerIP()+":"+file1.getReplicateOwnerID()+"/RMICommunication");
+				try {
+					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getReplicateOwnerID(), file1.getReplicateOwnerIP(), "RMICommunication");
 					file1.setSourceIP(nodedata1.getMyIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
 					recInt.receiveThisFile(file1);
@@ -76,7 +79,7 @@ public class Sender extends Thread
             Socket connectionSocket = null;
             BufferedOutputStream outToClient = null;
             FileInputStream fis = null;
-
+            //tcp.sendFile(filePath, file1.getSourceID()+3276);
             try {
                 welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
                 connectionSocket = welcomeSocket.accept();

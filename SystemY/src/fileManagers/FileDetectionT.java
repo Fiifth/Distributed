@@ -7,17 +7,15 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import neworkFunctions.RMI;
 import nodeP.NodeData;
 import nodeP.RMICommunicationInt;
 
@@ -25,6 +23,7 @@ public class FileDetectionT extends Thread{
 	public WatchService watcher;
 	String dirToSearch;
 	Path dir;
+	RMI rmi=new RMI();
 
 	NodeData nodedata1;
 	
@@ -92,10 +91,10 @@ public class FileDetectionT extends Thread{
 			        nodedata1.localFiles.remove(removedFile);
 			        removedFile.refreshReplicateOwner(nodedata1, removedFile);
 			        RMICommunicationInt recInt=null;
-			        try {//TODO change to RMI.getRMIObject
-						recInt = (RMICommunicationInt) Naming.lookup("//"+removedFile.getReplicateOwnerIP()+":"+removedFile.getReplicateOwnerID()+"/RMICommunication");
+			        try {
+			        	recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
 						recInt.removeOwner(removedFile);
-					} catch (MalformedURLException | RemoteException | NotBoundException e) {e.printStackTrace();}
+					} catch (RemoteException e) {e.printStackTrace();}
 			        
 				}
 				boolean valid = key.reset();

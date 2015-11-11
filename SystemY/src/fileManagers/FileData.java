@@ -78,7 +78,7 @@ public class FileData implements Serializable
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
 	{
 		String[] ipAndIDArray=null;
-		try {//TODO change to RMI.getRMIObject
+		try {
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
 			String ipAndID = nameserver.locateFile(getFileName());
 			ipAndIDArray=ipAndID.split("-");

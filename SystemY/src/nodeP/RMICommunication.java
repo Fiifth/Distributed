@@ -1,28 +1,24 @@
 package nodeP;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import fileManagers.FileData;
+import neworkFunctions.RMI;
 
 public class RMICommunication extends UnicastRemoteObject implements RMICommunicationInt  {
 	private static final long serialVersionUID = 1L;
 	NodeData nodedata1;
+	RMI rmi=new RMI();
 	protected RMICommunication(NodeData nodedata1) throws RemoteException {
 		super();
 		this.nodedata1=nodedata1;
 	}
-	public void setUpRMI() //TODO change to RMI.bind
+	public void setUpRMI()
 	{
-			try{
-				LocateRegistry.createRegistry(nodedata1.getMyNodeID());
-				RMICommunicationInt RMI = new RMICommunication(nodedata1);
-				Naming.rebind("//localhost:"+nodedata1.getMyNodeID()+"/RMICommunication", RMI);
-				System.out.println("RMI is ready!");
-				}
-				catch(Exception e){System.out.println("could not start RMI");}
+		RMICommunicationInt rmiInt = this;
+		rmi.bindObjectRMI(nodedata1.getMyNodeID(), "localhost", "RMICommunication", rmiInt);
+			
 	}
 
 	public boolean receiveThisFile(FileData file1) throws RemoteException 

@@ -1,13 +1,11 @@
 package nodeP;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
 import java.rmi.RemoteException;
 
 import fileManagers.FileDetectionT;
 import fileManagers.Sender;
 import neworkFunctions.Multicast;
+import neworkFunctions.TCP;
 import fileManagers.FileOwnershipT;
 import fileManagers.Receiver;
 import fileManagers.Remover;
@@ -15,11 +13,11 @@ import nodeManager.NodeOrderThread;
 import nodeManager.ShutdownT;
 
 public class Node 
-{	
+{	TCP tcp=new TCP();
 	Multicast multi=new Multicast("228.5.6.7", 6789);
 	
 	public static void main(String[] args) throws Exception
-	{		String name="15";
+	{		String name="7";
 		Node node1=new Node();
 		final NodeData nodedata1=new NodeData();
 		node1.startNieuweNode(name,nodedata1);
@@ -37,7 +35,7 @@ public class Node
 		int numberOfNodes=getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
 		{
-			String nodes=getNextPrevNode();
+			String nodes = tcp.receiveTextWithTCP(6770, 5000)[0];
 			String[] node = nodes.split("-");
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
@@ -96,45 +94,13 @@ public class Node
 		System.out.println("stopped");
 	}
 
-	public String getNextPrevNode() //TODO change to TCP.receiveText
-		{
-			ServerSocket welcomeSocket = null;
-			Socket connectionSocket = null;
-			String nextPrevNode = null;
-			
-			try {
-				welcomeSocket = new ServerSocket(6770);
-				connectionSocket = welcomeSocket.accept();
-				welcomeSocket.close();
-				BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-				nextPrevNode = inFromNameServer.readLine();			
-				connectionSocket.close();
-			} 
-			catch (IOException e) {e.printStackTrace();	}
-			return nextPrevNode;		
-		}
 		
-	public int getNameServerRespons(NodeData nodedata1) //TODO change to TCP.receiveText
+	public int getNameServerRespons(NodeData nodedata1) 
 		{
-			ServerSocket welcomeSocket = null;
-			Socket connectionSocket = null;
-			InetAddress serverIP;
-			int nodes=-1;
-			
-			try {
-				welcomeSocket = new ServerSocket(6790);
-				welcomeSocket.setSoTimeout(5000);
-				connectionSocket = welcomeSocket.accept();
-				welcomeSocket.close();
-				BufferedReader inFromNameServer = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-				String amountOfNodes = inFromNameServer.readLine();
-				nodes=Integer.parseInt(amountOfNodes);
-				serverIP=connectionSocket.getInetAddress();
-				String ServerIPString=serverIP.getHostAddress();
-				nodedata1.setNameServerIP(ServerIPString);
-				connectionSocket.close();
-			} 
-			catch (IOException e) {}
+		int nodes=-1;
+		String[] received=tcp.receiveTextWithTCP(6790, 5000);
+		nodedata1.setNameServerIP(received[1]);
+		nodes=Integer.parseInt(received[0]);
 			return nodes;
 		}
 }

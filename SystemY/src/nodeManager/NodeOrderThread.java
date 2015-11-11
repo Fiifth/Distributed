@@ -1,14 +1,12 @@
 package nodeManager;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.Socket;
-
+import neworkFunctions.TCP;
 import nodeP.NodeData;
 
 public class NodeOrderThread extends Thread {
+	TCP tcp=new TCP();
 	DatagramPacket messageIn;
 	NodeData nodedata1;
 	int myNodeID;
@@ -61,7 +59,7 @@ public class NodeOrderThread extends Thread {
 			}
 			else if(myPrevNode == myNextNode && myNextNode == myNodeID)
 			{
-				sendToNode(myNodeID+"-"+myNodeID,nodeIP);
+				tcp.sendTextWithTCP(myNodeID+"-"+myNodeID, nodeIP, 6770);
 				nodedata1.setPrevNode(newNodeID);
 				nodedata1.setNextNode(newNodeID);
 				System.out.println("I am the previous and next of the new node (second)");
@@ -70,7 +68,7 @@ public class NodeOrderThread extends Thread {
 			
 			else if(myNodeID < newNodeID && newNodeID < myNextNode)
 			{
-				sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+				tcp.sendTextWithTCP(myNodeID+"-"+myNextNode, nodeIP, 6770);
 				nodedata1.setNextNode(newNodeID);
 				System.out.println("I am the previous of the new node (middle)");
 			}
@@ -85,13 +83,13 @@ public class NodeOrderThread extends Thread {
 				//potential prev of new node
 				if (newNodeID>myNodeID && newNodeID>myPrevNode && newNodeID>myNextNode)
 				{
-					sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+					tcp.sendTextWithTCP(myNodeID+"-"+myNextNode, nodeIP, 6770);
 					nodedata1.setNextNode(newNodeID);
 					System.out.println("I am the previous of the new node (end)");
 				}
 				else if (newNodeID<myNodeID && newNodeID<myPrevNode && newNodeID<myNextNode)
 				{
-					sendToNode(myNodeID+"-"+myNextNode,nodeIP);
+					tcp.sendTextWithTCP(myNodeID+"-"+myNextNode, nodeIP, 6770);
 					nodedata1.setNextNode(newNodeID);
 					System.out.println("I am the previous of the new node (begin)");
 				}
@@ -116,19 +114,5 @@ public class NodeOrderThread extends Thread {
 		System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 		
 	}
-	public void sendToNode(String nodes, String nodeIP) //TODO change to TCP.sendText
-	{
-		Socket clientSocket;
-		try {
-			Thread.sleep(300);
-			clientSocket = new Socket(nodeIP,6770);
-			DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-			outToNode.writeBytes(nodes+ "\n");
-			clientSocket.close();
-		} catch (IOException | InterruptedException e) {e.printStackTrace();//} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}	
-	}
-
+	
 }

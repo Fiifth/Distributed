@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -28,19 +29,22 @@ public class TCP
 				outToNode.close();
 			} catch (IOException e) {e.printStackTrace();}
 	}
-	public String receiveTextWithTCP(int socket,int timeout)
+	public String[] receiveTextWithTCP(int socket,int timeout)
 	{
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
-		String text = null;
+		String[] text=new String[2];
 		
 		try {
 			welcomeSocket = new ServerSocket(socket);
 			welcomeSocket.setSoTimeout(timeout);
 			connectionSocket = welcomeSocket.accept();
+			InetAddress originIP=connectionSocket.getInetAddress();
+			text[1]=originIP.getHostAddress();
 			welcomeSocket.close();
 			BufferedReader bufferIN = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			text = bufferIN.readLine();			
+			text[0] = bufferIN.readLine();	
+			
 			connectionSocket.close();
 		} 
 		catch (IOException e) {e.printStackTrace();	}
@@ -63,6 +67,7 @@ public class TCP
 
             if (outToClient != null) 
             {
+            	
                 File myFile = new File(filePath);
                 byte[] mybytearray = new byte[(int) myFile.length()];
 
@@ -83,7 +88,8 @@ public class TCP
                 System.out.println("file send!");
         }
 	}
-	public void receiveFile(String sourceIP,int serverPort, String fileOutput)
+	
+public void receiveFile(String sourceIP,int serverPort, String fileOutput)
 	{
 		
 		FileOutputStream fos = null;

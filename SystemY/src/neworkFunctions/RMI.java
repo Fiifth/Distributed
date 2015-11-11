@@ -19,7 +19,7 @@ public class RMI
 				}
 				catch(Exception e){System.out.println("could not start RMI");}
 	}
-	public void unbindObjectRMI(int RMIport,String locationIP, String locationName,Object object) //TODO add to shutdown
+	public void unbindObjectRMI(int RMIport,String locationIP, String locationName,Object object)
 	{
 		try {
 			Naming.unbind("//"+locationIP+":"+RMIport+"/"+locationName);

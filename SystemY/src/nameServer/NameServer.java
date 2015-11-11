@@ -4,15 +4,16 @@ package nameServer;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.rmi.*;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
 import neworkFunctions.Multicast;
+import neworkFunctions.RMI;
 
 public class NameServer extends UnicastRemoteObject implements NameServerInterface
 {
+	RMI rmi=new RMI();
 	Multicast multi=new Multicast("228.5.6.7", 6789);
 	private TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
@@ -31,7 +32,9 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	public void startNameServer(NameServer nameServer) throws IOException
 	{
 		
-		nameServer.setUpRMI(nameServer); //TODO change RMI.setup
+		NameServerInterface nameint = nameServer;
+		
+		rmi.bindObjectRMI(1099, "localhost", "NameServer", nameint);
 		
 		multi.joinMulticastGroup();
 		
@@ -44,21 +47,7 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 		//multicastSocket.close();
 	}
 
-	public void setUpRMI(NameServer nameServer)
-	{
-		try{
-			LocateRegistry.createRegistry(1099);
-			NameServerInterface nameint = nameServer;
-			Naming.rebind("//localhost/NameServer", nameint);
-			
-			System.out.println("NameServer is ready.");
-			}
-			catch(Exception e)
-			{
-			System.out.println("NameServer error: " + e.getMessage());
-			e.printStackTrace();
-			}
-	}
+	
 	
 
 	public boolean addNode(String nodeName, String nodeIP) throws RemoteException {

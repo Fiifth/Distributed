@@ -6,11 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+
+import neworkFunctions.TCP;
 import nodeP.NodeData;
 
 public class Receiver extends Thread 
 {
-
+TCP tcp=new TCP();
 		NodeData nodedata1;
 	
 	public Receiver(NodeData nodedata1)
@@ -34,7 +36,6 @@ public class Receiver extends Thread
 	
 	public void receiveFile(FileData file1, String DirReplFiles) //TODO change to TCP.receiveFile
 	{
-		
 		FileOutputStream fos = null;
         BufferedOutputStream bos = null;
         Socket clientSocket = null;
@@ -55,7 +56,6 @@ public class Receiver extends Thread
         		fnExists = true;
        		}
     	}
-        
         if(!fnExists){
         	file1.setFolderLocation(DirReplFiles);
         	file1.setRemoveAfterSend(false);
@@ -64,37 +64,8 @@ public class Receiver extends Thread
  
 
         	System.out.println("looking for server");
-            try {
-				clientSocket = new Socket(file1.getSourceIP(), serverPort);
-				is = clientSocket.getInputStream();
-			} catch (IOException e) {System.out.println("couldn't open socket");}	
+        	tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput);
            
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        if (is != null) 
-        {
-        	System.out.print("Server found: ");
-           
-            try 
-            {
-                fos = new FileOutputStream(fileOutput);
-                bos = new BufferedOutputStream(fos);
-                bytesRead = is.read(aByte, 0, aByte.length);
-                do 
-                {
-                        baos.write(aByte);
-                        bytesRead = is.read(aByte);
-                } while (bytesRead != -1);
-
-                bos.write(baos.toByteArray());
-                bos.flush();
-                bos.close();
-                clientSocket.close();
-                System.out.println("File received");
-            } 
-            catch (IOException ex) {System.out.println("File not found or error sending it");}
-        }
     }
 
 

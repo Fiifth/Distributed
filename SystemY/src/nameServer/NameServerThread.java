@@ -1,14 +1,14 @@
 package nameServer;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.rmi.RemoteException;
+
+import neworkFunctions.TCP;
 
 public class NameServerThread extends Thread {
 	DatagramPacket messageIn;
+	TCP tcp=new TCP();
 	NameServer nameServer;
 	public NameServerThread(DatagramPacket messageIn, NameServer nameServer)
 	{
@@ -35,9 +35,11 @@ public class NameServerThread extends Thread {
 		else//addnode
 		{
 			String numOfNodesString=null;
-			try 
-			{
-				boolean isNewNode=nameServer.addNode(message[1], nodeIP);
+			
+				boolean isNewNode=false;
+				try {
+					isNewNode = nameServer.addNode(message[1], nodeIP);
+				} catch (RemoteException e) {}
 				if (isNewNode)
 				{
 					Integer numberOfNodes = nameServer.getNodeMap().size(); 
@@ -48,14 +50,8 @@ public class NameServerThread extends Thread {
 				{
 					numOfNodesString="0";
 				}
-				Socket clientSocket;
-				try {	//TODO change to TCP.sendText
-					clientSocket = new Socket(nodeIP,6790);
-					DataOutputStream outToNode = new DataOutputStream(clientSocket.getOutputStream());
-					outToNode.writeBytes(numOfNodesString + "\n");
-					clientSocket.close();
-					} catch (IOException e) {e.printStackTrace();}
-			}catch (RemoteException e) {e.printStackTrace();}		
-		}
+				tcp.sendTextWithTCP(numOfNodesString, nodeIP, 6790);
+			}
+			}
 	}
-}
+
