@@ -18,15 +18,14 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	{
 		RMICommunicationInt rmiInt = this;
 		rmi.bindObjectRMI(nodedata1.getMyNodeID(), "localhost", "RMICommunication", rmiInt);
-			
 	}
 
 	public boolean receiveThisFile(FileData file1) throws RemoteException 
 	{
 		boolean queue=nodedata1.receiveQueue.offer(file1);
-
 		return queue;
 	}
+	
 	public boolean removeOwner(FileData file1) throws RemoteException {
 		System.out.println("I should remove: "+file1.getFileName());
 		FileData removedFile=null;
@@ -41,10 +40,9 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
         nodedata1.removeQueue.add(removedFile);
 		return false;
 	}
-	@Override
+	
 	public boolean addOwner(FileData file1) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

@@ -22,9 +22,7 @@ public class NodeDetection extends Thread
 		multi.joinMulticastGroup();
 		while(nodedata1.getToLeave() == 0)
 		{
-			DatagramPacket messageIn = multi.receiveMulticast();
-			System.out.println("Node communication detected");
-			
+			DatagramPacket messageIn = multi.receiveMulticast();			
 			if(nodedata1.getToLeave() == 0)
 			{
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);

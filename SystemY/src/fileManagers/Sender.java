@@ -34,90 +34,84 @@ public class Sender extends Thread
 	}
 	public void run()
 	{
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e1) {System.out.println("interrupted sleep");}
-		while(true)
-			{
-			
+		try {Thread.sleep(2000);} catch (InterruptedException e1) {System.out.println("interrupted sleep");return;}
+		
+		while(!Thread.interrupted())
+		{
 			FileData file1=null;
-			 RMICommunicationInt recInt=null;
-			try {
+			RMICommunicationInt recInt=null;
+			try 
+			{
 				file1 = nodedata1.sendQueue.take();
+				nodedata1.setSending(true);
 			} catch (InterruptedException e1) {return;}
 
-			
 			if (file1.getLocalOwnerID()==file1.getReplicateOwnerID()&&file1.getLocalOwnerID()==nodedata1.getMyNodeID())
 			{
-				System.out.print("the file exist locally: ");
-				copyFileLocally(nodedata1,file1);
-				
+				copyFileLocally(nodedata1,file1);	
 			}
 			else
 			{
-				try {
+				try 
+				{
 					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getReplicateOwnerID(), file1.getReplicateOwnerIP(), "RMICommunication");
 					file1.setSourceIP(nodedata1.getMyIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
 					recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
-				
 				sendFile(file1);
-				if (file1.getRemoveAfterSend())
-						{
-					nodedata1.removeQueue.add(file1);
-					
-						}
+				if (file1.getRemoveAfterSend()) nodedata1.removeQueue.add(file1);
 			}
+			nodedata1.setSending(false);
 		}
-
 	}
-	public void sendFile(FileData file1) //TODO change to TCP.sendFile
+	public void sendFile(FileData file1)
 	{
 		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
-		System.out.print("Sending following file: "+ filePath+": ");
-            ServerSocket welcomeSocket = null;
-            Socket connectionSocket = null;
-            BufferedOutputStream outToClient = null;
-            FileInputStream fis = null;
-            //tcp.sendFile(filePath, file1.getSourceID()+3276);
-            try {
-                welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
-                connectionSocket = welcomeSocket.accept();
-                outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
-                welcomeSocket.close();
-            } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
+        ServerSocket welcomeSocket = null;
+        Socket connectionSocket = null;
+        BufferedOutputStream outToClient = null;
+        FileInputStream fis = null;
+        BufferedInputStream bis=null;
+        try 
+        {
+            welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
+            connectionSocket = welcomeSocket.accept();
+            outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
+            welcomeSocket.close();
+        } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
 
-            if (outToClient != null) 
+        if (outToClient != null) 
+        {
+            File myFile = new File(filePath);
+            byte[] mybytearray = new byte[(int) myFile.length()];
+
+            try 
             {
-            	
-                File myFile = new File(filePath);
-                byte[] mybytearray = new byte[(int) myFile.length()];
+                fis = new FileInputStream(myFile);
+                bis = new BufferedInputStream(fis);
+            } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
 
-                try {
-                    fis = new FileInputStream(myFile);
-                } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
-                BufferedInputStream bis = new BufferedInputStream(fis);
-
-                try {
-                    bis.read(mybytearray, 0, mybytearray.length);
-                    outToClient.write(mybytearray, 0, mybytearray.length);
-                    outToClient.flush();
-                    outToClient.close();
-                    connectionSocket.close();
-                    fis.close();
-					bis.close();
-                } catch (IOException ex) {System.out.println("Sending file failed!"); } 
-                System.out.println("file send!");
+            try 
+            {
+                bis.read(mybytearray, 0, mybytearray.length);
+                outToClient.write(mybytearray, 0, mybytearray.length);
+                outToClient.flush();
+                outToClient.close();
+                connectionSocket.close();
+                fis.close();
+				bis.close();
+            } catch (IOException ex) {System.out.println("Sending file failed!"); } 
         }
 	}
+	
 	public void copyFileLocally(NodeData nodedata1,FileData file1)
 	{
 		Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
 		Path destination = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
-		try {
+		try 
+		{
 			Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
-			System.out.println("copy is done");
 			file1.setFolderLocation(nodedata1.getMyReplFolder());
 			nodedata1.replFiles.add(file1);
 		} catch (IOException e) {System.out.println("couldn't copy file");}

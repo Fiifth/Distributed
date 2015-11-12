@@ -19,7 +19,6 @@ public class NodeOrderThread extends Thread {
 		myNodeID=nodedata1.getMyNodeID();
 		myPrevNode=nodedata1.getPrevNode();
 		myNextNode=nodedata1.getNextNode();
-		
 	}
 
 	public void run() {
@@ -28,12 +27,9 @@ public class NodeOrderThread extends Thread {
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
 		String[] msgs = msg.split("-");
-		//node[0]=toleave, node[1] = his name, node[2] = hisprevID, node[3] = hisnextID
 		int toLeave = Integer.parseInt(msgs[0]);
-		//his nodeName to nodeID to compare with his next and his prev
 		int newNodeID= Math.abs(msgs[1].hashCode()%32768);
-		
-		//removing node
+
 		if(toLeave == 1)
 		{
 			//Strings van ID's naar int parsen
@@ -110,9 +106,6 @@ public class NodeOrderThread extends Thread {
 				}	
 			}
 		}
-		
 		System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
-		
 	}
-	
 }

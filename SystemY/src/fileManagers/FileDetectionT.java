@@ -32,54 +32,44 @@ public class FileDetectionT extends Thread{
 		this.nodedata1=nodedata1;
 	}
 	
-	public void run(){
-		
-		dirToSearch = nodedata1.getMyLocalFolder();
-		dir = Paths.get(dirToSearch);
-		//vul lijst en queue met nieuwe map
-		firstSearchFilesToAdd();
-		try {
-			setupWatchService();
-		} catch (IOException e) {}
-		while(true&&!Thread.interrupted())
+	@SuppressWarnings("unchecked")
+	public void run()
+	{
+		dir = Paths.get(nodedata1.getMyLocalFolder());
+		firstSearchFilesToAdd(); //vul lijst en queue met nieuwe map
+		setupWatchService();		
+		while(!Thread.interrupted())
 		{
 			WatchKey key;
-			try{
+			try
+			{
 				key = watcher.take();
-				
-			} catch(InterruptedException ex) {
+			} catch(InterruptedException ex) 
+			{
+				try {watcher.close();} catch (IOException e) {}
 				return;
 			}
-			for(WatchEvent<?> event : key.pollEvents()){
-				//get event type
-				WatchEvent.Kind<?> kind = event.kind();
-				 // get file name
-				@SuppressWarnings("unchecked")
+			for(WatchEvent<?> event : key.pollEvents())
+			{
+				WatchEvent.Kind<?> kind = event.kind(); //get event type
 				WatchEvent<Path> ev = (WatchEvent<Path>) event;
-				Path fileName = ev.context();
-				System.out.println(kind.name() + ": " + fileName);
-				 
-				if(kind == OVERFLOW){
-					continue;
+				Path fileName = ev.context();	// get file name
+				if(kind == ENTRY_CREATE)
+				{
+					//do nothing
 				}
-				else if(kind == ENTRY_CREATE){
-					System.out.println("new file added");
-				}
-				else if(kind == ENTRY_MODIFY){
-					System.out.println("file modified");
-					
+				else if(kind == ENTRY_MODIFY)
+				{
 					FileData file1=new FileData();
-					file1.setNewFileData(fileName.toString(), dirToSearch, nodedata1);
+					file1.setNewFileData(fileName.toString(), nodedata1);
 					file1.setSourceIP(file1.getLocalOwnerIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
 					file1.refreshReplicateOwner(nodedata1, file1);
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}
-				//aan de hand van de filenaam het filedata1 object opzoeken en zo de data doorsturen naar replicatie eigenaar
 				else if(kind == ENTRY_DELETE)
 				{
-					System.out.println("file removed");
 					FileData removedFile=null;
 			        for (FileData tempfile : nodedata1.localFiles) 
 			    	{
@@ -94,26 +84,21 @@ public class FileDetectionT extends Thread{
 			        try {
 			        	recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
 						recInt.removeOwner(removedFile);
-					} catch (RemoteException e) {e.printStackTrace();}
-			        
+					} catch (RemoteException e) {e.printStackTrace();} 
 				}
-				boolean valid = key.reset();
-				if(!valid){
-					return;
-				}
+				key.reset();
 			}
 		}
-		
+		try {watcher.close();} catch (IOException e) {}
 	}
-	//bij startup de lijst en queue vullen me alle bestanden
+	
 	public void firstSearchFilesToAdd()
 	{
-		String DirReplFiles=nodedata1.getMyReplFolder();
-		File folder1 = new File(DirReplFiles);
+		File folder1 = new File(nodedata1.getMyReplFolder());
 		if (!folder1.exists())
 			folder1.mkdir();
 		
-		File folder = new File(dirToSearch);
+		File folder = new File(nodedata1.getMyLocalFolder());
 		if (!folder.exists())
 			folder.mkdir();
 
@@ -124,20 +109,20 @@ public class FileDetectionT extends Thread{
 				{
 					String fileName = file.getName();
 					FileData file1=new FileData();
-					file1.setNewFileData(fileName, dirToSearch, nodedata1);
+					file1.setNewFileData(fileName, nodedata1);
 					file1.refreshReplicateOwner(nodedata1, file1);
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}
-			}	
+			}
 		}
 	
-	
-	//start watcher
-	public void setupWatchService() throws IOException{
-		watcher = FileSystems.getDefault().newWatchService();
-		dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-		
+	public void setupWatchService() {
+		try {
+			watcher = FileSystems.getDefault().newWatchService();
+			dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+		} catch (IOException e) {}
+
 	}
 
 }	

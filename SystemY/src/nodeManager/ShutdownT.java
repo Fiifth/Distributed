@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import fileManagers.FileData;
 import fileManagers.FileDetectionT;
@@ -20,19 +21,13 @@ public class ShutdownT extends Thread
 {
 	NodeData nodedata1;
 	String input;
-	FileDetectionT cLFQ;
-	Remover rem;
-	Receiver rQT;
-	Sender sRFT;
 	Multicast multi;
+	ArrayList<Object> threadList;
 	RMI rmi=new RMI();
-	public ShutdownT(NodeData nodedata1, FileDetectionT cLFQ, Remover rem, Receiver rQT, Sender sRFT, Multicast multi)
+	public ShutdownT(NodeData nodedata1, ArrayList<Object> threadList, Multicast multi)
 	{
 		this.nodedata1=nodedata1;
-		this.cLFQ=cLFQ;
-		this.rem=rem;
-		this.rQT=rQT;
-		this.sRFT=sRFT;
+		this.threadList=threadList;
 		this.multi=multi;
 	}
 
@@ -60,54 +55,32 @@ public class ShutdownT extends Thread
 						} catch (RemoteException e) {e.printStackTrace();}
 		    	}
 				
-					nodedata1.setToLeave(1);
-					String text="1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode();
-					
-					multi.sendMulticast(text);
+				nodedata1.setToLeave(1);
+				String text="1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode();
+				
+				multi.sendMulticast(text);
 
-					stay = false;
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						
-						e.printStackTrace();
-					}
-					
-					FileOwnershipT COT =new FileOwnershipT(nodedata1);
-					COT.start();
+				stay = false;
+				try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}		
 
-					while(COT.isAlive()){}
-					
-					while(!nodedata1.sendQueue.isEmpty()){}
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						// TODO flag als laatste zending klaar is ipv sleep
-						e.printStackTrace();
-					}
-					multi.LeaveMulticast();
-					stopThreads();
-					
-					System.exit(1);
-				}
-			}	
-	}
+				FileOwnershipT COT =new FileOwnershipT(nodedata1);
+				COT.start();
+
+				while(COT.isAlive()){}
+				
+				while(!nodedata1.sendQueue.isEmpty()){}
 	
-	public void stopThreads()
-	{
-		cLFQ.interrupt();
-		try {
-			cLFQ.watcher.close();
-		} catch (IOException e) {e.printStackTrace();}
-		rem.interrupt();
-		rQT.interrupt();
-		sRFT.interrupt();
+				while(nodedata1.isSending()){}
+				
+				multi.LeaveMulticast();
+				
+				for (Object temp:threadList)
+				{
+					((Thread) temp).interrupt();
+				}
+				System.exit(1);
+			}
+		}	
 	}
-	public void checkThreadStatus()
-	{
-		System.out.println(cLFQ.isAlive());
-		System.out.println(rem.isAlive());
-		System.out.println(rQT.isAlive());
-		System.out.println(sRFT.isAlive());
-	}
+
 }

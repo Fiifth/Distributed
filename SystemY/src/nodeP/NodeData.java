@@ -17,23 +17,25 @@ public class NodeData {
 	private volatile String myIP;
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
+	private volatile boolean sending;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
 	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
 	
+	
 	public String getNodeName() {
 		return nodeName;
 	}
 	public void setNodeName(String nodeName) {
-		setMyNodeID(Math.abs(nodeName.hashCode()%32768));
+		this.setMyNodeID(Math.abs(nodeName.hashCode()%32768));
 		try {
 			setMyIP(InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {}
 		this.nodeName = nodeName;
-		setMyReplFolder("c:\\SystemYNodeFilesRep"+getMyNodeID());
-		setMyLocalFolder("c:\\SystemYNodeFiles"+getMyNodeID());
+		this.setMyReplFolder("c:\\SystemYNodeFilesRep"+getMyNodeID());
+		this.setMyLocalFolder("c:\\SystemYNodeFiles"+getMyNodeID());
 	}
 	public int getPrevNode() {
 		return prevNode;
@@ -83,6 +85,12 @@ public class NodeData {
 	}
 	public void setMyReplFolder(String myReplFolder) {
 		this.myReplFolder = myReplFolder;
+	}
+	public boolean isSending() {
+		return sending;
+	}
+	public void setSending(boolean sending) {
+		this.sending = sending;
 	}
 	
 }

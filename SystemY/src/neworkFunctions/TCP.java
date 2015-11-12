@@ -47,49 +47,48 @@ public class TCP
 			
 			connectionSocket.close();
 		} 
-		catch (IOException e) {e.printStackTrace();	}
+		catch (IOException e) {System.out.println("nobody is here");	}
 		return text;		
 	}
 	public void sendFile(String filePath,int socket)
 	{
-		System.out.print("Sending following file: "+ filePath+": ");
-            ServerSocket welcomeSocket = null;
-            Socket connectionSocket = null;
-            BufferedOutputStream outToClient = null;
-            FileInputStream fis = null;
+        ServerSocket welcomeSocket = null;
+        Socket connectionSocket = null;
+        BufferedOutputStream outToClient = null;
+        FileInputStream fis = null;
+
+        try 
+        {
+            welcomeSocket = new ServerSocket(socket);
+            connectionSocket = welcomeSocket.accept();
+            outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
+            welcomeSocket.close();
+        } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
+
+        if (outToClient != null) 
+        {
+            File myFile = new File(filePath);
+            byte[] mybytearray = new byte[(int) myFile.length()];
 
             try {
-                welcomeSocket = new ServerSocket(socket);
-                connectionSocket = welcomeSocket.accept();
-                outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
-                welcomeSocket.close();
-            } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
+                fis = new FileInputStream(myFile);
+            } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
+            BufferedInputStream bis = new BufferedInputStream(fis);
 
-            if (outToClient != null) 
+            try 
             {
-            	
-                File myFile = new File(filePath);
-                byte[] mybytearray = new byte[(int) myFile.length()];
-
-                try {
-                    fis = new FileInputStream(myFile);
-                } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
-                BufferedInputStream bis = new BufferedInputStream(fis);
-
-                try {
-                    bis.read(mybytearray, 0, mybytearray.length);
-                    outToClient.write(mybytearray, 0, mybytearray.length);
-                    outToClient.flush();
-                    outToClient.close();
-                    connectionSocket.close();
-                    fis.close();
-					bis.close();
-                } catch (IOException ex) {System.out.println("Sending file failed!"); } 
-                System.out.println("file send!");
+                bis.read(mybytearray, 0, mybytearray.length);
+                outToClient.write(mybytearray, 0, mybytearray.length);
+                outToClient.flush();
+                outToClient.close();
+                connectionSocket.close();
+                fis.close();
+				bis.close();
+            } catch (IOException ex) {System.out.println("Sending file failed!"); } 
         }
 	}
 	
-public void receiveFile(String sourceIP,int serverPort, String fileOutput)
+	public void receiveFile(String sourceIP,int serverPort, String fileOutput)
 	{
 		
 		FileOutputStream fos = null;
@@ -115,17 +114,17 @@ public void receiveFile(String sourceIP,int serverPort, String fileOutput)
                 bytesRead = is.read(aByte, 0, aByte.length);
                 do 
                 {
-                        baos.write(aByte);
-                        bytesRead = is.read(aByte);
+                	baos.write(aByte);
+                    bytesRead = is.read(aByte);
                 } while (bytesRead != -1);
+                
                 bos.write(baos.toByteArray());
                 bos.flush();
                 bos.close();
                 baos.close();
                 fos.close();
                 clientSocket.close();
-            } 
-            catch (IOException ex) {System.out.println("File not received");}
+            } catch (IOException ex) {System.out.println("File not received");}
         }
 	}
 }

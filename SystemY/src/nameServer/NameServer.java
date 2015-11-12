@@ -14,7 +14,7 @@ import neworkFunctions.RMI;
 public class NameServer extends UnicastRemoteObject implements NameServerInterface
 {
 	RMI rmi=new RMI();
-	Multicast multi=new Multicast("228.5.6.7", 6789);
+	
 	private TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
 	
@@ -31,25 +31,13 @@ public class NameServer extends UnicastRemoteObject implements NameServerInterfa
 	
 	public void startNameServer(NameServer nameServer) throws IOException
 	{
-		
-		NameServerInterface nameint = nameServer;
-		
+		NameServerInterface nameint = nameServer;	
 		rmi.bindObjectRMI(1099, "localhost", "NameServer", nameint);
-		
-		multi.joinMulticastGroup();
-		
-		while(true)
-		{
-			DatagramPacket messageIn = multi.receiveMulticast();
-			NameServerThread c =new NameServerThread(messageIn,nameServer);
-			c.start(); 
-		}
-		//multicastSocket.close();
+		NameServerNodeDetection nameservernodedetection=new NameServerNodeDetection(nameServer);
+		nameservernodedetection.start();
 	}
 
 	
-	
-
 	public boolean addNode(String nodeName, String nodeIP) throws RemoteException {
 		int hashedNN = Math.abs(nodeName.hashCode()%32768);
 		if (!nodeMap.containsKey(hashedNN))

@@ -15,17 +15,18 @@ public class Remover extends Thread
 	}
 	public void run()
 	{
-		while(true)
+		while(!Thread.interrupted())
 		{
 			FileData file1=null;
-			try {
+			try 
+			{
 				file1=nodedata1.removeQueue.take();
-			} catch (InterruptedException e) {return;}
-			Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
-			try {
+			} catch (InterruptedException e) {return;}			
+			try 
+			{
+				Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
 				Files.delete(source);
 			} catch (IOException e) {System.out.println("file couldn't be deleted");}			
 		}
-		
 	}
 }

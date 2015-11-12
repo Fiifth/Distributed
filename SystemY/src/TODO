@@ -1,16 +1,6 @@
-1) generic functie schrijven
-	* object zoeken met specifieke filenaam
-
-2) shutdownT 1 sleep wegwerken met een flag
-
-3) remove manager niet met thread doen
-
-4) tcp.sendFile fixen (werkt niet om onbekende rede)
 
 5) try catch overal nakijken en eventueel failure management
 
 6) duidelijke printjes maken
 
-7) thread list bijhouden
-
-8) isInterrupted in while lus bij threads
+7) geautomatiseerde testen

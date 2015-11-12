@@ -16,8 +16,8 @@ public class NameServerThread extends Thread {
 		this.nameServer=nameServer;
 	}
 	
-	public void run() {
-		
+	public void run() 
+	{
 		String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 		String[] message = msgs.split("-");
 		int toLeave=Integer.parseInt(message[0]);
@@ -35,23 +35,24 @@ public class NameServerThread extends Thread {
 		else//addnode
 		{
 			String numOfNodesString=null;
+			boolean isNewNode=false;
+			try 
+			{
+				isNewNode = nameServer.addNode(message[1], nodeIP);
+			} catch (RemoteException e) {}
 			
-				boolean isNewNode=false;
-				try {
-					isNewNode = nameServer.addNode(message[1], nodeIP);
-				} catch (RemoteException e) {}
-				if (isNewNode)
-				{
-					Integer numberOfNodes = nameServer.getNodeMap().size(); 
-					System.out.println("Added NodeIP: " + nodeIP);
-					numOfNodesString = numberOfNodes.toString();	
-				}
-				else
-				{
-					numOfNodesString="0";
-				}
-				tcp.sendTextWithTCP(numOfNodesString, nodeIP, 6790);
+			if (isNewNode)
+			{
+				Integer numberOfNodes = nameServer.getNodeMap().size(); 
+				System.out.println("Added NodeIP: " + nodeIP);
+				numOfNodesString = numberOfNodes.toString();	
 			}
+			else
+			{
+				numOfNodesString="0";
 			}
+			tcp.sendTextWithTCP(numOfNodesString, nodeIP, 6790);
+		}
 	}
+}
 

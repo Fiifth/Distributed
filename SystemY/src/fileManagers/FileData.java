@@ -20,10 +20,10 @@ public class FileData implements Serializable
 	private volatile boolean removeAfterSend;
 
 	
-	public void setNewFileData(String fileName, String folderLocation, NodeData nodedata1)
+	public void setNewFileData(String fileName, NodeData nodedata1)
 	{
 		this.fileName=fileName;
-		this.folderLocation=folderLocation;
+		folderLocation=nodedata1.getMyLocalFolder();
 		localOwnerIP=nodedata1.getMyIP();
 		localOwnerID=nodedata1.getMyNodeID();
 	}
