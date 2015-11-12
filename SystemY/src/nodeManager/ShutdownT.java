@@ -3,6 +3,9 @@ package nodeManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -72,13 +75,22 @@ public class ShutdownT extends Thread
 	
 				while(nodedata1.isSending()){}
 				
+				try {
+					Naming.unbind(nodedata1.getBind());
+				} catch (RemoteException | MalformedURLException | NotBoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				multi.LeaveMulticast();
+				
+				
 				
 				for (Object temp:threadList)
 				{
 					((Thread) temp).interrupt();
 				}
-				System.exit(1);
+				//System.exit(1);
 			}
 		}	
 	}

@@ -17,7 +17,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public void setUpRMI()
 	{
 		RMICommunicationInt rmiInt = this;
-		rmi.bindObjectRMI(nodedata1.getMyNodeID(), "localhost", "RMICommunication", rmiInt);
+		nodedata1.setBind(rmi.bindObjectRMI(nodedata1.getMyNodeID(), "localhost", "RMICommunication", rmiInt));
 	}
 
 	public boolean receiveThisFile(FileData file1) throws RemoteException 

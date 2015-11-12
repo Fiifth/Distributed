@@ -18,6 +18,7 @@ public class NodeData {
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
 	private volatile boolean sending;
+	private volatile String bind;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
 	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
@@ -85,6 +86,12 @@ public class NodeData {
 	}
 	public void setMyReplFolder(String myReplFolder) {
 		this.myReplFolder = myReplFolder;
+	}
+	public String getBind() {
+		return bind;
+	}
+	public void setBind(String bind) {
+		this.bind = bind;
 	}
 	public boolean isSending() {
 		return sending;

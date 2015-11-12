@@ -6,13 +6,15 @@ import java.rmi.*;
 
 public class RMI 
 {
-	public void bindObjectRMI(int RMIport,String locationIP, String locationName,Object object ) 
+	public String bindObjectRMI(int RMIport,String locationIP, String locationName,Object object ) 
 	{
+		String bind="//"+locationIP+":"+RMIport+"/"+locationName;
 		try
 		{
 			LocateRegistry.createRegistry(RMIport);
 			Naming.rebind("//"+locationIP+":"+RMIport+"/"+locationName, (Remote) object);
-		}catch(Exception e){System.out.println("could not start RMI");}	
+		}catch(Exception e){System.out.println("could not start RMI");}
+		return bind;	
 	}
 	
 	public void unbindObjectRMI(String locationName)
