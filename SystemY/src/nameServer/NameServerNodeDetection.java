@@ -5,8 +5,8 @@ import neworkFunctions.Multicast;
 
 public class NameServerNodeDetection extends Thread 
 {
-	NameServer nameServer;
-	public NameServerNodeDetection(NameServer nameServer)
+	StartNameServer nameServer;
+	public NameServerNodeDetection(StartNameServer nameServer)
 	{
 		this.nameServer=nameServer;
 	}

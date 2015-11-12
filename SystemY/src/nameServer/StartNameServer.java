@@ -11,26 +11,22 @@ import java.util.Map.Entry;
 import neworkFunctions.Multicast;
 import neworkFunctions.RMI;
 
-public class NameServer extends UnicastRemoteObject implements NameServerInterface
+public class StartNameServer extends UnicastRemoteObject implements NameServerInterface
 {
 	RMI rmi=new RMI();
 	
 	private TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
 	
-	public static void main(String[] args) throws IOException
-	{
-		NameServer nameServer=new NameServer();
-		nameServer.startNameServer(nameServer);
-	}
 
-	protected NameServer() throws RemoteException 
+	public StartNameServer() throws RemoteException 
 	{
 		super();
 	}
 	
-	public void startNameServer(NameServer nameServer) throws IOException
+	public void startNameServer() throws IOException
 	{
+		StartNameServer nameServer=this;
 		NameServerInterface nameint = nameServer;	
 		rmi.bindObjectRMI(1099, "localhost", "NameServer", nameint);
 		NameServerNodeDetection nameservernodedetection=new NameServerNodeDetection(nameServer);

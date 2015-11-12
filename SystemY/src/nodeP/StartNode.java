@@ -8,22 +8,28 @@ import fileManagers.*;
 import neworkFunctions.*;
 import nodeManager.*;
 
-public class Node 
+public class StartNode 
 {	
 	TCP tcp=new TCP();
 	Multicast multi=new Multicast("228.5.6.7", 6789);
+	String nodeName;
+	
+	public StartNode(String nodeName)
+	{
+		this.nodeName=nodeName;
+		
+	}
 	
 	public static void main(String[] args) throws Exception
 	{		
-		String name="3";
-		Node node1=new Node();
-		final NodeData nodedata1=new NodeData();
-		node1.startNieuweNode(name,nodedata1);
+		
 	}
 	
-	public void startNieuweNode(String nodeNaam,NodeData nodedata1)
+	public void startNewNode()
 	{
-		nodedata1.setNodeName(nodeNaam);
+		final NodeData nodedata1=new NodeData();
+		
+		nodedata1.setNodeName(nodeName);
 		System.out.println("My name is: "+nodedata1.getNodeName());
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
 

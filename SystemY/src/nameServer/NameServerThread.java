@@ -9,8 +9,8 @@ import neworkFunctions.TCP;
 public class NameServerThread extends Thread {
 	DatagramPacket messageIn;
 	TCP tcp=new TCP();
-	NameServer nameServer;
-	public NameServerThread(DatagramPacket messageIn, NameServer nameServer)
+	StartNameServer nameServer;
+	public NameServerThread(DatagramPacket messageIn, StartNameServer nameServer)
 	{
 		this.messageIn=messageIn;
 		this.nameServer=nameServer;
