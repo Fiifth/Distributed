@@ -2,13 +2,11 @@ package nameServer;
 
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
-import neworkFunctions.Multicast;
 import neworkFunctions.RMI;
 
 public class StartNameServer extends UnicastRemoteObject implements NameServerInterface

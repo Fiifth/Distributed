@@ -1,6 +1,4 @@
 package nodeP;
-import java.awt.List;
-import java.net.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -20,11 +18,6 @@ public class StartNode
 		
 	}
 	
-	public static void main(String[] args) throws Exception
-	{		
-		
-	}
-	
 	public void startNewNode()
 	{
 		final NodeData nodedata1=new NodeData();
@@ -37,7 +30,7 @@ public class StartNode
 		multi.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		multi.LeaveMulticast();
 		
-		setSurroundingNodes(nodedata1);
+		if (!setSurroundingNodes(nodedata1)) return;
 			
 		try 
 		{
@@ -65,7 +58,7 @@ public class StartNode
 		shutdown.start();
 	}
 	
-	private void setSurroundingNodes(NodeData nodedata1) 
+	private boolean setSurroundingNodes(NodeData nodedata1) 
 	{
 		int numberOfNodes=getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
@@ -75,32 +68,38 @@ public class StartNode
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
 			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
+			return true;
 		}
 		else if(numberOfNodes==1)
 		{
 			System.out.println("I am the first node");
 			 nodedata1.setPrevNode(nodedata1.getMyNodeID());
 			 nodedata1.setNextNode(nodedata1.getMyNodeID());
+			 return true;
 		}
 		else if(numberOfNodes==0)
 		{
 			System.out.println("this node name already exists, please try again with a different name");
-			return;
+			return false;
 		}
 		else
 		{
 			System.out.println("no nameserver was found");
-			return;
+			return false;
 		}
 		
 	}
 	
 	public int getNameServerRespons(NodeData nodedata1) 
 	{
-		int nodes=-1;
+		int nodes;
 		String[] received=tcp.receiveTextWithTCP(6790, 5000);
 		nodedata1.setNameServerIP(received[1]);
+		if (received[0] != null)
+		{
 		nodes=Integer.parseInt(received[0]);
+		}
+		else nodes=-1;
 		return nodes;
 	}
 }

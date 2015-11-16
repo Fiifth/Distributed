@@ -10,11 +10,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import fileManagers.FileData;
-import fileManagers.FileDetectionT;
 import fileManagers.FileOwnershipT;
-import fileManagers.Receiver;
-import fileManagers.Remover;
-import fileManagers.Sender;
 import neworkFunctions.Multicast;
 import neworkFunctions.RMI;
 import nodeP.NodeData;
@@ -46,7 +42,7 @@ public class ShutdownT extends Thread
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if(input.equals("quit"))
+			if(input.equals("quit "+nodedata1.getNodeName()))
 				{
 				for (FileData tempfile : nodedata1.localFiles) 
 		    	{
