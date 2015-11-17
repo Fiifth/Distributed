@@ -1,14 +1,9 @@
-
-2) geautomatiseerde testen
-
-
-
-Testen
-
-
-3) file toevoegen in lokale folder --> check of juist gerepliceerd wordt
-*meerdere nodes
-
-4) file verwijderen op lokale plaats --> check of replicatie ook verwijderd is
-
-5) node met files afsluiten --> check of gerepliceerde bestanden overgezet zijn en lokale bestanden verwijderd zijn
+Web based systems
+1) architecture : RENS
+2) processes : KWINTEN
+3) Communication : MATS
+4) Naming : RENS
+5) Synchronization : RENS
+6) Web proxy caching : RENS
+7) Replication WHS + WA
+8) Fault Tolerance --> SUMMARY
