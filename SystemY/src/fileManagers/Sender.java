@@ -59,7 +59,7 @@ public class Sender extends Thread
 					file1.setSourceID(nodedata1.getMyNodeID());
 					recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
-				sendFile(file1);
+				sendFile(file1); //TODO if return false --> start failure
 				if (file1.getRemoveAfterSend()) nodedata1.removeQueue.add(file1);
 			}
 			nodedata1.setSending(false);

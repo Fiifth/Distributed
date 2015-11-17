@@ -18,7 +18,7 @@ import java.net.Socket;
 
 public class TCP 
 {
-	public void sendTextWithTCP(String text, String destinationIP, int socket )
+	public boolean sendTextWithTCP(String text, String destinationIP, int socket )
 	{
 		Socket clientSocket;
 			try {
@@ -27,7 +27,8 @@ public class TCP
 				outToNode.writeBytes(text+ "\n");
 				clientSocket.close();
 				outToNode.close();
-			} catch (IOException e) {e.printStackTrace();}
+				return true;
+			} catch (IOException e) {return false;}
 	}
 	public String[] receiveTextWithTCP(int socket,int timeout)
 	{
@@ -44,13 +45,12 @@ public class TCP
 			welcomeSocket.close();
 			BufferedReader bufferIN = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			text[0] = bufferIN.readLine();	
-			
 			connectionSocket.close();
 		} 
-		catch (IOException e) {System.out.println("nobody is here");	}
+		catch (IOException e) {}
 		return text;		
 	}
-	public void sendFile(String filePath,int socket)
+	public boolean sendFile(String filePath,int socket)
 	{
         ServerSocket welcomeSocket = null;
         Socket connectionSocket = null;
@@ -63,34 +63,32 @@ public class TCP
             connectionSocket = welcomeSocket.accept();
             outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
             welcomeSocket.close();
-        } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
+        } catch (IOException ex) { return false;}
 
-        if (outToClient != null) 
+        File myFile = new File(filePath);
+        byte[] mybytearray = new byte[(int) myFile.length()];
+
+        try {
+            fis = new FileInputStream(myFile);
+        } catch (FileNotFoundException ex) {return false;}
+        
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        try 
         {
-            File myFile = new File(filePath);
-            byte[] mybytearray = new byte[(int) myFile.length()];
-
-            try {
-                fis = new FileInputStream(myFile);
-            } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
-            BufferedInputStream bis = new BufferedInputStream(fis);
-
-            try 
-            {
-                bis.read(mybytearray, 0, mybytearray.length);
-                outToClient.write(mybytearray, 0, mybytearray.length);
-                outToClient.flush();
-                outToClient.close();
-                connectionSocket.close();
-                fis.close();
-				bis.close();
-            } catch (IOException ex) {System.out.println("Sending file failed!"); } 
-        }
+            bis.read(mybytearray, 0, mybytearray.length);
+            outToClient.write(mybytearray, 0, mybytearray.length);
+            outToClient.flush();
+            outToClient.close();
+            connectionSocket.close();
+            fis.close();
+			bis.close();
+        } catch (IOException ex) {return false; } 
+        return true;
 	}
 	
-	public void receiveFile(String sourceIP,int serverPort, String fileOutput)
+	public boolean receiveFile(String sourceIP,int serverPort, String fileOutput)
 	{
-		
 		FileOutputStream fos = null;
         BufferedOutputStream bos = null;
         Socket clientSocket = null;
@@ -101,7 +99,7 @@ public class TCP
             try {
 				clientSocket = new Socket(sourceIP, serverPort);
 				is = clientSocket.getInputStream();
-			} catch (IOException e) {System.out.println("couldn't open socket");}	
+			} catch (IOException e) {return false;}	
            
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -124,8 +122,9 @@ public class TCP
                 baos.close();
                 fos.close();
                 clientSocket.close();
-            } catch (IOException ex) {System.out.println("File not received");}
+            } catch (IOException ex) {return false;}
         }
+        return true;
 	}
 }
 

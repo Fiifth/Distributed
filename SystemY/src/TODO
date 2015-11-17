@@ -1,24 +1,14 @@
 
-1) try catch overal nakijken en failure detection
-
 2) geautomatiseerde testen
-
-3) quit+nodenaam
-
-4) check ownership juistzetten
 
 
 
 Testen
 
-1) nodes toevoegen --> check of in juiste volgorde
-
-2) node verwijderen --> check of in juiste volgorde
 
 3) file toevoegen in lokale folder --> check of juist gerepliceerd wordt
-*1 node
 *meerdere nodes
 
 4) file verwijderen op lokale plaats --> check of replicatie ook verwijderd is
 
-5) node met files afluisten --> check of gerepliceerde bestanden overgezet zijn en lokale bestanden verwijderd zijn
+5) node met files afsluiten --> check of gerepliceerde bestanden overgezet zijn en lokale bestanden verwijderd zijn

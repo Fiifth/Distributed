@@ -80,8 +80,6 @@ public class ShutdownT extends Thread
 				
 				multi.LeaveMulticast();
 				
-				
-				
 				for (Object temp:threadList)
 				{
 					((Thread) temp).interrupt();

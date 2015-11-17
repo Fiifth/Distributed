@@ -24,7 +24,7 @@ public class Receiver extends Thread
 				file1=nodedata1.receiveQueue.take();
 			} 
 			catch (InterruptedException e) {return;}
-			receiveFile(file1,nodedata1);
+			receiveFile(file1,nodedata1); 
 			}
 		}
 	
@@ -47,6 +47,6 @@ public class Receiver extends Thread
         	file1.setRemoveAfterSend(false);
         	nodedata1.replFiles.add(file1);
         }
-        	tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput);  
+        	tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); //TODO if return false --> start failure
     }
 }

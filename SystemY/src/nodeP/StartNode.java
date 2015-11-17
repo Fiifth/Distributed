@@ -11,16 +11,16 @@ public class StartNode
 	TCP tcp=new TCP();
 	Multicast multi=new Multicast("228.5.6.7", 6789);
 	String nodeName;
+	public NodeData nodedata1;
 	
 	public StartNode(String nodeName)
 	{
 		this.nodeName=nodeName;
-		
 	}
 	
 	public void startNewNode()
 	{
-		final NodeData nodedata1=new NodeData();
+		nodedata1=new NodeData();
 		
 		nodedata1.setNodeName(nodeName);
 		System.out.println("My name is: "+nodedata1.getNodeName());
