@@ -18,6 +18,7 @@ public class FileData implements Serializable
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
 	private volatile boolean removeAfterSend;
+	private volatile boolean isLocked;
 
 	
 	public void setNewFileData(String fileName, NodeData nodedata1)
@@ -75,6 +76,14 @@ public class FileData implements Serializable
 		this.removeAfterSend = removeAfterSend;
 	}
 
+	public void setLock(boolean isLocked){
+		this.isLocked = isLocked;
+	}
+	
+	public boolean getLock(){
+		return isLocked;
+	}
+	
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
 	{
 		String[] ipAndIDArray=null;

@@ -22,6 +22,7 @@ public class NodeData {
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
 	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
+	public volatile ArrayList<FileData> allFiles = new ArrayList<FileData>();
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
 	
