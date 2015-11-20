@@ -2,6 +2,7 @@ package nodeP;
 
 import java.net.*;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -22,10 +23,9 @@ public class NodeData {
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
 	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
-	public volatile ArrayList<FileData> allFiles = new ArrayList<FileData>();
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
-	
+	public volatile TreeMap<Integer, ArrayList<FileData>> allNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
 	
 	public String getNodeName() {
 		return nodeName;
