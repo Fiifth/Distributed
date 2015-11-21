@@ -26,7 +26,9 @@ public class NodeData {
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile TreeMap<Integer, ArrayList<FileData>> allNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
-	public volatile ArrayList<FileData> lockRequestList = new ArrayList<FileData>();
+	public volatile ArrayList<FileData> lockRequestList = new ArrayList<FileData>();//try to achieve lock in order to download
+	public volatile ArrayList<FileData> downloadingList = new ArrayList<FileData>();
+	public volatile ArrayList<FileData> unlockRequestList = new ArrayList<FileData>();
 	public String getNodeName() {
 		return nodeName;
 	}
@@ -108,6 +110,17 @@ public class NodeData {
 	public void removeLockRequest(FileData fd){
 		fd.setLockRequest(false);
 		lockRequestList.remove(fd);
+		
 	}
-
+	
+	public void fileStartDownload(FileData fd){
+		fd.setDownloaded(false);
+		downloadingList.add(fd);
+	}
+	
+	public void fileDoneDownloading(FileData fd){
+		fd.setDownloaded(true);
+		unlockRequestList.add(fd);
+		downloadingList.remove(fd);
+	}
 }

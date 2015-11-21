@@ -11,10 +11,10 @@ import nodeP.NodeData;
 public class FileListAgent extends AgentMain{
 	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
 	ArrayList<FileData> nodeReplFiles;
-	public FileListAgent(NodeData nodeData1) {
+	public FileListAgent(NodeData nodeData1, TreeMap<Integer,ArrayList<FileData>> allAgentNetworkFiles) {
 		super(nodeData1);
 		nodeReplFiles = nodeData1.replFiles;
-		// TODO Auto-generated constructor stub
+		this.allAgentNetworkFiles = allAgentNetworkFiles;
 	}
 	
 	@Override
