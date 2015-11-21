@@ -21,7 +21,8 @@ public class FileData implements Serializable
 	private volatile boolean isLocked;
 	private volatile boolean lockRequest;
 	private volatile boolean isDownloaded;
-
+	private volatile int destinationID;
+	private volatile String destinationIP;
 	
 	public void setNewFileData(String fileName, NodeData nodedata1)
 	{
@@ -100,6 +101,22 @@ public class FileData implements Serializable
 
 	public void setDownloaded(boolean isDownloaded) {
 		this.isDownloaded = isDownloaded;
+	}
+
+	public int getDestinationID() {
+		return destinationID;
+	}
+
+	public void setDestinationID(int destinationID) {
+		this.destinationID = destinationID;
+	}
+
+	public String getDestinationIP() {
+		return destinationIP;
+	}
+
+	public void setDestinationIP(String destinationIP) {
+		this.destinationIP = destinationIP;
 	}
 
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
