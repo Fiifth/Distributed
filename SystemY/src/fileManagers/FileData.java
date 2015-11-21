@@ -20,6 +20,7 @@ public class FileData implements Serializable
 	private volatile boolean removeAfterSend;
 	private volatile boolean isLocked;
 	private volatile boolean lockRequest;
+	private volatile boolean isDownloaded;
 
 	
 	public void setNewFileData(String fileName, NodeData nodedata1)
@@ -93,6 +94,14 @@ public class FileData implements Serializable
 		return lockRequest;
 	}
 	
+	public boolean isDownloaded() {
+		return isDownloaded;
+	}
+
+	public void setDownloaded(boolean isDownloaded) {
+		this.isDownloaded = isDownloaded;
+	}
+
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
 	{
 		String[] ipAndIDArray=null;

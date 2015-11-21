@@ -26,7 +26,7 @@ public class NodeData {
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile TreeMap<Integer, ArrayList<FileData>> allNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
-	
+	public volatile ArrayList<FileData> lockRequestList = new ArrayList<FileData>();
 	public String getNodeName() {
 		return nodeName;
 	}
@@ -100,5 +100,14 @@ public class NodeData {
 	public void setSending(boolean sending) {
 		this.sending = sending;
 	}
+	public void requestFileLock(FileData fd){
+		fd.setLockRequest(true);
+		lockRequestList.add(fd);
+	}
 	
+	public void removeLockRequest(FileData fd){
+		fd.setLockRequest(false);
+		lockRequestList.remove(fd);
+	}
+
 }
