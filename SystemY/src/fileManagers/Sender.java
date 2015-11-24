@@ -54,7 +54,7 @@ public class Sender extends Thread
 			{
 				try 
 				{
-					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getReplicateOwnerID(), file1.getReplicateOwnerIP(), "RMICommunication");
+					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
 					file1.setSourceIP(nodedata1.getMyIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
 					recInt.receiveThisFile(file1);

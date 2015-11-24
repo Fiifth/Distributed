@@ -1,7 +1,10 @@
 package nodeP;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
+import agent.AgentMain;
+import agent.FileListAgent;
 import fileManagers.*;
 import neworkFunctions.*;
 import nodeManager.*;
@@ -68,7 +71,14 @@ public class StartNode
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
 			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
+			if(numberOfNodes==2)
+			{
+				TreeMap<Integer,ArrayList<FileData>> initTree = new TreeMap<Integer,ArrayList<FileData>>();
+				AgentMain fileAgent = new AgentMain(nodedata1, true, initTree);
+				fileAgent.run();
+			}
 			return true;
+			
 		}
 		else if(numberOfNodes==1)
 		{

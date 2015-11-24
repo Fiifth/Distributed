@@ -8,25 +8,28 @@ import java.util.TreeMap;
 import fileManagers.FileData;
 import nodeP.NodeData;
 
-public class FileListAgent extends AgentMain{
+public class FileListAgent{
 	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
 	ArrayList<FileData> nodeReplFiles;
+	NodeData nodeData1;
 	public FileListAgent(NodeData nodeData1, TreeMap<Integer,ArrayList<FileData>> allAgentNetworkFiles) {
-		super(nodeData1);
+		this.nodeData1 = nodeData1;
 		nodeReplFiles = nodeData1.replFiles;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
 	}
 	
-	@Override
-	public void run() {
+	
+	public void runFLA() {
 		//Update agent's network files list
 		updateAgentNetworkFiles();
 		//Check for lock requests before updating local node's file list
 		checkLockRequestsAndGrantLock();
 		//Update agent's network files list
 		updateAgentNetworkFiles();
+		//Iterate local locks and add to send list
+		iterateLocalLocksAddToSend();
 		//Update local node's file list
-		updateLocalAllFiles();
+		updateLocalAllFiles();		
 	}
 	public void updateAgentNetworkFiles(){
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID())){ //if agent already has a version of node's replFiles
@@ -47,6 +50,7 @@ public class FileListAgent extends AgentMain{
 	public void checkLockRequestsAndGrantLock(){
 		//when granting lock set downloaded to false
 		//Node will set downloaded true when ready
+		//TODO replace iterations
 		int listSize = nodeData1.lockRequestList.size();
 		for(Map.Entry<Integer, ArrayList<FileData>> entry : allAgentNetworkFiles.entrySet()){//search node's file map for lock requests
 			int tempNodeID = entry.getKey();
@@ -62,7 +66,10 @@ public class FileListAgent extends AgentMain{
 						}
 						else{
 							tempFD.setLock(true);
+							tempFD.setDestinationID(nodeData1.getMyNodeID());
+							tempFD.setDestinationIP(nodeData1.getMyIP());
 							nodeData1.removeLockRequest(fileToAttemptLock);
+							nodeData1.downloadingList.add(tempFD);
 							tempFD.setDownloaded(false);
 							tempFiles.remove(itFile); // replace original with lock activated file
 							tempFiles.add(tempFD);
@@ -75,6 +82,15 @@ public class FileListAgent extends AgentMain{
 		}
 	}
 	
+	public void iterateLocalLocksAddToSend(){
+		ArrayList<FileData> agentLocalNodeFilesList = allAgentNetworkFiles.get(nodeData1.getMyNodeID());
+		for(FileData tempFileData : agentLocalNodeFilesList){
+			if(tempFileData.getLock()){
+				tempFileData.setRemoveAfterSend(false);
+				nodeData1.sendQueue.add(tempFileData);
+			}
+		}
+	}
 	public void updateLocalAllFiles(){
 		if(!nodeData1.allNetworkFiles.equals(allAgentNetworkFiles)){
 			nodeData1.allNetworkFiles = allAgentNetworkFiles;
@@ -83,4 +99,5 @@ public class FileListAgent extends AgentMain{
 			//nodes network files are already up to date
 		}
 	}
+	
 }

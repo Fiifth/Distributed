@@ -129,6 +129,8 @@ public class FileData implements Serializable
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
 		filedata1.replicateOwnerIP=ipAndIDArray[0];
 		filedata1.replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
+		filedata1.destinationID = replicateOwnerID;
+		filedata1.destinationIP = replicateOwnerIP;
 		//System.out.println(replicateOwnerID+nodedata1.getMyNodeID());
 		 return !(replicateOwnerID==nodedata1.getMyNodeID());
 			
