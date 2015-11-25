@@ -3,6 +3,7 @@ package nodeP;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import agent.AgentMain;
 import fileManagers.FileData;
 import neworkFunctions.RMI;
 
@@ -44,5 +45,17 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public boolean addOwner(FileData file1) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
+	{
+		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
+		{
+			fileAgent.run();
+			while(fileAgent.isAlive()){}
+			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+			try {
+				recInt.rmiAgentExecution(fileAgent);
+			} catch (RemoteException e) {}
+		}
 	}
 }

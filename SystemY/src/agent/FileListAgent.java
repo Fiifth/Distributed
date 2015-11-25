@@ -9,7 +9,7 @@ import fileManagers.FileData;
 import nodeP.NodeData;
 
 public class FileListAgent{
-	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
+	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles;
 	NodeData nodeData1;
 	
 	public FileListAgent(NodeData nodeData1, TreeMap<Integer,ArrayList<FileData>> allAgentNetworkFiles) 
