@@ -1,4 +1,4 @@
-package nodeP;
+package nodeManager;
 
 import java.rmi.RemoteException;
 

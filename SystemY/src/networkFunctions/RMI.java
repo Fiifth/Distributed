@@ -1,4 +1,4 @@
-package neworkFunctions;
+package networkFunctions;
 
 import java.net.MalformedURLException;
 import java.rmi.registry.LocateRegistry;

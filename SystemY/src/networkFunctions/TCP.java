@@ -1,4 +1,4 @@
-package neworkFunctions;
+package networkFunctions;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -4,7 +4,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
 
-import neworkFunctions.TCP;
+import networkFunctions.TCP;
 
 public class NameServerThread extends Thread {
 	DatagramPacket messageIn;

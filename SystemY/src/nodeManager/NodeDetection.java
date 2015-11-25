@@ -3,7 +3,7 @@ package nodeManager;
 import java.net.DatagramPacket;
 
 import fileManagers.FileOwnershipT;
-import neworkFunctions.Multicast;
+import networkFunctions.Multicast;
 import nodeP.NodeData;
 
 public class NodeDetection extends Thread 

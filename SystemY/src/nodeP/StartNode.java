@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import agent.AgentMain;
 import agent.FileListAgent;
 import fileManagers.*;
-import neworkFunctions.*;
+import networkFunctions.*;
 import nodeManager.*;
 
 public class StartNode 
