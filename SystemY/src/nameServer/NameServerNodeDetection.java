@@ -1,7 +1,8 @@
 package nameServer;
 
 import java.net.DatagramPacket;
-import neworkFunctions.Multicast;
+
+import networkFunctions.Multicast;
 
 public class NameServerNodeDetection extends Thread 
 {

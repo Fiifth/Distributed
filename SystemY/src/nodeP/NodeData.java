@@ -15,6 +15,7 @@ public class NodeData {
 	private volatile int myNodeID;
 	private volatile int toLeave;
 	private volatile String nameServerIP;
+	private volatile String prevNodeIP;
 	private volatile String myIP;
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
@@ -95,6 +96,12 @@ public class NodeData {
 	}
 	public void setBind(String bind) {
 		this.bind = bind;
+	}
+	public String getPrevNodeIP() {
+		return prevNodeIP;
+	}
+	public void setPrevNodeIP(String prevNodeIP) {
+		this.prevNodeIP = prevNodeIP;
 	}
 	public boolean isSending() {
 		return sending;

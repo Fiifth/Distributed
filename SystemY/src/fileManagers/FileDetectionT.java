@@ -13,9 +13,9 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.rmi.RemoteException;
 
-import neworkFunctions.RMI;
+import networkFunctions.RMI;
+import nodeManager.RMICommunicationInt;
 import nodeP.NodeData;
-import nodeP.RMICommunicationInt;
 
 public class FileDetectionT extends Thread{
 	public WatchService watcher;

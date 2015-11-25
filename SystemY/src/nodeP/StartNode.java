@@ -6,11 +6,12 @@ import java.util.TreeMap;
 import agent.AgentMain;
 import agent.FileListAgent;
 import fileManagers.*;
-import neworkFunctions.*;
+import networkFunctions.*;
 import nodeManager.*;
 
 public class StartNode 
 {	
+	RMI rmi=new RMI();
 	TCP tcp=new TCP();
 	Multicast multi=new Multicast("228.5.6.7", 6789);
 	String nodeName;
@@ -33,13 +34,14 @@ public class StartNode
 		multi.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		multi.LeaveMulticast();
 		
-		if (!setSurroundingNodes(nodedata1)) return;
+		
 			
 		try 
 		{
 			RMICommunication rmiCom=new RMICommunication(nodedata1);
 			rmiCom.setUpRMI();
 		} catch (RemoteException e1) {e1.printStackTrace();}
+		if (!setSurroundingNodes(nodedata1)) return;
 		ArrayList<Object> threadList = new ArrayList<Object>();
 		
 		FileDetectionT filedetector =new FileDetectionT(nodedata1);
@@ -66,7 +68,9 @@ public class StartNode
 		int numberOfNodes=getNameServerRespons(nodedata1);
 		if (numberOfNodes>1)
 		{
-			String nodes = tcp.receiveTextWithTCP(6770, 5000)[0];
+			String[] received=tcp.receiveTextWithTCP(6770, 5000);
+			String nodes = received[0];
+			nodedata1.setPrevNodeIP(received[1]);
 			String[] node = nodes.split("-");
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
@@ -76,6 +80,11 @@ public class StartNode
 				TreeMap<Integer,ArrayList<FileData>> initTree = new TreeMap<Integer,ArrayList<FileData>>();
 				AgentMain fileAgent = new AgentMain(nodedata1, true, initTree);
 				fileAgent.run();
+				while(fileAgent.isAlive()){}
+				RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+				try {
+					recInt.rmiAgentExecution(fileAgent);
+				} catch (RemoteException e) {}
 			}
 			return true;
 			

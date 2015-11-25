@@ -1,4 +1,4 @@
-package neworkFunctions;
+package networkFunctions;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

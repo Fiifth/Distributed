@@ -1,16 +1,18 @@
-package nodeP;
+package nodeManager;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import agent.AgentMain;
 import fileManagers.FileData;
-import neworkFunctions.RMI;
+import networkFunctions.RMI;
+import nodeP.NodeData;
 
 public class RMICommunication extends UnicastRemoteObject implements RMICommunicationInt  {
 	private static final long serialVersionUID = 1L;
 	NodeData nodedata1;
 	RMI rmi=new RMI();
-	protected RMICommunication(NodeData nodedata1) throws RemoteException {
+	public RMICommunication(NodeData nodedata1) throws RemoteException {
 		super();
 		this.nodedata1=nodedata1;
 	}
@@ -44,5 +46,17 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public boolean addOwner(FileData file1) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
+	{
+		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
+		{
+			fileAgent.run();
+			while(fileAgent.isAlive()){}
+			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+			try {
+				recInt.rmiAgentExecution(fileAgent);
+			} catch (RemoteException e) {}
+		}
 	}
 }

@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
-import neworkFunctions.RMI;
+import networkFunctions.RMI;
 
 public class StartNameServer extends UnicastRemoteObject implements NameServerInterface
 {

@@ -2,7 +2,8 @@ package nodeManager;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import neworkFunctions.TCP;
+
+import networkFunctions.TCP;
 import nodeP.NodeData;
 
 public class NodeOrderThread extends Thread {

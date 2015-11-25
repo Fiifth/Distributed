@@ -23,6 +23,7 @@ public class FileData implements Serializable
 	private volatile boolean isDownloaded;
 	private volatile int destinationID;
 	private volatile String destinationIP;
+	private volatile boolean destinationFolderReplication;
 	
 	public void setNewFileData(String fileName, NodeData nodedata1)
 	{
@@ -119,6 +120,14 @@ public class FileData implements Serializable
 		this.destinationIP = destinationIP;
 	}
 
+	public boolean isDestinationFolderReplication() {
+		return destinationFolderReplication;
+	}
+
+	public void setDestinationFolderReplication(boolean destinationFolderReplication) {
+		this.destinationFolderReplication = destinationFolderReplication;
+	}
+
 	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
 	{
 		String[] ipAndIDArray=null;
@@ -131,6 +140,7 @@ public class FileData implements Serializable
 		filedata1.replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
 		filedata1.destinationID = replicateOwnerID;
 		filedata1.destinationIP = replicateOwnerIP;
+		filedata1.setDestinationFolderReplication(true);
 		//System.out.println(replicateOwnerID+nodedata1.getMyNodeID());
 		 return !(replicateOwnerID==nodedata1.getMyNodeID());
 			

@@ -10,9 +10,11 @@ import fileManagers.FileData;
 public class AgentMain extends Thread {
 	
 	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
+	
 	NodeData nodeData1;
 	boolean typeOfAgent;
-	public AgentMain(NodeData nodeData1, boolean typeOfAgent, TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles){
+	public AgentMain(NodeData nodeData1, boolean typeOfAgent, TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles)
+	{
 		this.nodeData1 = nodeData1;
 		this.typeOfAgent = typeOfAgent;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;

@@ -11,10 +11,9 @@ import java.util.ArrayList;
 
 import fileManagers.FileData;
 import fileManagers.FileOwnershipT;
-import neworkFunctions.Multicast;
-import neworkFunctions.RMI;
+import networkFunctions.Multicast;
+import networkFunctions.RMI;
 import nodeP.NodeData;
-import nodeP.RMICommunicationInt;
 
 public class ShutdownT extends Thread
 {

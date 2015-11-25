@@ -17,10 +17,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import neworkFunctions.RMI;
-import neworkFunctions.TCP;
+
+import networkFunctions.RMI;
+import networkFunctions.TCP;
+import nodeManager.RMICommunicationInt;
 import nodeP.NodeData;
-import nodeP.RMICommunicationInt;
 
 public class Sender extends Thread
 {

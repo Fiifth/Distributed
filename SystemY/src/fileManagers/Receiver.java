@@ -1,6 +1,6 @@
 package fileManagers;
 
-import neworkFunctions.TCP;
+import networkFunctions.TCP;
 import nodeP.NodeData;
 
 public class Receiver extends Thread 
@@ -30,8 +30,13 @@ public class Receiver extends Thread
 	
 	public void receiveFile(FileData file1, NodeData nodedata1) 
 	{
+		String DestinationFolder;
+		if(file1.isDestinationFolderReplication()) 
+			DestinationFolder=nodedata1.getMyReplFolder();
+		else
+			DestinationFolder=nodedata1.getMyLocalFolder();
         int serverPort = file1.getSourceID()+32768;
-        String fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
+        String fileOutput = DestinationFolder+"\\"+file1.getFileName();
         boolean fnExists = false;
         for (FileData tempfile : nodedata1.replFiles) 
     	{
@@ -43,7 +48,7 @@ public class Receiver extends Thread
     	}
         if(!fnExists)
         {
-        	file1.setFolderLocation(nodedata1.getMyReplFolder());
+        	file1.setFolderLocation(DestinationFolder);
         	file1.setRemoveAfterSend(false);
         	nodedata1.replFiles.add(file1);
         }
