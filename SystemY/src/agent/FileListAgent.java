@@ -10,11 +10,11 @@ import nodeP.NodeData;
 
 public class FileListAgent{
 	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
-	ArrayList<FileData> nodeReplFiles;
 	NodeData nodeData1;
-	public FileListAgent(NodeData nodeData1, TreeMap<Integer,ArrayList<FileData>> allAgentNetworkFiles) {
+	
+	public FileListAgent(NodeData nodeData1, TreeMap<Integer,ArrayList<FileData>> allAgentNetworkFiles) 
+	{
 		this.nodeData1 = nodeData1;
-		nodeReplFiles = nodeData1.replFiles;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
 	}
 	
@@ -23,7 +23,7 @@ public class FileListAgent{
 		//Update agent's network files list
 		updateAgentNetworkFiles();
 		//Check for lock requests before updating local node's file list
-		checkLockRequestsAndGrantLock();
+		iterateMyLockList();
 		//Update agent's network files list
 		updateAgentNetworkFiles();
 		//Iterate local locks and add to send list
@@ -31,6 +31,7 @@ public class FileListAgent{
 		//Update local node's file list
 		updateLocalAllFiles();		
 	}
+	
 	public void updateAgentNetworkFiles(){
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID())){ //if agent already has a version of node's replFiles
 			ArrayList<FileData>tempReplList = allAgentNetworkFiles.get(nodeData1.getMyNodeID()); //place the agents version of replFiles in tempList
@@ -39,18 +40,19 @@ public class FileListAgent{
 			}
 			else{	//agent's version is outdated! -> remove old and add new version
 				allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
-				allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeReplFiles);
+				allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
 			}
 		}
 		else{ // agent has no version of node's replFiles
-			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeReplFiles);
+			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
 		}
 	}
 	
-	public void checkLockRequestsAndGrantLock(){
+/*	public void checkLockRequestsAndGrantLock(){
 		//when granting lock set downloaded to false
 		//Node will set downloaded true when ready
 		//TODO replace iterations
+		
 		int listSize = nodeData1.lockRequestList.size();
 		for(Map.Entry<Integer, ArrayList<FileData>> entry : allAgentNetworkFiles.entrySet()){//search node's file map for lock requests
 			int tempNodeID = entry.getKey();
@@ -68,6 +70,7 @@ public class FileListAgent{
 							tempFD.setLock(true);
 							tempFD.setDestinationID(nodeData1.getMyNodeID());
 							tempFD.setDestinationIP(nodeData1.getMyIP());
+							tempFD.setDestinationFolderReplication(false);
 							nodeData1.removeLockRequest(fileToAttemptLock);
 							nodeData1.downloadingList.add(tempFD);
 							tempFD.setDownloaded(false);
@@ -78,6 +81,25 @@ public class FileListAgent{
 						}
 					}
 				}
+			}
+		}
+	}
+	*/
+	public void iterateMyLockList()
+	{
+		for (FileData fileToAttemptLock:nodeData1.lockRequestList)
+		{
+			ArrayList<FileData> agentNodeFilesList = allAgentNetworkFiles.get(fileToAttemptLock.getReplicateOwnerID());
+			if (agentNodeFilesList.contains(fileToAttemptLock))
+			{
+				fileToAttemptLock.setLock(true);
+				fileToAttemptLock.setDestinationID(nodeData1.getMyNodeID());
+				fileToAttemptLock.setDestinationIP(nodeData1.getMyIP());
+				fileToAttemptLock.setDestinationFolderReplication(false);
+				nodeData1.lockRequestList.remove(fileToAttemptLock);
+				nodeData1.downloadingList.add(fileToAttemptLock);
+				allAgentNetworkFiles.remove(fileToAttemptLock.getReplicateOwnerID());
+				allAgentNetworkFiles.put(fileToAttemptLock.getReplicateOwnerID(), agentNodeFilesList);
 			}
 		}
 	}
