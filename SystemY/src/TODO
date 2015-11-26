@@ -1,9 +1,34 @@
-Web based systems
-1) architecture : RENS
-2) processes : KWINTEN
-3) Communication : MATS
-4) Naming : RENS
-5) Synchronization : RENS
-6) Web proxy caching : RENS
-7) Replication WHS + WA: Mats
-8) Fault Tolerance --> SUMMARY :kwinten?
+
+1) meerdere local owners opslagen
+	* Wanneer iemand een file download zal deze in de lokale folder komen te staan
+	  dit wordt gedetecteerd door fileDetectionT en de file zal doorgestuurd worden
+	  naar een replicate owner (waarvan hij eigelijk komt).
+	  		-oplossing: wanneer we filedata via RMI doorsturen naar replicate owner
+	  		 om vervolgens de file te ontvangen eerst checken of de file al in de
+	  		 replicatie folder aanwezig is. Geef gwn false terug en zo weet de local
+	  		 owner ook dat de file reeds aanwezig is.
+	  		 De replicatie node kan dan ook de nodeID toevoegen aan de filedata in
+	  		 kwestie bij lokale file owners
+	  		-we kunnen dit ook gewoon toelaten en de lokale owner ID toevoegen wanneer
+	  		 we achteraf (na het ontvangen) zien dat de file al in de replication lijst
+	  		 staat en vervolgens de nodeID toevoegen van een nieuwe lokale owner
+2) wanneer een lokale file verwijdering gedetecteerd wordt
+	* opzoeken waar file gerepliceerd is
+	* rmi call doen naar deze node om te zeggen dat hij geen lokale owner meer is
+	* deze zal in replicationfilelist de filedata opzoeken en hem uit de lokale owner lijst
+	  verwijderen
+	* als er geen lokale owners meer zijn mag de file volledig verwijderd worden
+	
+3) wanneer we een bestand moeten doorsturen maar deze niet gevonden is
+	--> een leeg bestand doorsturen
+	
+
+4) recoveryAgent
+	*stuur multicast met nodeID,nextNode,PrevNode
+	*start agent
+		*laat bij iedereen replication files afgaan 
+			als de falende node een lokale owner was van een van de replication files
+				de id uit de lokale owner lijst verwijderen
+				(de file zal automatisch verwijderd worden als de falende node de enige eigenaar was
+				van de file)
+	*stop agent als we de agent object terug krijgen
