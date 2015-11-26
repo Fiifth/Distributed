@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import agent.AgentMain;
-import agent.FileListAgent;
 import fileManagers.*;
 import networkFunctions.*;
 import nodeManager.*;
@@ -78,7 +77,9 @@ public class StartNode
 			if(numberOfNodes==2)
 			{
 				TreeMap<Integer,ArrayList<FileData>> initTree = new TreeMap<Integer,ArrayList<FileData>>();
-				AgentMain fileAgent = new AgentMain(nodedata1, true, initTree);
+				ArrayList<FileData> agentLockList=new ArrayList<FileData>();
+				AgentMain fileAgent = new AgentMain(true, initTree,agentLockList);
+				fileAgent.setNodeData1(nodedata1);
 				fileAgent.run();
 				while(fileAgent.isAlive()){}
 				RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");

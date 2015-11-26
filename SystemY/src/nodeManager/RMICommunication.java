@@ -51,6 +51,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	{
 		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
 		{
+			fileAgent.setNodeData1(nodedata1);
 			fileAgent.run();
 			while(fileAgent.isAlive()){}
 			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");

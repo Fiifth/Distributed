@@ -18,9 +18,6 @@ public class FileData implements Serializable
 	private volatile int replicateOwnerID;
 	private volatile String replicateOwnerIP;
 	private volatile boolean removeAfterSend;
-	private volatile boolean isLocked;
-	private volatile boolean lockRequest;
-	private volatile boolean isDownloaded;
 	private volatile int destinationID;
 	private volatile String destinationIP;
 	private volatile boolean destinationFolderReplication;
@@ -78,30 +75,6 @@ public class FileData implements Serializable
 
 	public void setRemoveAfterSend(boolean removeAfterSend) {
 		this.removeAfterSend = removeAfterSend;
-	}
-
-	public void setLock(boolean isLocked){
-		this.isLocked = isLocked;
-	}
-	
-	public boolean getLock(){
-		return isLocked;
-	}
-	
-	public void setLockRequest(boolean lockRequest){
-		this.lockRequest = lockRequest;
-	}
-	
-	public boolean getLockRequest(){
-		return lockRequest;
-	}
-	
-	public boolean isDownloaded() {
-		return isDownloaded;
-	}
-
-	public void setDownloaded(boolean isDownloaded) {
-		this.isDownloaded = isDownloaded;
 	}
 
 	public int getDestinationID() {
