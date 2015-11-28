@@ -23,8 +23,7 @@ public class StartNode
 	
 	public void startNewNode()
 	{
-		nodedata1=new NodeData();
-		
+		nodedata1=new NodeData();		
 		nodedata1.setNodeName(nodeName);
 		System.out.println("My name is: "+nodedata1.getNodeName());
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
