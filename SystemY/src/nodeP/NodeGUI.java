@@ -152,34 +152,15 @@ public class NodeGUI {
         	        	public void actionPerformed(ActionEvent e) {
         	        	}
         	        });
-        	        
-        	        
-        	        
-        	        
-        	        
-        	        
+
         	        
         			nodeframe.setVisible(true);
-        			
-        			
+
         		}
         	}
         });
-       
-        
-        
-        
-        
-        
-        
 
-        
-		
 	}
 	
-	public static void main(String[] args) 
-	{
-		NodeGUI ngui = new NodeGUI();
-		
-	}
+	
 }
