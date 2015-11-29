@@ -133,7 +133,6 @@ public class NodeGUI {
         	        {
         	        	for(int i=0;i<tempLocalFiles.size();i++)
         	        	{
-        	        		System.out.println("test");
         	        		localFileNames[i] = tempLocalFiles.get(i).getFileName();
         	        	}
         	        }
