@@ -6,11 +6,17 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+
+import fileManagers.FileData;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
@@ -117,9 +123,36 @@ public class NodeGUI {
         	        
         	        JTextPane filelijst = new JTextPane();
         	        filelijst.setFont(new Font("Tahoma", Font.BOLD, 13));
-        	        filelijst.setText("File lijst:");
-        	        filelijst.setBounds(5, 30, 290, 20);
+        	        filelijst.setText("Own Files:");
+        	        filelijst.setBounds(5, 30, 100, 20);
         	        nodeframe.getContentPane().add(filelijst);
+        	        
+        	        ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
+        	        String[] localFileNames = new String[tempLocalFiles.size()];
+        	        if(tempLocalFiles.size() != 0)
+        	        {
+        	        	for(int i=0;i<tempLocalFiles.size();i++)
+        	        	{
+        	        		System.out.println("test");
+        	        		localFileNames[i] = tempLocalFiles.get(i).getFileName();
+        	        	}
+        	        }
+        	        JList<String> displayList = new JList<>(localFileNames);
+        	        JScrollPane ownfile = new JScrollPane(displayList);
+        	        ownfile.setBounds(5, 50, 220, 230);
+        	        ownfile.setBackground(Color.WHITE);
+        	        nodeframe.getContentPane().add(ownfile);
+        	        
+        	        JTextPane allfiles = new JTextPane();
+        	        allfiles.setFont(new Font("Tahoma", Font.BOLD, 13));
+        	        allfiles.setText("All Files:");
+        	        allfiles.setBounds(230, 30, 100, 20);
+        	        nodeframe.getContentPane().add(allfiles);
+        	        
+        	        JScrollPane allfile = new JScrollPane();
+        	        allfile.setBounds(230, 50, 220, 230);
+        	        allfile.setBackground(Color.WHITE);
+        	        nodeframe.getContentPane().add(allfile);
         	        
         	        JButton btnaddFile = new JButton("Add File");
         	        btnaddFile.setBounds(500, 50, 150, 30);
