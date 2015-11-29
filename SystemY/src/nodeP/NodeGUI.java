@@ -7,6 +7,9 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -138,7 +141,7 @@ public class NodeGUI {
         	        }
         	        JList<String> displayList = new JList<>(localFileNames);
         	        JScrollPane ownfile = new JScrollPane(displayList);
-        	        ownfile.setBounds(5, 50, 220, 230);
+        	        ownfile.setBounds(5, 50, 220, 210);
         	        ownfile.setBackground(Color.WHITE);
         	        nodeframe.getContentPane().add(ownfile);
         	        
@@ -148,8 +151,25 @@ public class NodeGUI {
         	        allfiles.setBounds(230, 30, 100, 20);
         	        nodeframe.getContentPane().add(allfiles);
         	        
+        	        TreeMap<Integer, ArrayList<FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
+        	        System.out.println("originele map" + node1.nodedata1.allNetworkFiles);
+        	        System.out.println("map:" + tempAllNetworkFiles);
+        	        String[] allFileNames = new String[tempAllNetworkFiles.size()];
+        	        Collection<ArrayList<FileData>> valueCollection = tempAllNetworkFiles.values();
+        	        System.out.println("collection" + valueCollection);
+        	        for (Iterator iterator = valueCollection.iterator(); iterator.hasNext();)
+        	        {
+        	        	System.out.println("testiterator");
+        	        	iterator.next();
+        	        }
+        	        for(int i = 0; i < valueCollection.size(); i++)
+        	        {
+        	        	System.out.println("testdefaultfor");        	        	
+        	        }
+        	        //String[] allFileNames = valueCollection.toArray(new String[valueCollection.size()]);
+        	        //JList<String> displayAllList = new JList<>(allFileNames);
         	        JScrollPane allfile = new JScrollPane();
-        	        allfile.setBounds(230, 50, 220, 230);
+        	        allfile.setBounds(230, 50, 220, 210);
         	        allfile.setBackground(Color.WHITE);
         	        nodeframe.getContentPane().add(allfile);
         	        
