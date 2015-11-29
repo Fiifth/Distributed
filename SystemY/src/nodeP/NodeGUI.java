@@ -150,7 +150,9 @@ public class NodeGUI {
         	        nodeframe.getContentPane().add(btnQuit);
         	        btnQuit.addActionListener(new ActionListener() {
         	        	public void actionPerformed(ActionEvent e) {
-        	        	}
+        	        		node1.nodedata1.setToQuit(true);
+        	        		nodeframe.setVisible(false);
+        	        		}
         	        });
 
         	        

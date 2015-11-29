@@ -9,6 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import fileManagers.FileData;
 
 public class NodeData {
+	private volatile boolean toQuit = false;
 	private volatile String nodeName;
 	private volatile int prevNode;
 	private volatile int nextNode;
@@ -41,6 +42,15 @@ public class NodeData {
 		this.setMyReplFolder("c:\\SystemYNodeFilesRep"+getMyNodeID());
 		this.setMyLocalFolder("c:\\SystemYNodeFiles"+getMyNodeID());
 	}
+	
+	public boolean getToQuit(){
+		return toQuit;
+	}
+	
+	public void setToQuit(boolean toQuit){
+		this.toQuit = toQuit;		
+	}
+	
 	public int getPrevNode() {
 		return prevNode;
 	}

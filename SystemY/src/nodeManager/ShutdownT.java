@@ -17,6 +17,7 @@ import nodeP.NodeData;
 
 public class ShutdownT extends Thread
 {
+	public boolean toquit = false;
 	NodeData nodedata1;
 	String input;
 	Multicast multi;
@@ -35,13 +36,8 @@ public class ShutdownT extends Thread
 		System.out.println("Type quit to stop this node.");
 		while(stay)
 		{
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			try {
-				input = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if(input.equals("quit "+nodedata1.getNodeName()))
+			//true if node wants to quit
+			if(nodedata1.getToQuit())
 				{
 				for (FileData tempfile : nodedata1.localFiles) 
 		    	{
