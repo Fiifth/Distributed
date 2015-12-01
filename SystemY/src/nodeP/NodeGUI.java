@@ -204,18 +204,17 @@ public class NodeGUI {
         test.setBounds(230, 30, 100, 20);
         nodeframe.getContentPane().add(test); 
 		
-		//ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
-        String[] localFileNames = new String[tempLocalFiles.size()];
+		ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
+		 ArrayList<String> localFileNames = new ArrayList<String>();
         if(tempLocalFiles.size() != 0)
         	//System.out.println(tempLocalFiles.size());
         {
-        	for(int i=0;i<tempLocalFiles.size();i++)
+        	for (FileData kjdf:tempLocalFiles)
         	{
-        		localFileNames[i] = tempLocalFiles.get(i).getFileName();
-        		System.out.println(localFileNames[i]);
+        		localFileNames.add(kjdf.getFileName());
         	}
         }
-        JList<String> displayList = new JList<>(localFileNames);
+        JList<Object> displayList = new JList<>(localFileNames.toArray());
         JScrollPane ownfile = new JScrollPane(displayList);
         ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);

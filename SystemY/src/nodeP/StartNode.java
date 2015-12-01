@@ -80,17 +80,32 @@ public class StartNode
 				AgentMain fileAgent = new AgentMain(true, initTree,agentLockList);
 				fileAgent.setNodeData1(nodedata1);
 				fileAgent.run();
+				
 				while(fileAgent.isAlive()){}
+				
 				RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
-		
-					try {
-						recInt.rmiAgentExecution(fileAgent);
-					} catch (RemoteException e) {
+				try 
+				{
+					recInt.rmiAgentExecution(fileAgent);
+				} catch (RemoteException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					System.out.println("jow3");
-			
+					e.printStackTrace();
+				}
+				
+//				new Thread() {
+//		            public void run() {
+//		            	RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+//						try 
+//						{
+//							recInt.rmiAgentExecution(fileAgent);
+//						} catch (RemoteException e) {
+//								// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//		            }
+//		        }.start();
+
+				
 			}
 			return true;
 			
