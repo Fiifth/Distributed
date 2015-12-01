@@ -1,5 +1,6 @@
 package nodeP;
 
+import java.io.Serializable;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -8,7 +9,11 @@ import java.util.concurrent.BlockingQueue;
 
 import fileManagers.FileData;
 
-public class NodeData {
+public class NodeData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private volatile boolean toQuit = false;
 	private volatile String nodeName;
 	private volatile int prevNode;

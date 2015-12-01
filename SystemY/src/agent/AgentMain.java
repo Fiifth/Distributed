@@ -1,15 +1,20 @@
 package agent;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nodeP.NodeData;
 import fileManagers.FileData;
 
-public class AgentMain extends Thread 
+public class AgentMain extends Thread implements Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles;
 	public ArrayList<FileData> agentLockList;
 	

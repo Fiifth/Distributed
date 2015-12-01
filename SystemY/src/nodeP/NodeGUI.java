@@ -207,6 +207,7 @@ public class NodeGUI {
 		//ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
         String[] localFileNames = new String[tempLocalFiles.size()];
         if(tempLocalFiles.size() != 0)
+        	//System.out.println(tempLocalFiles.size());
         {
         	for(int i=0;i<tempLocalFiles.size();i++)
         	{

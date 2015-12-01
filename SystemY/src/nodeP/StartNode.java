@@ -82,10 +82,15 @@ public class StartNode
 				fileAgent.run();
 				while(fileAgent.isAlive()){}
 				RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
-				try {
-					recInt.rmiAgentExecution(fileAgent);
+		
+					try {
+						recInt.rmiAgentExecution(fileAgent);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					System.out.println("jow3");
-				} catch (RemoteException e) {}
+			
 			}
 			return true;
 			
