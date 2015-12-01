@@ -17,6 +17,7 @@ public class NodeData {
 	private volatile int toLeave;
 	private volatile String nameServerIP;
 	private volatile String prevNodeIP;
+	private volatile String nextNodeIP;
 	private volatile String myIP;
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
@@ -62,6 +63,12 @@ public class NodeData {
 	}
 	public void setNextNode(int nextNode) {
 		this.nextNode = nextNode;
+	}
+	public String getNextNodeIP() {
+		return nextNodeIP;
+	}
+	public void setNextNodeIP(String nextNodeIP) {
+		this.nextNodeIP = nextNodeIP;
 	}
 	public int getMyNodeID() {
 		return myNodeID;

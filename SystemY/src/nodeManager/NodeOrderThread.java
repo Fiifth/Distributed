@@ -40,11 +40,13 @@ public class NodeOrderThread extends Thread {
 			if(myPrevNode == newNodeID)
 			{
 				nodedata1.setPrevNode(newPrevID);
+				//TODO IP
 			}
 			//if mynext == his id => mynext to his next
 			if(myNextNode == newNodeID)
 			{
 				nodedata1.setNextNode(newNextID);
+				//TODO IP
 			}
 		}
 		//adding new node
@@ -58,7 +60,9 @@ public class NodeOrderThread extends Thread {
 			{
 				tcp.sendTextWithTCP(myNodeID+"-"+myNodeID, nodeIP, 6770);
 				nodedata1.setPrevNode(newNodeID);
+				nodedata1.setPrevNodeIP(nodeIP);
 				nodedata1.setNextNode(newNodeID);
+				nodedata1.setNextNodeIP(nodeIP);
 				System.out.println("I am the previous and next of the new node (second)");
 			}
 			
@@ -67,11 +71,13 @@ public class NodeOrderThread extends Thread {
 			{
 				tcp.sendTextWithTCP(myNodeID+"-"+myNextNode, nodeIP, 6770);
 				nodedata1.setNextNode(newNodeID);
+				nodedata1.setNextNodeIP(nodeIP);
 				System.out.println("I am the previous of the new node (middle)");
 			}
 			else if( myNodeID > newNodeID && newNodeID > myPrevNode)
 			{
 				nodedata1.setPrevNode(newNodeID);	
+				nodedata1.setPrevNodeIP(nodeIP);
 				System.out.println("I am the next of the new node (middle)");
 			}
 
@@ -82,12 +88,14 @@ public class NodeOrderThread extends Thread {
 				{
 					tcp.sendTextWithTCP(myNodeID+"-"+myNextNode, nodeIP, 6770);
 					nodedata1.setNextNode(newNodeID);
+					nodedata1.setNextNodeIP(nodeIP);
 					System.out.println("I am the previous of the new node (end)");
 				}
 				else if (newNodeID<myNodeID && newNodeID<myPrevNode && newNodeID<myNextNode)
 				{
 					tcp.sendTextWithTCP(myNodeID+"-"+myNextNode, nodeIP, 6770);
 					nodedata1.setNextNode(newNodeID);
+					nodedata1.setNextNodeIP(nodeIP);
 					System.out.println("I am the previous of the new node (begin)");
 				}
 				
@@ -97,12 +105,14 @@ public class NodeOrderThread extends Thread {
 				//potential next of new node
 				if (newNodeID>myNodeID && newNodeID>myPrevNode && newNodeID>myNextNode)
 				{
-					nodedata1.setPrevNode(newNodeID);	
+					nodedata1.setPrevNode(newNodeID);
+					nodedata1.setPrevNodeIP(nodeIP);
 					System.out.println("I am the next of the new node (end)");
 				}
 				else if (newNodeID<myNodeID && newNodeID<myPrevNode && newNodeID<myNextNode)
 				{
-					nodedata1.setPrevNode(newNodeID);	
+					nodedata1.setPrevNode(newNodeID);
+					nodedata1.setPrevNodeIP(nodeIP);
 					System.out.println("I am the next of the new node (begin)");
 				}	
 			}
