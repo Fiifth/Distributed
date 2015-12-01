@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
@@ -25,9 +26,12 @@ import javax.swing.Action;
 
 public class NodeGUI {
 	public static Object frame;
+	public JFrame nodeframe;
 	public JTextField textField;
 	private JTextField textField_1;
 	public String nodenaam;
+	public StartNode node1;
+	public ArrayList<FileData> tempLocalFiles;
 	
 	
 	public NodeGUI(){
@@ -57,7 +61,7 @@ public class NodeGUI {
         txtpnGeefDeNodenaam.setBounds(10, 80, 132, 20);
         nameframe.getContentPane().add(txtpnGeefDeNodenaam);  
         
-        JFrame nodeframe = new JFrame();
+        nodeframe = new JFrame();
 		nodeframe.getContentPane().setForeground(Color.BLACK);
 		nodeframe.setResizable(true);
 		nodeframe.getContentPane().setBackground(Color.WHITE);
@@ -91,8 +95,10 @@ public class NodeGUI {
         			nameframe.setVisible(false);
         			nodeframe.setTitle("Node " + nodenaam);
         			
-        			StartNode node1=new StartNode(nodenaam);
+        			node1=new StartNode(nodenaam);
         			node1.startNewNode();
+        			
+        			tempLocalFiles = node1.nodedata1.localFiles;
         			
         			JTextPane Nodenaam = new JTextPane();
         			Nodenaam.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -130,54 +136,20 @@ public class NodeGUI {
         	        filelijst.setBounds(5, 30, 100, 20);
         	        nodeframe.getContentPane().add(filelijst);
         	        
-        	        ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
-        	        String[] localFileNames = new String[tempLocalFiles.size()];
-        	        if(tempLocalFiles.size() != 0)
-        	        {
-        	        	for(int i=0;i<tempLocalFiles.size();i++)
-        	        	{
-        	        		localFileNames[i] = tempLocalFiles.get(i).getFileName();
-        	        	}
-        	        }
-        	        JList<String> displayList = new JList<>(localFileNames);
-        	        JScrollPane ownfile = new JScrollPane(displayList);
-        	        ownfile.setBounds(5, 50, 220, 210);
-        	        ownfile.setBackground(Color.WHITE);
-        	        nodeframe.getContentPane().add(ownfile);
-        	        
         	        JTextPane allfiles = new JTextPane();
         	        allfiles.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        allfiles.setText("All Files:");
         	        allfiles.setBounds(230, 30, 100, 20);
-        	        nodeframe.getContentPane().add(allfiles);
+        	        nodeframe.getContentPane().add(allfiles);       	        
         	        
-        	        TreeMap<Integer, ArrayList<FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
-        	        System.out.println("originele map" + node1.nodedata1.allNetworkFiles);
-        	        System.out.println("map:" + tempAllNetworkFiles);
-        	        String[] allFileNames = new String[tempAllNetworkFiles.size()];
-        	        Collection<ArrayList<FileData>> valueCollection = tempAllNetworkFiles.values();
-        	        System.out.println("collection" + valueCollection);
-        	        for (Iterator iterator = valueCollection.iterator(); iterator.hasNext();)
-        	        {
-        	        	System.out.println("testiterator");
-        	        	iterator.next();
-        	        }
-        	        for(int i = 0; i < valueCollection.size(); i++)
-        	        {
-        	        	System.out.println("testdefaultfor");        	        	
-        	        }
-        	        //String[] allFileNames = valueCollection.toArray(new String[valueCollection.size()]);
-        	        //JList<String> displayAllList = new JList<>(allFileNames);
-        	        JScrollPane allfile = new JScrollPane();
-        	        allfile.setBounds(230, 50, 220, 210);
-        	        allfile.setBackground(Color.WHITE);
-        	        nodeframe.getContentPane().add(allfile);
         	        
-        	        JButton btnaddFile = new JButton("Add File");
+        	        JButton btnaddFile = new JButton("Refresh Files");
         	        btnaddFile.setBounds(500, 50, 150, 30);
         	        nodeframe.getContentPane().add(btnaddFile);
         	        btnaddFile.addActionListener(new ActionListener() {
         	        	public void actionPerformed(ActionEvent e) {
+        	        		generateLists();
+        	        		
         	        	}
         	        });
         	        
@@ -206,14 +178,64 @@ public class NodeGUI {
         	        		nodeframe.setVisible(false);
         	        		}
         	        });
-
         	        
+        	        generateLists();
         			nodeframe.setVisible(true);
 
         		}
         	}
         });
 
+	}
+	
+	public void generateLists(){
+		
+		JTextPane test = new JTextPane();
+        test.setFont(new Font("Tahoma", Font.BOLD, 13));
+        test.setText("All Files:");
+        test.setBounds(230, 30, 100, 20);
+        nodeframe.getContentPane().add(test); 
+		
+		//ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
+        String[] localFileNames = new String[tempLocalFiles.size()];
+        if(tempLocalFiles.size() != 0)
+        {
+        	for(int i=0;i<tempLocalFiles.size();i++)
+        	{
+        		localFileNames[i] = tempLocalFiles.get(i).getFileName();
+        		System.out.println(localFileNames[i]);
+        	}
+        }
+        JList<String> displayList = new JList<>(localFileNames);
+        JScrollPane ownfile = new JScrollPane(displayList);
+        ownfile.setBounds(5, 50, 220, 210);
+        ownfile.setBackground(Color.WHITE);
+        nodeframe.getContentPane().add(ownfile);
+        
+        
+        TreeMap<Integer, ArrayList<FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
+        ArrayList<String> allFileNames = new ArrayList<String>();
+        for (Map.Entry<Integer, ArrayList<FileData>> entry : tempAllNetworkFiles.entrySet()) {
+            ArrayList<FileData> value = entry.getValue();
+            Integer key = entry.getKey();
+            if(value.size() != 0)
+	        {
+	        	for(int i=0;i<value.size();i++)
+	        	{
+	        		allFileNames.add(value.get(i).getFileName());
+	        	}
+	        }
+            
+        }
+        System.out.println(allFileNames);
+        JList<Object> displayAllList = new JList<>(allFileNames.toArray());
+        JScrollPane allfile = new JScrollPane(displayAllList);
+        allfile.setBounds(230, 50, 220, 210);
+        allfile.setBackground(Color.WHITE);
+        nodeframe.getContentPane().add(allfile);
+        
+        
+		
 	}
 	
 	
