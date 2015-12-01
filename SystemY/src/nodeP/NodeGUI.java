@@ -66,7 +66,7 @@ public class NodeGUI {
 		nodeframe.setResizable(true);
 		nodeframe.getContentPane().setBackground(Color.WHITE);
 		nodeframe.setBackground(Color.WHITE);
-		nodeframe.setBounds(20, 20, 700, 300);
+		nodeframe.setBounds(20, 20, 700, 500);
 		nodeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		nodeframe.getContentPane().setLayout(null);
 		
@@ -153,8 +153,16 @@ public class NodeGUI {
         	        	}
         	        });
         	        
+        	        JButton btnRMLFile = new JButton("Remove Local File");
+        	        btnRMLFile.setBounds(500, 100 , 150, 30);
+        	        nodeframe.getContentPane().add(btnRMLFile);
+        	        btnRMLFile.addActionListener(new ActionListener() {
+        	        	public void actionPerformed(ActionEvent e) {
+        	        	}
+        	        });
+        	        
         	        JButton btnRMFile = new JButton("Remove File");
-        	        btnRMFile.setBounds(500, 100 , 150, 30);
+        	        btnRMFile.setBounds(500, 150 , 150, 30);
         	        nodeframe.getContentPane().add(btnRMFile);
         	        btnRMFile.addActionListener(new ActionListener() {
         	        	public void actionPerformed(ActionEvent e) {
@@ -162,7 +170,7 @@ public class NodeGUI {
         	        });
         	        
         	        JButton btnDLFile = new JButton("Download File");
-        	        btnDLFile.setBounds(500, 150, 150, 30);
+        	        btnDLFile.setBounds(500, 200, 150, 30);
         	        nodeframe.getContentPane().add(btnDLFile);
         	        btnDLFile.addActionListener(new ActionListener() {
         	        	public void actionPerformed(ActionEvent e) {
@@ -170,7 +178,7 @@ public class NodeGUI {
         	        });
         	        
         	        JButton btnQuit = new JButton("Quit Node");
-        	        btnQuit.setBounds(500, 200, 150, 30);
+        	        btnQuit.setBounds(500, 250, 150, 30);
         	        nodeframe.getContentPane().add(btnQuit);
         	        btnQuit.addActionListener(new ActionListener() {
         	        	public void actionPerformed(ActionEvent e) {
@@ -208,7 +216,7 @@ public class NodeGUI {
         }
         JList<String> displayList = new JList<>(localFileNames);
         JScrollPane ownfile = new JScrollPane(displayList);
-        ownfile.setBounds(5, 50, 220, 210);
+        ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(ownfile);
         
@@ -224,13 +232,12 @@ public class NodeGUI {
 	        	{
 	        		allFileNames.add(value.get(i).getFileName());
 	        	}
-	        }
-            
+	        }            
         }
         System.out.println(allFileNames);
         JList<Object> displayAllList = new JList<>(allFileNames.toArray());
         JScrollPane allfile = new JScrollPane(displayAllList);
-        allfile.setBounds(230, 50, 220, 210);
+        allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(allfile);
         
