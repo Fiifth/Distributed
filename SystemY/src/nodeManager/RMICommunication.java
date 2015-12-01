@@ -49,6 +49,8 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	}
 	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
 	{
+		System.out.println("Agent is a go");
+		try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}	
 		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
 		{
 			fileAgent.setNodeData1(nodedata1);
