@@ -30,7 +30,8 @@ public class FileListAgent{
 		updateLocalAllFiles();		
 	}
 	
-	public void updateAgentNetworkFiles(){
+	public void updateAgentNetworkFiles()
+	{
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{ //if agent already has a version of node's replFiles
 			ArrayList<FileData>tempReplList = allAgentNetworkFiles.get(nodeData1.getMyNodeID()); //place the agents version of replFiles in tempList
