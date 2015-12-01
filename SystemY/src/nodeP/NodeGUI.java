@@ -1,16 +1,22 @@
 package nodeP;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -20,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 import fileManagers.FileData;
+import nodeManager.RMICommunicationInt;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -144,50 +151,68 @@ public class NodeGUI {
         	        
         	        
         	        JButton btnaddFile = new JButton("Refresh Files");
-        	        btnaddFile.setBounds(500, 50, 150, 30);
-        	        nodeframe.getContentPane().add(btnaddFile);
-        	        btnaddFile.addActionListener(new ActionListener() {
-        	        	public void actionPerformed(ActionEvent e) {
-        	        		generateLists();
-        	        		
-        	        	}
-        	        });
+                    btnaddFile.setBounds(500, 50, 150, 30);
+                    nodeframe.getContentPane().add(btnaddFile);
+                    btnaddFile.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                    generateLists();                                       
+                            }
+                    });
+                   
+                   
+                    JButton btnRMFile = new JButton("Remove File");
+                    btnRMFile.setBounds(500, 100 , 150, 30);
+                    nodeframe.getContentPane().add(btnRMFile);
+                    btnRMFile.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                   
+                                   
+                            }
+                    });
+                   
+                    JButton btnDLFile = new JButton("Download File");
+                    btnDLFile.setBounds(500, 150, 150, 30);
+                    nodeframe.getContentPane().add(btnDLFile);
+                    btnDLFile.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                            }
+                    });
+                   
+                    JButton btnOpenFolder = new JButton("Open Folder");
+                    btnOpenFolder.setBounds(500, 200, 150, 30);
+                    nodeframe.getContentPane().add(btnOpenFolder);
+                    btnOpenFolder.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                    try {
+                    	Desktop.getDesktop().open(new File(node1.nodedata1.getMyLocalFolder()));
+                    	} catch (IOException e1) {}
+                    }
+                    });
+                   
+                    JButton btnQuit = new JButton("Quit Node");
+                    btnQuit.setBounds(500, 250, 150, 30);
+                    nodeframe.getContentPane().add(btnQuit);
+                    btnQuit.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                    node1.nodedata1.setToQuit(true);
+                                    nodeframe.setVisible(false);
+                                    }
+                    });
         	        
-        	        JButton btnRMLFile = new JButton("Remove Local File");
-        	        btnRMLFile.setBounds(500, 100 , 150, 30);
-        	        nodeframe.getContentPane().add(btnRMLFile);
-        	        btnRMLFile.addActionListener(new ActionListener() {
-        	        	public void actionPerformed(ActionEvent e) {
-        	        	}
-        	        });
         	        
-        	        JButton btnRMFile = new JButton("Remove File");
-        	        btnRMFile.setBounds(500, 150 , 150, 30);
-        	        nodeframe.getContentPane().add(btnRMFile);
-        	        btnRMFile.addActionListener(new ActionListener() {
-        	        	public void actionPerformed(ActionEvent e) {
-        	        	}
-        	        });
+        			
+        			new Thread() {
+        	            public void run() {
+        	            	while(true){
+        	            		generateLists();
+            	            	try {
+    								sleep(1000);
+    							} catch (InterruptedException e) {}
+        	            	}
+        	            }
+        	        }.start();
         	        
-        	        JButton btnDLFile = new JButton("Download File");
-        	        btnDLFile.setBounds(500, 200, 150, 30);
-        	        nodeframe.getContentPane().add(btnDLFile);
-        	        btnDLFile.addActionListener(new ActionListener() {
-        	        	public void actionPerformed(ActionEvent e) {
-        	        	}
-        	        });
-        	        
-        	        JButton btnQuit = new JButton("Quit Node");
-        	        btnQuit.setBounds(500, 250, 150, 30);
-        	        nodeframe.getContentPane().add(btnQuit);
-        	        btnQuit.addActionListener(new ActionListener() {
-        	        	public void actionPerformed(ActionEvent e) {
-        	        		node1.nodedata1.setToQuit(true);
-        	        		nodeframe.setVisible(false);
-        	        		}
-        	        });
-        	        
-        	        generateLists();
+
         			nodeframe.setVisible(true);
 
         		}
@@ -205,7 +230,7 @@ public class NodeGUI {
         nodeframe.getContentPane().add(test); 
 		
 		ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
-		 ArrayList<String> localFileNames = new ArrayList<String>();
+		ArrayList<String> localFileNames = new ArrayList<String>();
         if(tempLocalFiles.size() != 0)
         	//System.out.println(tempLocalFiles.size());
         {
@@ -214,6 +239,9 @@ public class NodeGUI {
         		localFileNames.add(kjdf.getFileName());
         	}
         }
+        System.out.println(localFileNames);
+        System.out.println(localFileNames.toArray());
+        System.out.println("*********************");
         JList<Object> displayList = new JList<>(localFileNames.toArray());
         JScrollPane ownfile = new JScrollPane(displayList);
         ownfile.setBounds(5, 50, 220, 410);
@@ -223,27 +251,21 @@ public class NodeGUI {
         
         TreeMap<Integer, ArrayList<FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
         ArrayList<String> allFileNames = new ArrayList<String>();
-        for (Map.Entry<Integer, ArrayList<FileData>> entry : tempAllNetworkFiles.entrySet()) {
-            ArrayList<FileData> value = entry.getValue();
-            Integer key = entry.getKey();
-            if(value.size() != 0)
-	        {
-	        	for(int i=0;i<value.size();i++)
-	        	{
-	        		allFileNames.add(value.get(i).getFileName());
-	        	}
-	        }            
+       	for (Map.Entry<Integer, ArrayList<FileData>> entry : tempAllNetworkFiles.entrySet()) {
+        ArrayList<FileData> value = entry.getValue();
+        Integer key = entry.getKey();
+        if(value.size() != 0)
+    	{
+    	     	for(int i=0;i<value.size();i++)
+    	        {
+    	        	allFileNames.add(value.get(i).getFileName());
+    	        }
+    	    }            
         }
-        System.out.println(allFileNames);
         JList<Object> displayAllList = new JList<>(allFileNames.toArray());
         JScrollPane allfile = new JScrollPane(displayAllList);
         allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(allfile);
-        
-        
-		
-	}
-	
-	
+	}	
 }
