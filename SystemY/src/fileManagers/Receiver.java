@@ -38,6 +38,7 @@ public class Receiver extends Thread
         int serverPort = file1.getSourceID()+32768;
         String fileOutput = DestinationFolder+"\\"+file1.getFileName();
         boolean fnExists = false;
+        //TODO replFiles is map dus gewoon filenaam opzoeken in map
         for (FileData tempfile : nodedata1.replFiles) 
     	{
         	if(tempfile.getFileName().equals(file1.getFileName()))

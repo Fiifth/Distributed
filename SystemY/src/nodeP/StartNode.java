@@ -87,25 +87,8 @@ public class StartNode
 				try 
 				{
 					recInt.rmiAgentExecution(fileAgent);
-				} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-//				new Thread() {
-//		            public void run() {
-//		            	RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
-//						try 
-//						{
-//							recInt.rmiAgentExecution(fileAgent);
-//						} catch (RemoteException e) {
-//								// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//		            }
-//		        }.start();
-
-				
+				} catch (RemoteException e) {e.printStackTrace();}
+							
 			}
 			return true;
 			

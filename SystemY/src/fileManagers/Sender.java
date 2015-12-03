@@ -59,9 +59,11 @@ public class Sender extends Thread
 					file1.setSourceIP(nodedata1.getMyIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
 					recInt.receiveThisFile(file1);
+					//TODO IF return false don't send file!
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
 				sendFile(file1); //TODO if return false --> start failure
 				if (file1.getRemoveAfterSend()) nodedata1.removeQueue.add(file1);
+				//TODO remove file without using removerqueue
 			}
 			nodedata1.setSending(false);
 		}
@@ -114,7 +116,7 @@ public class Sender extends Thread
 		{
 			Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
 			file1.setFolderLocation(nodedata1.getMyReplFolder());
-			nodedata1.replFiles.add(file1);
+			nodedata1.replFiles.add(file1); //TODO add to map instead of list
 		} catch (IOException e) {System.out.println("couldn't copy file");}
 	}
 }

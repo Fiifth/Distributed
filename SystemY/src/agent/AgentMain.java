@@ -49,6 +49,7 @@ public class AgentMain extends Thread implements Serializable
 	public void updateAgentNetworkFiles(){
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{ //if agent already has a version of node's replFiles
+			//TODO map tempReplList
 			ArrayList<FileData>tempReplList = allAgentNetworkFiles.get(nodeData1.getMyNodeID()); //place the agents version of replFiles in tempList
 			if(tempReplList.equals(nodeData1.replFiles)){ //if agent's version equals node's version
 				//list is already up to date
@@ -67,6 +68,9 @@ public class AgentMain extends Thread implements Serializable
 	public void attemptToLock()
 	{
 		boolean found=false;
+		//TODO loop trough keys
+		//TODO make lockRequestlist a map en agentlocklist ook
+		//for (String key : map.keySet()) {
 		ArrayList<FileData> templockRequestList=new ArrayList<FileData>();
 		templockRequestList=nodeData1.lockRequestList;
 		for (FileData fileToAttemptLock:templockRequestList)
@@ -89,6 +93,9 @@ public class AgentMain extends Thread implements Serializable
 	
 	public void checkAgentLocks(){
 		ArrayList<FileData> lockedFiles = agentLockList;
+		//TODO verzend als je een lokale eigenaar bent en zet iets op verzonden zodat de volgende dit ook niet verzend
+		//locked files is map dus (Object value : map.values()) {
+		//check of ik een file gelockt heb-->heb ik het ontvangen-->verwijder uit locklist
 		for(FileData lockedFile : lockedFiles)
 		{
 			if (lockedFile.getReplicateOwnerID()==nodeData1.getMyNodeID())

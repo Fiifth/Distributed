@@ -68,10 +68,7 @@ public class ShutdownT extends Thread
 				
 				try {
 					Naming.unbind(nodedata1.getBind());
-				} catch (RemoteException | MalformedURLException | NotBoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} catch (RemoteException | MalformedURLException | NotBoundException e) {}
 				
 				multi.LeaveMulticast();
 				

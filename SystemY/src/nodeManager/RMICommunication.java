@@ -24,6 +24,8 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 
 	public boolean receiveThisFile(FileData file1) throws RemoteException 
 	{
+		//IF destinationFolderReplication
+		//TODO filedata already present? -->return false and add owner
 		boolean queue=nodedata1.receiveQueue.offer(file1);
 		return queue;
 	}
@@ -31,6 +33,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public boolean removeOwner(FileData file1) throws RemoteException {
 		System.out.println("I should remove: "+file1.getFileName());
 		FileData removedFile=null;
+		//TODO refiles is map dus gewoon met hash fetchen en removeOwner functie oproepen
         for (FileData tempfile : nodedata1.replFiles) 
     	{
         	if(tempfile.getFileName().equals(file1.getFileName()))
@@ -38,13 +41,14 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
         		removedFile = tempfile;
        		}
     	}
+      //TODO taken enkel uitvoeren in filedata als er geen owners meer zijn
         nodedata1.replFiles.remove(removedFile);
         nodedata1.removeQueue.add(removedFile);
+        
 		return false;
 	}
 	
 	public boolean addOwner(FileData file1) throws RemoteException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
@@ -58,9 +62,9 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 			while(fileAgent.isAlive()){}
 			new Thread() {
 	            public void run() {
-	            	RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+	            	RMICommunicationInt recInt= (RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
 	    			try {
-	    				recInt.rmiAgentExecution(fileAgent);
+	    				((RMICommunicationInt) recInt).rmiAgentExecution(fileAgent);
 	    			} catch (RemoteException e) {}
 	    			System.out.println("jow");
 	            }

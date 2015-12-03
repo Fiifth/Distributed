@@ -55,7 +55,7 @@ public class FileReplicationTest {
 		
 		
 		//leaving node test
-		System.out.println("****TESTING****please type 'quit 5' within 10 s****");
+		node2.nodedata1.setToQuit(true);
 		Thread.sleep(11000);
 		check1=fileExists(newNode1.nodedata1.getMyReplFolder(),"4");
 		check2=fileExists(node2.nodedata1.getMyReplFolder(),"6");
@@ -89,10 +89,7 @@ public class FileReplicationTest {
 		Path source = Paths.get(folder+"\\"+fileName);
 		try {
 			Files.delete(source);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
 		
 	}
 

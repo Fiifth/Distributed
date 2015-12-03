@@ -234,6 +234,7 @@ public class NodeGUI {
         if(tempLocalFiles.size() != 0)
         	//System.out.println(tempLocalFiles.size());
         {
+        	//TODO loalfiles is map --> (Object value : map.values()) {
         	for (FileData kjdf:tempLocalFiles)
         	{
         		localFileNames.add(kjdf.getFileName());
@@ -254,6 +255,8 @@ public class NodeGUI {
        	for (Map.Entry<Integer, ArrayList<FileData>> entry : tempAllNetworkFiles.entrySet()) {
         ArrayList<FileData> value = entry.getValue();
         Integer key = entry.getKey();
+      //TODO allNetworkFiles value is map --> (Object value : map.values()) {
+        //TODO change for(int;crap;crap) to (int:value)
         if(value.size() != 0)
     	{
     	     	for(int i=0;i<value.size();i++)

@@ -29,8 +29,8 @@ public class NodeData implements Serializable {
 	private volatile boolean sending;
 	private volatile String bind;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
-	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();	
-	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>();
+	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();// TODO make hashmap
+	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>(); //TODO make hashmap
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile TreeMap<Integer, ArrayList<FileData>> allNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();

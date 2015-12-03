@@ -12,7 +12,9 @@ public class FileData implements Serializable
 	private volatile String fileName;
 	private volatile String folderLocation;
 	private volatile String localOwnerIP;
-	private volatile int localOwnerID;
+	private volatile int localOwnerID;	//TODO make arraylist of this
+	//TODO een remove owner functie voor deze list maken
+	//als er geen owners overblijven uit repfilesmap verwijderen en file verwijderen
 	private volatile String sourceIP;
 	private volatile int sourceID;
 	private volatile int replicateOwnerID;

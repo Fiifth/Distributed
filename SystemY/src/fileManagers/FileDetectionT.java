@@ -63,6 +63,8 @@ public class FileDetectionT extends Thread{
 					file1.setSourceIP(file1.getLocalOwnerIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
 					file1.refreshReplicateOwner(nodedata1, file1);
+					//TODO if filenameHash is not in map (make function)
+					//add to map & add to send queue
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}
@@ -108,7 +110,13 @@ public class FileDetectionT extends Thread{
 					String fileName = file.getName();
 					FileData file1=new FileData();
 					file1.setNewFileData(fileName, nodedata1);
+					file1.setSourceIP(file1.getLocalOwnerIP());
+					file1.setSourceID(nodedata1.getMyNodeID());
+					//TODO set hash of file
 					file1.refreshReplicateOwner(nodedata1, file1);
+					//TODO if filenameHash is not in map
+					//add to map & add to send queue
+					
 					nodedata1.sendQueue.add(file1);
 					nodedata1.localFiles.add(file1);
 				}

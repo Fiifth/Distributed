@@ -50,7 +50,7 @@ public class NodeOrderTest {
 		else
 			System.out.println("nope");
 		
-		System.out.println("please type 'quit 3' within 10 s"); //end node2
+		node2.nodedata1.setToQuit(true);
 		Thread.sleep(10000);
 		check1=node1.nodedata1.getNextNode() == node3.nodedata1.getMyNodeID();
 		check2=node1.nodedata1.getPrevNode() == node5.nodedata1.getMyNodeID();
