@@ -43,7 +43,7 @@ public class ShutdownT extends Thread
 				        RMICommunicationInt recInt=null;
 				        try {
 				        	recInt = (RMICommunicationInt) rmi.getRMIObject(entry.getValue().getReplicateOwnerID(), entry.getValue().getReplicateOwnerIP(), "RMICommunication");
-							recInt.removeOwner(entry.getValue());
+							recInt.removeThisOwner(entry.getValue());
 						} catch (RemoteException e) {e.printStackTrace();}
 		    	}
 				

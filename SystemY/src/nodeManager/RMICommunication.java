@@ -1,6 +1,11 @@
 package nodeManager;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import agent.AgentMain;
@@ -24,21 +29,30 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 
 	public boolean receiveThisFile(FileData file1) throws RemoteException 
 	{
-		//IF destinationFolderReplication
-		//TODO filedata already present? -->return false and add owner
-		boolean queue=nodedata1.receiveQueue.offer(file1);
-		return queue;
+		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
+		if (file1.isDestinationFolderReplication()&&nodedata1.replFiles.containsKey(fileNameHash))
+		{
+			FileData temp=nodedata1.replFiles.get(fileNameHash);
+			temp.addOwner(file1.getSourceID());
+			nodedata1.replFiles.put(fileNameHash, temp);
+			return true;
+		}
+		else
+		{
+		nodedata1.receiveQueue.offer(file1);
+		return false; 
+		}
 	}
 	
-	public boolean removeOwner(FileData file1) throws RemoteException {
+	public void removeThisOwner(FileData file1) throws RemoteException 
+	{
 		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
 		FileData removedFile=nodedata1.replFiles.get(fileNameHash);
-		
-      //TODO taken enkel uitvoeren in filedata als er geen owners meer zijn
-        nodedata1.replFiles.remove(fileNameHash);
-        nodedata1.removeQueue.add(removedFile);
-        
-		return false;
+		if (removedFile.removeOwner(file1.getSourceID()))
+		{
+			nodedata1.replFiles.remove(fileNameHash);
+			nodedata1.removeQueue.add(removedFile);
+		}
 	}
 	
 	public boolean addOwner(FileData file1) throws RemoteException {
@@ -46,18 +60,23 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	}
 	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
 	{
-		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}	
+		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}	
 		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
 		{
 			fileAgent.setNodeData1(nodedata1);
 			fileAgent.run();
 			while(fileAgent.isAlive()){}
 			new Thread() {
-	            public void run() {
-	            	RMICommunicationInt recInt=  (RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
-	    			try {
-	    				((RMICommunicationInt) recInt).rmiAgentExecution(fileAgent);
-	    			} catch (RemoteException e) {}
+	            public void run() 
+	            {
+	            	RMICommunicationInt recInt;
+					try {
+						recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getPrevNodeIP()+":"+nodedata1.getPrevNode()+"/RMICommunication");
+						recInt.rmiAgentExecution(fileAgent);
+					} catch (MalformedURLException | RemoteException | NotBoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 	            }
 	        }.start();
 			

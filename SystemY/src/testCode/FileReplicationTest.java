@@ -56,7 +56,7 @@ public class FileReplicationTest {
 		
 		//leaving node test
 		node2.nodedata1.setToQuit(true);
-		Thread.sleep(11000);
+		Thread.sleep(5000);
 		check1=fileExists(newNode1.nodedata1.getMyReplFolder(),"4")||newNode1.nodedata1.replFiles.containsKey(Math.abs("4".hashCode()%32768));
 		check2=fileExists(node2.nodedata1.getMyReplFolder(),"6")||node2.nodedata1.replFiles.containsKey(Math.abs("6".hashCode()%32768));;
 		boolean test4=!check1&&!check2;

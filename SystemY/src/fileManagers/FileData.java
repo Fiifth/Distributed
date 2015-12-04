@@ -2,6 +2,7 @@ package fileManagers;
 
 import java.io.Serializable;
 import java.rmi.Naming;
+import java.util.ArrayList;
 
 import nameServer.NameServerInterface;
 import nodeP.NodeData;
@@ -12,9 +13,7 @@ public class FileData implements Serializable
 	private volatile String fileName;
 	private volatile String folderLocation;
 	private volatile String localOwnerIP;
-	private volatile int localOwnerID;	//TODO make arraylist of this
-	//TODO een remove owner functie voor deze list maken
-	//als er geen owners overblijven uit repfilesmap verwijderen en file verwijderen
+	ArrayList<Integer> localOwners = new ArrayList<Integer>();
 	private volatile String sourceIP;
 	private volatile int sourceID;
 	private volatile int replicateOwnerID;
@@ -24,12 +23,27 @@ public class FileData implements Serializable
 	private volatile String destinationIP;
 	private volatile boolean destinationFolderReplication;
 	
+	public void addOwner (int ownerID)
+	{
+		localOwners.add(ownerID);
+	}
+	public boolean removeOwner (Integer ownerID)
+	{
+		if (localOwners.contains(ownerID))
+			localOwners.remove(ownerID);
+		return localOwners.isEmpty();
+
+	}
+	public boolean isOwner(int ownerID)
+	{
+		return localOwners.contains(ownerID);		
+	}
 	public void setNewFileData(String fileName, NodeData nodedata1)
 	{
 		this.fileName=fileName;
 		folderLocation=nodedata1.getMyLocalFolder();
 		localOwnerIP=nodedata1.getMyIP();
-		localOwnerID=nodedata1.getMyNodeID();
+		
 	}
 	
 	public void setFolderLocation(String folderLocation) {
@@ -45,9 +59,7 @@ public class FileData implements Serializable
 	public String getLocalOwnerIP() {
 		return localOwnerIP;
 	}
-	public int getLocalOwnerID() {
-		return localOwnerID;
-	}
+
 	public int getReplicateOwnerID() {
 		return replicateOwnerID;
 	}

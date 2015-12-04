@@ -47,23 +47,26 @@ public class Sender extends Thread
 				nodedata1.setSending(true);
 			} catch (InterruptedException e1) {return;}
 
-			if (file1.getLocalOwnerID()==file1.getReplicateOwnerID()&&file1.getLocalOwnerID()==nodedata1.getMyNodeID())
+			if (file1.isOwner(nodedata1.getMyNodeID())&&file1.isDestinationFolderReplication()==true&&file1.getDestinationID()==nodedata1.getMyNodeID())
 			{
 				copyFileLocally(nodedata1,file1);	
 			}
 			else
 			{
+				boolean filePresent;
 				try 
 				{
 					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
 					file1.setSourceIP(nodedata1.getMyIP());
 					file1.setSourceID(nodedata1.getMyNodeID());
-					recInt.receiveThisFile(file1);
-					//TODO IF return false don't send file!
-				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
-				sendFile(file1); //TODO if return false --> start failure
-				if (file1.getRemoveAfterSend()) nodedata1.removeQueue.add(file1);
-				//TODO remove file without using removerqueue
+					
+					filePresent=recInt.receiveThisFile(file1);
+				} catch (Exception e) {System.out.println("failed connection to RMI of the node"); filePresent=true;}
+				if (!filePresent)
+				{
+					sendFile(file1); //TODO if return false --> start failure
+					if (file1.getRemoveAfterSend()) nodedata1.removeQueue.add(file1);
+				}
 			}
 			nodedata1.setSending(false);
 		}

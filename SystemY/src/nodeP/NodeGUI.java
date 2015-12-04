@@ -226,9 +226,7 @@ public class NodeGUI {
         		localFileNames.add(value.getFileName());
         	}
         }
-        System.out.println(localFileNames);
-        System.out.println(localFileNames.toArray());
-        System.out.println("*********************");
+        
         JList<Object> displayList = new JList<>(localFileNames.toArray());
         JScrollPane ownfile = new JScrollPane(displayList);
         ownfile.setBounds(5, 50, 220, 410);

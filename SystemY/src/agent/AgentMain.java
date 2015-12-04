@@ -49,7 +49,6 @@ public class AgentMain extends Thread implements Serializable
 	public void updateAgentNetworkFiles(){
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{ //if agent already has a version of node's replFiles
-			//TODO map tempReplList
 			//TreeMap<Integer, FileData>tempReplList = ); //place the agents version of replFiles in tempList
 			if(!allAgentNetworkFiles.get(nodeData1.getMyNodeID()).equals(nodeData1.replFiles)) //if agent's version equals node's version
 				allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);

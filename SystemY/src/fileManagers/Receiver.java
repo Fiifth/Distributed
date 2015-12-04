@@ -33,6 +33,7 @@ public class Receiver extends Thread
 		String DestinationFolder;
 		if(file1.isDestinationFolderReplication()) 
 		{
+			
 			DestinationFolder=nodedata1.getMyReplFolder();
 			int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
 			if (!nodedata1.replFiles.containsKey(fileNameHash))
@@ -40,6 +41,7 @@ public class Receiver extends Thread
 		       		file1.setFolderLocation(DestinationFolder);
 		       		file1.setRemoveAfterSend(false);
 		       		nodedata1.replFiles.put(fileNameHash,file1);
+		       		
 		       } 
 		}
 		else DestinationFolder=nodedata1.getMyLocalFolder();
