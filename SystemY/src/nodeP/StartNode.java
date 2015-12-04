@@ -75,8 +75,8 @@ public class StartNode
 			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 			if(numberOfNodes==2)
 			{
-				TreeMap<Integer,ArrayList<FileData>> initTree = new TreeMap<Integer,ArrayList<FileData>>();
-				ArrayList<FileData> agentLockList=new ArrayList<FileData>();
+				TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
+				TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
 				AgentMain fileAgent = new AgentMain(true, initTree,agentLockList);
 				fileAgent.setNodeData1(nodedata1);
 				fileAgent.run();

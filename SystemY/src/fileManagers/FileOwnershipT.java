@@ -1,5 +1,7 @@
 package fileManagers;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import nameServer.NameServerInterface;
 import nodeP.NodeData;
 
@@ -15,17 +17,16 @@ public class FileOwnershipT extends Thread
 	public void run()
 	{
 		try {Thread.sleep(2000);} catch (InterruptedException e1) {	}
-		//ArrayList<FileData> tempreplFiles = new ArrayList<FileData> (nodedata1.replFiles.size());
-		//Collections.copy(tempreplFiles, nodedata1.replFiles);
-		@SuppressWarnings("unchecked")
-		ArrayList<FileData> tempreplFiles = (ArrayList<FileData>) nodedata1.replFiles.clone();
-		for (FileData file1 : tempreplFiles) 
+		
+		Iterator<Map.Entry<Integer, FileData>> iterator = nodedata1.replFiles.entrySet().iterator();
+		while(iterator.hasNext())
 		{
-			if (file1.refreshReplicateOwner(nodedata1,file1))
+			Map.Entry<Integer, FileData> entry = iterator.next();
+			if (entry.getValue().refreshReplicateOwner(nodedata1, entry.getValue()))
 			{
-					file1.setRemoveAfterSend(true);
-					nodedata1.sendQueue.add(file1);
-					nodedata1.replFiles.remove(file1);
+				entry.getValue().setRemoveAfterSend(true);
+				nodedata1.sendQueue.add(entry.getValue());
+				iterator.remove();
 			}
 		}
 	}

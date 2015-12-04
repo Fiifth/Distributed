@@ -32,27 +32,20 @@ public class Receiver extends Thread
 	{
 		String DestinationFolder;
 		if(file1.isDestinationFolderReplication()) 
+		{
 			DestinationFolder=nodedata1.getMyReplFolder();
-		else
-			DestinationFolder=nodedata1.getMyLocalFolder();
+			int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
+			if (!nodedata1.replFiles.containsKey(fileNameHash))
+		       {
+		       		file1.setFolderLocation(DestinationFolder);
+		       		file1.setRemoveAfterSend(false);
+		       		nodedata1.replFiles.put(fileNameHash,file1);
+		       } 
+		}
+		else DestinationFolder=nodedata1.getMyLocalFolder();
+		
         int serverPort = file1.getSourceID()+32768;
-        String fileOutput = DestinationFolder+"\\"+file1.getFileName();
-        boolean fnExists = false;
-        //TODO replFiles is map dus gewoon filenaam opzoeken in map
-        for (FileData tempfile : nodedata1.replFiles) 
-    	{
-        	if(tempfile.getFileName().equals(file1.getFileName()))
-        	{
-        		//if owner is different add second owner (multiple owners still has to implemented
-        		fnExists = true;
-       		}
-    	}
-        if(!fnExists)
-        {
-        	file1.setFolderLocation(DestinationFolder);
-        	file1.setRemoveAfterSend(false);
-        	nodedata1.replFiles.add(file1);
-        }
-        	tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); //TODO if return false --> start failure
+        String fileOutput = DestinationFolder+"\\"+file1.getFileName();      
+        tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); //TODO if return false --> start failure
     }
 }

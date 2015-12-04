@@ -110,13 +110,17 @@ public class Sender extends Thread
 	
 	public void copyFileLocally(NodeData nodedata1,FileData file1)
 	{
+		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
 		Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
 		Path destination = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 		try 
 		{
 			Files.copy(source,destination,StandardCopyOption.REPLACE_EXISTING);
 			file1.setFolderLocation(nodedata1.getMyReplFolder());
-			nodedata1.replFiles.add(file1); //TODO add to map instead of list
+			if (!nodedata1.replFiles.containsKey(fileNameHash))
+		       {
+		       		nodedata1.replFiles.put(fileNameHash,file1);
+		       } 
 		} catch (IOException e) {System.out.println("couldn't copy file");}
 	}
 }

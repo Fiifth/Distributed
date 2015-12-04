@@ -31,18 +31,11 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	}
 	
 	public boolean removeOwner(FileData file1) throws RemoteException {
-		System.out.println("I should remove: "+file1.getFileName());
-		FileData removedFile=null;
-		//TODO refiles is map dus gewoon met hash fetchen en removeOwner functie oproepen
-        for (FileData tempfile : nodedata1.replFiles) 
-    	{
-        	if(tempfile.getFileName().equals(file1.getFileName()))
-        	{
-        		removedFile = tempfile;
-       		}
-    	}
+		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
+		FileData removedFile=nodedata1.replFiles.get(fileNameHash);
+		
       //TODO taken enkel uitvoeren in filedata als er geen owners meer zijn
-        nodedata1.replFiles.remove(removedFile);
+        nodedata1.replFiles.remove(fileNameHash);
         nodedata1.removeQueue.add(removedFile);
         
 		return false;
@@ -53,7 +46,6 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	}
 	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
 	{
-		System.out.println("Agent is a go");
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}	
 		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
 		{
@@ -62,11 +54,10 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 			while(fileAgent.isAlive()){}
 			new Thread() {
 	            public void run() {
-	            	RMICommunicationInt recInt= (RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+	            	RMICommunicationInt recInt=  (RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
 	    			try {
 	    				((RMICommunicationInt) recInt).rmiAgentExecution(fileAgent);
 	    			} catch (RemoteException e) {}
-	    			System.out.println("jow");
 	            }
 	        }.start();
 			

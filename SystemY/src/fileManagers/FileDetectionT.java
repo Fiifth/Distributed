@@ -58,33 +58,19 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_MODIFY)
 				{
-					FileData file1=new FileData();
-					file1.setNewFileData(fileName.toString(), nodedata1);
-					file1.setSourceIP(file1.getLocalOwnerIP());
-					file1.setSourceID(nodedata1.getMyNodeID());
-					file1.refreshReplicateOwner(nodedata1, file1);
-					//TODO if filenameHash is not in map (make function)
-					//add to map & add to send queue
-					nodedata1.sendQueue.add(file1);
-					nodedata1.localFiles.add(file1);
+					addFile(fileName.toString());
 				}
 				else if(kind == ENTRY_DELETE)
 				{
-					FileData removedFile=null;
-			        for (FileData tempfile : nodedata1.localFiles) 
-			    	{
-			        	if(tempfile.getFileName().equals(fileName.toString()))
-			        	{
-			        		removedFile = tempfile;
-			       		}
-			    	}
-			        nodedata1.localFiles.remove(removedFile);
+					int fileNameHash=Math.abs(fileName.toString().hashCode()%32768);
+					FileData removedFile=nodedata1.localFiles.get(fileNameHash);
 			        removedFile.refreshReplicateOwner(nodedata1, removedFile);
-			        RMICommunicationInt recInt=null;
-			        try {
-			        	recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
+			        try 
+			        {
+			        	RMICommunicationInt recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
 						recInt.removeOwner(removedFile);
-					} catch (RemoteException e) {e.printStackTrace();} 
+					} catch (RemoteException e) {e.printStackTrace();}
+			        nodedata1.localFiles.remove(fileNameHash);
 				}
 				key.reset();
 			}
@@ -107,28 +93,31 @@ public class FileDetectionT extends Thread{
 			{
 				if(file.isFile())
 				{
-					String fileName = file.getName();
-					FileData file1=new FileData();
-					file1.setNewFileData(fileName, nodedata1);
-					file1.setSourceIP(file1.getLocalOwnerIP());
-					file1.setSourceID(nodedata1.getMyNodeID());
-					//TODO set hash of file
-					file1.refreshReplicateOwner(nodedata1, file1);
-					//TODO if filenameHash is not in map
-					//add to map & add to send queue
-					
-					nodedata1.sendQueue.add(file1);
-					nodedata1.localFiles.add(file1);
+					addFile(file.getName());
 				}
 			}
 		}
 	
-	public void setupWatchService() {
+	public void setupWatchService() 
+	{
 		try {
 			watcher = FileSystems.getDefault().newWatchService();
 			dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 		} catch (IOException e) {}
-
+	}
+	public void addFile(String fileName)
+	{
+		int fileNameHash=Math.abs(fileName.hashCode()%32768);
+		if (!nodedata1.localFiles.containsKey(fileNameHash))
+		{
+			FileData file1=new FileData();
+			file1.setNewFileData(fileName, nodedata1);
+			file1.setSourceIP(file1.getLocalOwnerIP());
+			file1.setSourceID(nodedata1.getMyNodeID());
+			file1.refreshReplicateOwner(nodedata1, file1);
+			nodedata1.sendQueue.add(file1);
+			nodedata1.localFiles.put(fileNameHash,file1);
+		}		
 	}
 
 }	

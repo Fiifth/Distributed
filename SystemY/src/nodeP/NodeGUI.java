@@ -3,21 +3,13 @@ package nodeP;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -26,10 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 import fileManagers.FileData;
-import nodeManager.RMICommunicationInt;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 public class NodeGUI {
 	public static Object frame;
@@ -38,7 +26,7 @@ public class NodeGUI {
 	private JTextField textField_1;
 	public String nodenaam;
 	public StartNode node1;
-	public ArrayList<FileData> tempLocalFiles;
+
 	
 	
 	public NodeGUI(){
@@ -105,7 +93,6 @@ public class NodeGUI {
         			node1=new StartNode(nodenaam);
         			node1.startNewNode();
         			
-        			tempLocalFiles = node1.nodedata1.localFiles;
         			
         			JTextPane Nodenaam = new JTextPane();
         			Nodenaam.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -229,15 +216,14 @@ public class NodeGUI {
         test.setBounds(230, 30, 100, 20);
         nodeframe.getContentPane().add(test); 
 		
-		ArrayList<FileData> tempLocalFiles = node1.nodedata1.localFiles;
+		TreeMap<Integer, FileData> tempLocalFiles = node1.nodedata1.localFiles;
 		ArrayList<String> localFileNames = new ArrayList<String>();
+		
         if(tempLocalFiles.size() != 0)
-        	//System.out.println(tempLocalFiles.size());
         {
-        	//TODO loalfiles is map --> (Object value : map.values()) {
-        	for (FileData kjdf:tempLocalFiles)
+        	for (FileData value : tempLocalFiles.values())
         	{
-        		localFileNames.add(kjdf.getFileName());
+        		localFileNames.add(value.getFileName());
         	}
         }
         System.out.println(localFileNames);
@@ -250,21 +236,19 @@ public class NodeGUI {
         nodeframe.getContentPane().add(ownfile);
         
         
-        TreeMap<Integer, ArrayList<FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
+        TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
         ArrayList<String> allFileNames = new ArrayList<String>();
-       	for (Map.Entry<Integer, ArrayList<FileData>> entry : tempAllNetworkFiles.entrySet()) {
-        ArrayList<FileData> value = entry.getValue();
-        Integer key = entry.getKey();
-      //TODO allNetworkFiles value is map --> (Object value : map.values()) {
-        //TODO change for(int;crap;crap) to (int:value)
-        if(value.size() != 0)
-    	{
-    	     	for(int i=0;i<value.size();i++)
-    	        {
-    	        	allFileNames.add(value.get(i).getFileName());
-    	        }
-    	    }            
+        if (tempAllNetworkFiles.size() > 0)
+        {
+	        for (TreeMap<Integer, FileData> value : tempAllNetworkFiles.values())
+	        {
+	        	for (FileData temp : value.values())
+	        	{
+	        		allFileNames.add(temp.getFileName());
+	        	}
+	        }
         }
+        
         JList<Object> displayAllList = new JList<>(allFileNames.toArray());
         JScrollPane allfile = new JScrollPane(displayAllList);
         allfile.setBounds(230, 50, 220, 410);

@@ -15,13 +15,13 @@ public class AgentMain extends Thread implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles;
-	public ArrayList<FileData> agentLockList;
+	public TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles;
+	public TreeMap<Integer,FileData> agentLockList;
 	
 	NodeData nodeData1;
 	
 	boolean typeOfAgent;
-	public AgentMain(boolean typeOfAgent, TreeMap<Integer, ArrayList<FileData>> allAgentNetworkFiles,ArrayList<FileData> agentLockList)
+	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> agentLockList)
 	{
 		this.typeOfAgent = typeOfAgent;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
@@ -50,14 +50,9 @@ public class AgentMain extends Thread implements Serializable
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{ //if agent already has a version of node's replFiles
 			//TODO map tempReplList
-			ArrayList<FileData>tempReplList = allAgentNetworkFiles.get(nodeData1.getMyNodeID()); //place the agents version of replFiles in tempList
-			if(tempReplList.equals(nodeData1.replFiles)){ //if agent's version equals node's version
-				//list is already up to date
-			}
-			else{	//agent's version is outdated! -> remove old and add new version
-				allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
+			//TreeMap<Integer, FileData>tempReplList = ); //place the agents version of replFiles in tempList
+			if(!allAgentNetworkFiles.get(nodeData1.getMyNodeID()).equals(nodeData1.replFiles)) //if agent's version equals node's version
 				allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
-			}
 		}
 		else{ // agent has no version of node's replFiles
 			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
@@ -67,41 +62,28 @@ public class AgentMain extends Thread implements Serializable
 
 	public void attemptToLock()
 	{
-		boolean found=false;
-		//TODO loop trough keys
-		//TODO make lockRequestlist a map en agentlocklist ook
-		//for (String key : map.keySet()) {
-		ArrayList<FileData> templockRequestList=new ArrayList<FileData>();
-		templockRequestList=nodeData1.lockRequestList;
-		for (FileData fileToAttemptLock:templockRequestList)
+		TreeMap<Integer,FileData> copyLockList=nodeData1.lockRequestList;
+		
+		for (int key : copyLockList.keySet()) 
 		{
-			for(FileData lockedFiles:agentLockList)
+			if (!agentLockList.containsKey(key))
 			{
-				if (lockedFiles.getFileName().equals(fileToAttemptLock.getFileName()))
-					found=true;
-			}
-			if (!found)
-			{
-				fileToAttemptLock.refreshReplicateOwner(nodeData1, fileToAttemptLock);
-				fileToAttemptLock.setDestinationID(nodeData1.getMyNodeID());
-				fileToAttemptLock.setDestinationIP(nodeData1.getMyIP());
-				fileToAttemptLock.setDestinationFolderReplication(false);
-				nodeData1.lockRequestList.remove(fileToAttemptLock);
+				agentLockList.put(key, copyLockList.get(key));
+				nodeData1.lockRequestList.remove(key);
 			}
 		}
 	}
 	
 	public void checkAgentLocks(){
-		ArrayList<FileData> lockedFiles = agentLockList;
+		TreeMap<Integer,FileData> lockedFiles=agentLockList;
 		//TODO verzend als je een lokale eigenaar bent en zet iets op verzonden zodat de volgende dit ook niet verzend
-		//locked files is map dus (Object value : map.values()) {
 		//check of ik een file gelockt heb-->heb ik het ontvangen-->verwijder uit locklist
-		for(FileData lockedFile : lockedFiles)
+		for (FileData value : agentLockList.values())
 		{
-			if (lockedFile.getReplicateOwnerID()==nodeData1.getMyNodeID())
+			if(value.getReplicateOwnerID()==nodeData1.getMyNodeID())
 			{
-				nodeData1.sendQueue.add(lockedFile);
-				agentLockList.remove(lockedFile);
+				nodeData1.sendQueue.add(value);
+				agentLockList.remove(Math.abs(value.getFileName().hashCode()%32768));
 			}
 		}
 	}

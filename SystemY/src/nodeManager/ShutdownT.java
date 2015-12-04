@@ -1,13 +1,11 @@
 package nodeManager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import fileManagers.FileData;
 import fileManagers.FileOwnershipT;
@@ -33,19 +31,19 @@ public class ShutdownT extends Thread
 	public void run()
 	{
 		boolean stay = true;
-		System.out.println("Type quit to stop this node.");
 		while(stay)
 		{
 			//true if node wants to quit
 			if(nodedata1.getToQuit())
 				{
-				for (FileData tempfile : nodedata1.localFiles) 
-		    	{
-						tempfile.refreshReplicateOwner(nodedata1, tempfile);
+				
+				for(Map.Entry<Integer, FileData> entry : nodedata1.localFiles.entrySet())
+				{ 
+					entry.getValue().refreshReplicateOwner(nodedata1, entry.getValue());
 				        RMICommunicationInt recInt=null;
 				        try {
-				        	recInt = (RMICommunicationInt) rmi.getRMIObject(tempfile.getReplicateOwnerID(), tempfile.getReplicateOwnerIP(), "RMICommunication");
-							recInt.removeOwner(tempfile);
+				        	recInt = (RMICommunicationInt) rmi.getRMIObject(entry.getValue().getReplicateOwnerID(), entry.getValue().getReplicateOwnerIP(), "RMICommunication");
+							recInt.removeOwner(entry.getValue());
 						} catch (RemoteException e) {e.printStackTrace();}
 		    	}
 				

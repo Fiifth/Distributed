@@ -12,9 +12,8 @@ public class FailureAgent{
 		this.failedNodeData = failedNodeData;
 	}
 	
-	public void run(){
-		ArrayList<FileData> localFilesList = nodeData1.localFiles;
-		
-		
+	public void run()
+	{
+
 	}
 }

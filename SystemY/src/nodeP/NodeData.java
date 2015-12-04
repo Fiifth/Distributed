@@ -29,13 +29,15 @@ public class NodeData implements Serializable {
 	private volatile boolean sending;
 	private volatile String bind;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
-	public volatile ArrayList<FileData> localFiles=new ArrayList<FileData>();// TODO make hashmap
-	public volatile ArrayList<FileData> replFiles=new ArrayList<FileData>(); //TODO make hashmap
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
-	public volatile TreeMap<Integer, ArrayList<FileData>> allNetworkFiles = new TreeMap<Integer,ArrayList<FileData>>();
-	public volatile ArrayList<FileData> lockRequestList = new ArrayList<FileData>();//try to achieve lock in order to download
-
+	public volatile TreeMap<Integer, TreeMap<Integer,FileData>> allNetworkFiles = new TreeMap<Integer, TreeMap<Integer,FileData>>();
+	public volatile TreeMap<Integer,FileData> lockRequestList = new TreeMap<Integer,FileData>();//try to achieve lock in order to download
+	public volatile TreeMap<Integer, FileData> localFiles = new TreeMap<Integer,FileData>();
+	public volatile TreeMap<Integer, FileData> replFiles = new TreeMap<Integer,FileData>();
+	
+	
+	
 	public String getNodeName() {
 		return nodeName;
 	}

@@ -33,9 +33,9 @@ public class FileReplicationTest {
 		copyFile("C:\\files",node2.nodedata1.getMyLocalFolder(),"6");
 		copyFile("C:\\files",node2.nodedata1.getMyLocalFolder(),"8");
 		Thread.sleep(5000);
-		boolean check1=fileExists(node1.nodedata1.getMyReplFolder(),"4");
-		boolean check2=fileExists(node2.nodedata1.getMyReplFolder(),"6");
-		boolean check3=fileExists(node3.nodedata1.getMyReplFolder(),"8");
+		boolean check1=fileExists(node1.nodedata1.getMyReplFolder(),"4")&&node1.nodedata1.replFiles.containsKey(Math.abs("4".hashCode()%32768));
+		boolean check2=fileExists(node2.nodedata1.getMyReplFolder(),"6")&&node2.nodedata1.replFiles.containsKey(Math.abs("6".hashCode()%32768));
+		boolean check3=fileExists(node3.nodedata1.getMyReplFolder(),"8")&&node3.nodedata1.replFiles.containsKey(Math.abs("8".hashCode()%32768));
 		boolean test1=check1&&check2&&check3;
 
 		
@@ -49,16 +49,16 @@ public class FileReplicationTest {
 		StartNode newNode1=new StartNode("3");		
 		newNode1.startNewNode();
 		Thread.sleep(5000);
-		check2=fileExists(newNode1.nodedata1.getMyReplFolder(),"4");
-		check3=fileExists(node1.nodedata1.getMyReplFolder(),"4");
+		check2=fileExists(newNode1.nodedata1.getMyReplFolder(),"4")&&newNode1.nodedata1.replFiles.containsKey(Math.abs("4".hashCode()%32768));;
+		check3=fileExists(node1.nodedata1.getMyReplFolder(),"4")||node1.nodedata1.replFiles.containsKey(Math.abs("4".hashCode()%32768));;
 		boolean test3=check2&&!check3;
 		
 		
 		//leaving node test
 		node2.nodedata1.setToQuit(true);
 		Thread.sleep(11000);
-		check1=fileExists(newNode1.nodedata1.getMyReplFolder(),"4");
-		check2=fileExists(node2.nodedata1.getMyReplFolder(),"6");
+		check1=fileExists(newNode1.nodedata1.getMyReplFolder(),"4")||newNode1.nodedata1.replFiles.containsKey(Math.abs("4".hashCode()%32768));
+		check2=fileExists(node2.nodedata1.getMyReplFolder(),"6")||node2.nodedata1.replFiles.containsKey(Math.abs("6".hashCode()%32768));;
 		boolean test4=!check1&&!check2;
 		
 		System.out.println(test1+", "+test2+", "+test3+", "+test4);
