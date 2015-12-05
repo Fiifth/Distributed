@@ -22,7 +22,7 @@ public class FileOwnershipT extends Thread
 		while(iterator.hasNext())
 		{
 			Map.Entry<Integer, FileData> entry = iterator.next();
-			if (entry.getValue().refreshReplicateOwner(nodedata1, entry.getValue()))
+			if (entry.getValue().refreshReplicateOwner(nodedata1))
 			{
 				entry.getValue().setRemoveAfterSend(true);
 				nodedata1.sendQueue.add(entry.getValue());

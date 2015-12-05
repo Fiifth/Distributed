@@ -39,7 +39,7 @@ public class ShutdownT extends Thread
 				
 				for(Map.Entry<Integer, FileData> entry : nodedata1.localFiles.entrySet())
 				{ 
-					entry.getValue().refreshReplicateOwner(nodedata1, entry.getValue());
+					entry.getValue().refreshReplicateOwner(nodedata1);
 				        RMICommunicationInt recInt=null;
 				        try {
 				        	recInt = (RMICommunicationInt) rmi.getRMIObject(entry.getValue().getReplicateOwnerID(), entry.getValue().getReplicateOwnerIP(), "RMICommunication");

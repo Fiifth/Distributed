@@ -1,11 +1,13 @@
 package nodeManager;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import agent.AgentMain;
@@ -51,7 +53,8 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		if (removedFile.removeOwner(file1.getSourceID()))
 		{
 			nodedata1.replFiles.remove(fileNameHash);
-			nodedata1.removeQueue.add(removedFile);
+			Path source = Paths.get(removedFile.getFolderLocation()+"\\"+removedFile.getFileName());
+			try {Files.delete(source);} catch (IOException e) {}
 		}
 	}
 	

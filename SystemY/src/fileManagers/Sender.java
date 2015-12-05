@@ -65,7 +65,11 @@ public class Sender extends Thread
 				if (!filePresent)
 				{
 					sendFile(file1); //TODO if return false --> start failure
-					if (file1.getRemoveAfterSend()) nodedata1.removeQueue.add(file1);
+					if (file1.getRemoveAfterSend()) 
+					{
+						Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
+						try {Files.delete(source);} catch (IOException e) {}
+					}
 				}
 			}
 			nodedata1.setSending(false);

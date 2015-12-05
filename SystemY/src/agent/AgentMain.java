@@ -2,7 +2,6 @@ package agent;
 
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nodeP.NodeData;
@@ -46,16 +45,15 @@ public class AgentMain extends Thread implements Serializable
 		}
 	}
 
-	public void updateAgentNetworkFiles(){
+	public void updateAgentNetworkFiles()
+	{
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
-		{ //if agent already has a version of node's replFiles
-			//TreeMap<Integer, FileData>tempReplList = ); //place the agents version of replFiles in tempList
-			if(!allAgentNetworkFiles.get(nodeData1.getMyNodeID()).equals(nodeData1.replFiles)) //if agent's version equals node's version
+		{
+			if(!allAgentNetworkFiles.get(nodeData1.getMyNodeID()).equals(nodeData1.replFiles))
 				allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
 		}
-		else{ // agent has no version of node's replFiles
+		else
 			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
-		}
 	}
 	
 
@@ -73,11 +71,12 @@ public class AgentMain extends Thread implements Serializable
 		}
 	}
 	
-	public void checkAgentLocks(){
+	public void checkAgentLocks()
+	{
 		TreeMap<Integer,FileData> lockedFiles=agentLockList;
 		//TODO verzend als je een lokale eigenaar bent en zet iets op verzonden zodat de volgende dit ook niet verzend
 		//check of ik een file gelockt heb-->heb ik het ontvangen-->verwijder uit locklist
-		for (FileData value : agentLockList.values())
+		for (FileData value : lockedFiles.values())
 		{
 			if(value.getReplicateOwnerID()==nodeData1.getMyNodeID())
 			{

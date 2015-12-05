@@ -64,7 +64,7 @@ public class FileDetectionT extends Thread{
 				{
 					int fileNameHash=Math.abs(fileName.toString().hashCode()%32768);
 					FileData removedFile=nodedata1.localFiles.get(fileNameHash);
-			        removedFile.refreshReplicateOwner(nodedata1, removedFile);
+			        removedFile.refreshReplicateOwner(nodedata1);
 			        try 
 			        {
 			        	RMICommunicationInt recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
@@ -116,7 +116,7 @@ public class FileDetectionT extends Thread{
 			file1.addOwner(nodedata1.getMyNodeID());
 			file1.setSourceIP(file1.getLocalOwnerIP());
 			file1.setSourceID(nodedata1.getMyNodeID());
-			file1.refreshReplicateOwner(nodedata1, file1);
+			file1.refreshReplicateOwner(nodedata1);
 			nodedata1.sendQueue.add(file1);
 			nodedata1.localFiles.put(fileNameHash,file1);
 		}		

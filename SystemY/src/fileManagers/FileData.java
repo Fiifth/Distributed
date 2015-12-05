@@ -13,7 +13,7 @@ public class FileData implements Serializable
 	private volatile String fileName;
 	private volatile String folderLocation;
 	private volatile String localOwnerIP;
-	ArrayList<Integer> localOwners = new ArrayList<Integer>();
+	private ArrayList<Integer> localOwners = new ArrayList<Integer>();
 	private volatile String sourceIP;
 	private volatile int sourceID;
 	private volatile int replicateOwnerID;
@@ -32,7 +32,6 @@ public class FileData implements Serializable
 		if (localOwners.contains(ownerID))
 			localOwners.remove(ownerID);
 		return localOwners.isEmpty();
-
 	}
 	public boolean isOwner(int ownerID)
 	{
@@ -43,7 +42,6 @@ public class FileData implements Serializable
 		this.fileName=fileName;
 		folderLocation=nodedata1.getMyLocalFolder();
 		localOwnerIP=nodedata1.getMyIP();
-		
 	}
 	
 	public void setFolderLocation(String folderLocation) {
@@ -115,21 +113,19 @@ public class FileData implements Serializable
 		this.destinationFolderReplication = destinationFolderReplication;
 	}
 
-	public boolean refreshReplicateOwner(NodeData nodedata1,FileData filedata1)
+	public boolean refreshReplicateOwner(NodeData nodedata1)
 	{
 		String[] ipAndIDArray=null;
-		try {//TODO if return false --> start failure
+		try {
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
 			String ipAndID = nameserver.locateFile(getFileName());
 			ipAndIDArray=ipAndID.split("-");
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
-		filedata1.replicateOwnerIP=ipAndIDArray[0];
-		filedata1.replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
-		filedata1.destinationID = replicateOwnerID;
-		filedata1.destinationIP = replicateOwnerIP;
-		filedata1.setDestinationFolderReplication(true);
-		//System.out.println(replicateOwnerID+nodedata1.getMyNodeID());
-		 return !(replicateOwnerID==nodedata1.getMyNodeID());
-			
+		replicateOwnerIP=ipAndIDArray[0];
+		replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
+		destinationID = replicateOwnerID;
+		destinationIP = replicateOwnerIP;
+		setDestinationFolderReplication(true);
+		 return !(replicateOwnerID==nodedata1.getMyNodeID());	
 	}
 }

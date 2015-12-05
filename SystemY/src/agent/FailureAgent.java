@@ -1,7 +1,5 @@
 package agent;
 
-import java.util.ArrayList;
-import fileManagers.FileData;
 import nodeP.NodeData;
 
 public class FailureAgent{

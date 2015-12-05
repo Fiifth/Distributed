@@ -45,9 +45,6 @@ public class StartNode
 		FileDetectionT filedetector =new FileDetectionT(nodedata1);
 		filedetector.start();
 		threadList.add(filedetector);
-		Remover remover =new Remover(nodedata1);
-		remover.start();
-		threadList.add(remover);
 		Receiver receiver = new Receiver(nodedata1);
 		receiver.start();
 		threadList.add(receiver);
