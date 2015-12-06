@@ -84,5 +84,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	        }.start();
 			
 		}
+		else
+			nodedata1.allNetworkFiles.clear();
 	}
 }

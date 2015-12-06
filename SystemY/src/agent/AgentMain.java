@@ -50,7 +50,32 @@ public class AgentMain extends Thread implements Serializable
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{
 			if(!allAgentNetworkFiles.get(nodeData1.getMyNodeID()).equals(nodeData1.replFiles))
-				allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
+			{
+				TreeMap<Integer,FileData> tempMyFilesOnNode=new TreeMap<Integer,FileData>();
+				tempMyFilesOnNode.putAll(allAgentNetworkFiles.get(nodeData1.getMyNodeID()));
+				for (int key : nodeData1.replFiles.keySet())
+				{
+					if(!(tempMyFilesOnNode.containsKey(key)))
+					{
+						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
+					}
+					else if (!tempMyFilesOnNode.get(key).getLocalOwners().equals(nodeData1.replFiles.get(key).getLocalOwners()))
+					{
+						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
+					}
+				}
+				TreeMap<Integer,FileData> tempMyFilesOnNode2=new TreeMap<Integer,FileData>();
+				tempMyFilesOnNode2.putAll(tempMyFilesOnNode);
+				for (int key : tempMyFilesOnNode2.keySet())
+				{
+					if(!(nodeData1.replFiles.containsKey(key)))
+					{
+						tempMyFilesOnNode.remove(key);
+					}
+				}
+				allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
+				allAgentNetworkFiles.put(nodeData1.getMyNodeID(),tempMyFilesOnNode);
+			}
 		}
 		else
 			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
@@ -59,13 +84,13 @@ public class AgentMain extends Thread implements Serializable
 
 	public void attemptToLock()
 	{
-		TreeMap<Integer,FileData> copyLockList=nodeData1.lockRequestList;
+		TreeMap<Integer,String> copyLockList=nodeData1.lockRequestList;
 		
 		for (int key : copyLockList.keySet()) 
 		{
 			if (!agentLockList.containsKey(key))
 			{
-				agentLockList.put(key, copyLockList.get(key));
+				//agentLockList.put(key, copyLockList.get(key));
 				nodeData1.lockRequestList.remove(key);
 			}
 		}
@@ -83,6 +108,7 @@ public class AgentMain extends Thread implements Serializable
 				nodeData1.sendQueue.add(value);
 				agentLockList.remove(Math.abs(value.getFileName().hashCode()%32768));
 			}
+			
 		}
 	}
 	
