@@ -22,7 +22,12 @@ public class FileData implements Serializable
 	private volatile int destinationID;
 	private volatile String destinationIP;
 	private volatile boolean destinationFolderReplication;
+	private volatile boolean lock;
 	
+	public ArrayList<Integer> getLocalOwners()
+	{
+		return localOwners;
+	}
 	public void addOwner (int ownerID)
 	{
 		localOwners.add(ownerID);
@@ -40,6 +45,7 @@ public class FileData implements Serializable
 	public void setNewFileData(String fileName, NodeData nodedata1)
 	{
 		this.fileName=fileName;
+		lock=false;
 		folderLocation=nodedata1.getMyLocalFolder();
 		localOwnerIP=nodedata1.getMyIP();
 	}
@@ -113,6 +119,12 @@ public class FileData implements Serializable
 		this.destinationFolderReplication = destinationFolderReplication;
 	}
 
+	public boolean isLock() {
+		return lock;
+	}
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
 	public boolean refreshReplicateOwner(NodeData nodedata1)
 	{
 		String[] ipAndIDArray=null;
