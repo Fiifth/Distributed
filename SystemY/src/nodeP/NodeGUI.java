@@ -24,6 +24,7 @@ public class NodeGUI {
 	public JTextField textField;
 	public String nodenaam;
 	public StartNode node1;
+	public JList<Object> displayAllList;
 
 	
 	
@@ -150,8 +151,9 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnRMFile);
                     btnRMFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                   
-                                   
+                            	//TODO remove file
+                            	String fileToRm = displayAllList.getSelectedValue().toString();
+                            	System.out.println("selected file: " + fileToRm);                             
                             }
                     });
                    
@@ -160,6 +162,9 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
+                            	//TODO add to list
+                            	String fileToDl = displayAllList.getSelectedValue().toString();
+                            	System.out.println("selected file: " +fileToDl);
                             }
                     });
                    
@@ -245,7 +250,7 @@ public class NodeGUI {
 	        }
         }
         
-        JList<Object> displayAllList = new JList<>(allFileNames.toArray());
+        displayAllList = new JList<>(allFileNames.toArray());
         JScrollPane allfile = new JScrollPane(displayAllList);
         allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);
