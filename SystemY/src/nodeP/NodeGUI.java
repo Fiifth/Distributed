@@ -40,19 +40,19 @@ public class NodeGUI {
 		nameframe.setResizable(true);
 		nameframe.getContentPane().setBackground(Color.WHITE);
 		nameframe.setBackground(Color.WHITE);
-		nameframe.setBounds(20, 20, 300, 300);
+		nameframe.setBounds(20, 20, 300, 200);
 		nameframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		nameframe.getContentPane().setLayout(null);
                
         JTextField NN = new JTextField();
-        NN.setBounds(142, 80, 132, 20);
+        NN.setBounds(142, 20, 132, 20);
         nameframe.getContentPane().add(NN);
         NN.setColumns(10);
         
         JTextPane txtpnGeefDeNodenaam = new JTextPane();
         txtpnGeefDeNodenaam.setEditable(false);
         txtpnGeefDeNodenaam.setText("Geef de nodenaam in:");
-        txtpnGeefDeNodenaam.setBounds(10, 80, 132, 20);
+        txtpnGeefDeNodenaam.setBounds(10, 20, 132, 20);
         nameframe.getContentPane().add(txtpnGeefDeNodenaam);  
         
         nodeframe = new JFrame();
@@ -67,7 +67,7 @@ public class NodeGUI {
 		
 		nameframe.setVisible(true);
         JButton btnStartNode = new JButton("START Node");
-        btnStartNode.setBounds(90, 140, 120, 23);
+        btnStartNode.setBounds(90, 60 , 120, 23);
         nameframe.getContentPane().add(btnStartNode);
         btnStartNode.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -79,7 +79,7 @@ public class NodeGUI {
         			errortext.setText(nodenaam + " is geen geldige nodenaam.");
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
-        	        errortext.setBounds(10, 200, 300, 20);
+        	        errortext.setBounds(10, 140, 300, 20);
         	        errortext.setColumns(10);        			
         	        nameframe.getContentPane().add(errortext);      			
         		}
@@ -151,9 +151,38 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnRMFile);
                     btnRMFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                            	//TODO remove file
-                            	String fileToRm = displayAllList.getSelectedValue().toString();
-                            	System.out.println("selected file: " + fileToRm);                             
+                            	JFrame rmframe = new JFrame();
+                            	rmframe.setTitle("Remove File");
+                            	rmframe.getContentPane().setForeground(Color.BLACK);
+                            	rmframe.setResizable(true);
+                            	rmframe.getContentPane().setBackground(Color.WHITE);
+                            	rmframe.setBackground(Color.WHITE);
+                            	rmframe.setBounds(200, 200, 400, 200);
+                            	rmframe.getContentPane().setLayout(null);
+                                       
+                                JTextField filename = new JTextField();
+                                filename.setBounds(100, 50, 270, 20);
+                                rmframe.getContentPane().add(filename);
+                                filename.setColumns(10);
+                                
+                                JTextPane txtpnfilename = new JTextPane();
+                                txtpnfilename.setEditable(false);
+                                txtpnfilename.setText("File to remove: ");
+                                txtpnfilename.setBounds(10, 50, 90, 20);
+                                rmframe.getContentPane().add(txtpnfilename);
+                                
+                                JButton rmbutton = new JButton("Remove");
+                                rmbutton.setBounds(125, 100 , 150, 30);
+                                rmframe.getContentPane().add(rmbutton);
+                                rmbutton.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										String filetorm = filename.getText();
+										//TODO add to list to remove	
+									}
+                                
+                                }); 
+                                rmframe.setVisible(true);
+                            	                          
                             }
                     });
                    
@@ -162,9 +191,38 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                            	//TODO add to list
-                            	String fileToDl = displayAllList.getSelectedValue().toString();
-                            	System.out.println("selected file: " +fileToDl);
+                            	JFrame dlframe = new JFrame();
+                            	dlframe.setTitle("Download File");
+                            	dlframe.getContentPane().setForeground(Color.BLACK);
+                            	dlframe.setResizable(true);
+                            	dlframe.getContentPane().setBackground(Color.WHITE);
+                            	dlframe.setBackground(Color.WHITE);
+                            	dlframe.setBounds(200, 200, 400, 200);
+                            	dlframe.getContentPane().setLayout(null);
+                                       
+                                JTextField dlfilename = new JTextField();
+                                dlfilename.setBounds(100, 50, 270, 20);
+                                dlframe.getContentPane().add(dlfilename);
+                                dlfilename.setColumns(10);
+                                
+                                JTextPane dltxtpnfilename = new JTextPane();
+                                dltxtpnfilename.setEditable(false);
+                                dltxtpnfilename.setText("File to download: ");
+                                dltxtpnfilename.setBounds(10, 50, 90, 20);
+                                dlframe.getContentPane().add(dltxtpnfilename);
+                                
+                                JButton dlbutton = new JButton("Download");
+                                dlbutton.setBounds(125, 100 , 150, 30);
+                                dlframe.getContentPane().add(dlbutton);
+                                dlbutton.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										String filetodl = dlfilename.getText();
+										//TODO add to list to download	
+									}
+                                
+                                }); 
+                                dlframe.setVisible(true);
+                            	
                             }
                     });
                    
