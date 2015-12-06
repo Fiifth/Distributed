@@ -7,6 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import fileManagers.FileData;
+import fileManagers.FileOwnershipT;
 
 public class NodeData implements Serializable {
 	/**
@@ -74,12 +75,15 @@ public class NodeData implements Serializable {
 		return nextNodeIP;
 	}
 	public void setNextNodeIP(String nextNodeIP) {
+		FileOwnershipT COT =new FileOwnershipT(this);
+		COT.start();
 		this.nextNodeIP = nextNodeIP;
 	}
 	public int getMyNodeID() {
 		return myNodeID;
 	}
 	public void setMyNodeID(int myNodeID) {
+		
 		this.myNodeID = myNodeID;
 	}
 	public int getToLeave() {

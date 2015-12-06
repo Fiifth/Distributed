@@ -2,7 +2,6 @@ package nodeManager;
 
 import java.net.DatagramPacket;
 
-import fileManagers.FileOwnershipT;
 import networkFunctions.Multicast;
 import nodeP.NodeData;
 
@@ -27,9 +26,6 @@ public class NodeDetection extends Thread
 			{
 				NodeOrderThread c =new NodeOrderThread(messageIn,nodedata1);
 				c.start();
-
-				FileOwnershipT COT =new FileOwnershipT(nodedata1);
-				COT.start();
 			}
 		}
 	}

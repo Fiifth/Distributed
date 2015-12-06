@@ -62,15 +62,20 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_DELETE)
 				{
-					int fileNameHash=Math.abs(fileName.toString().hashCode()%32768);
-					FileData removedFile=nodedata1.localFiles.get(fileNameHash);
-			        removedFile.refreshReplicateOwner(nodedata1);
-			        try 
-			        {
-			        	RMICommunicationInt recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
-						recInt.removeThisOwner(removedFile);
-					} catch (RemoteException e) {e.printStackTrace();}
-			        nodedata1.localFiles.remove(fileNameHash);
+					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}	
+					File varTmpDir = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
+					if (!(varTmpDir.exists()))
+					{
+						int fileNameHash=Math.abs(fileName.toString().hashCode()%32768);
+						FileData removedFile=nodedata1.localFiles.get(fileNameHash);
+				        removedFile.refreshReplicateOwner(nodedata1);
+				        try 
+				        {
+				        	RMICommunicationInt recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
+							recInt.removeThisOwner(removedFile);
+						} catch (RemoteException e) {e.printStackTrace();}
+				        nodedata1.localFiles.remove(fileNameHash);
+					}
 				}
 				key.reset();
 			}

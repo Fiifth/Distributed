@@ -22,7 +22,6 @@ public class NodeGUI {
 	public static Object frame;
 	public JFrame nodeframe;
 	public JTextField textField;
-	private JTextField textField_1;
 	public String nodenaam;
 	public StartNode node1;
 

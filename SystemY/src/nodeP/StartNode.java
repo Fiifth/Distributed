@@ -31,9 +31,7 @@ public class StartNode
 		multi.joinMulticastGroup();
 		multi.sendMulticast("0"+"-"+nodedata1.getNodeName());
 		multi.LeaveMulticast();
-		
-		
-			
+
 		try 
 		{
 			RMICommunication rmiCom=new RMICommunication(nodedata1);
@@ -69,6 +67,7 @@ public class StartNode
 			String[] node = nodes.split("-");
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
+			nodedata1.setNextNodeIP(node[2]);
 			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 			if(numberOfNodes==2)
 			{

@@ -1,6 +1,5 @@
 package fileManagers;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.TreeMap;
 
 import nameServer.NameServerInterface;
 import nodeP.NodeData;
@@ -16,17 +15,17 @@ public class FileOwnershipT extends Thread
 	
 	public void run()
 	{
-		try {Thread.sleep(2000);} catch (InterruptedException e1) {	}
-		
-		Iterator<Map.Entry<Integer, FileData>> iterator = nodedata1.replFiles.entrySet().iterator();
-		while(iterator.hasNext())
+		try {Thread.sleep(500);} catch (InterruptedException e1) {	}
+		TreeMap<Integer,FileData> tempRepFiles=new TreeMap<Integer, FileData>();
+		tempRepFiles.putAll(nodedata1.replFiles);
+
+		for (Integer key : tempRepFiles.keySet())
 		{
-			Map.Entry<Integer, FileData> entry = iterator.next();
-			if (entry.getValue().refreshReplicateOwner(nodedata1))
+			if (tempRepFiles.get(key).refreshReplicateOwner(nodedata1))
 			{
-				entry.getValue().setRemoveAfterSend(true);
-				nodedata1.sendQueue.add(entry.getValue());
-				iterator.remove();
+				nodedata1.replFiles.remove(key);
+				tempRepFiles.get(key).setRemoveAfterSend(true);
+				nodedata1.sendQueue.add(tempRepFiles.get(key));
 			}
 		}
 	}
