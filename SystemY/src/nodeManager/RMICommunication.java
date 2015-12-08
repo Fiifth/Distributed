@@ -48,6 +48,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	
 	public void removeThisOwner(FileData file1) throws RemoteException 
 	{
+		//TODO check if empty
 		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
 		FileData removedFile=nodedata1.replFiles.get(fileNameHash);
 		if (removedFile.removeOwner(file1.getSourceID()))

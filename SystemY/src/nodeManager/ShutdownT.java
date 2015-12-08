@@ -38,13 +38,19 @@ public class ShutdownT extends Thread
 				{
 				
 				for(Map.Entry<Integer, FileData> entry : nodedata1.localFiles.entrySet())
-				{ 
-					entry.getValue().refreshReplicateOwner(nodedata1);
+				{
+					
+					FileData test = entry.getValue();
+					test.refreshReplicateOwner(nodedata1);
+					test.setSourceID(nodedata1.getMyNodeID());
+					//if(!(entry.getValue().getReplicateOwnerID()==nodedata1.getMyNodeID()))
+					//{
 				        RMICommunicationInt recInt=null;
 				        try {
-				        	recInt = (RMICommunicationInt) rmi.getRMIObject(entry.getValue().getReplicateOwnerID(), entry.getValue().getReplicateOwnerIP(), "RMICommunication");
-							recInt.removeThisOwner(entry.getValue());
+				        	recInt = (RMICommunicationInt) rmi.getRMIObject(test.getReplicateOwnerID(), test.getReplicateOwnerIP(), "RMICommunication");
+							recInt.removeThisOwner(test);
 						} catch (RemoteException e) {e.printStackTrace();}
+					//}
 		    	}
 				
 				nodedata1.setToLeave(1);
@@ -74,7 +80,7 @@ public class ShutdownT extends Thread
 				{
 					((Thread) temp).interrupt();
 				}
-				//System.exit(1);
+				System.exit(1);
 			}
 		}	
 	}

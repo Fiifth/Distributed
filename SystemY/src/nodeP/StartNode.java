@@ -59,6 +59,7 @@ public class StartNode
 	private boolean setSurroundingNodes(NodeData nodedata1) 
 	{
 		int numberOfNodes=getNameServerRespons(nodedata1);
+		nodedata1.setNumberOfNodesStart(numberOfNodes);
 		if (numberOfNodes>1)
 		{
 			String[] received=tcp.receiveTextWithTCP(6770, 5000);
