@@ -2,6 +2,7 @@ package agent;
 
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.TreeMap;
 
 import nodeP.NodeData;
@@ -84,14 +85,32 @@ public class AgentMain extends Thread implements Serializable
 
 	public void attemptToLock()
 	{
+		
+		TreeMap<Integer, TreeMap<Integer, FileData>> tempAllAgentNetworkFiles=new TreeMap<Integer,TreeMap<Integer,FileData>>();
+		tempAllAgentNetworkFiles.putAll(allAgentNetworkFiles);
 		TreeMap<Integer,String> copyLockList=nodeData1.lockRequestList;
 		
 		for (int key : copyLockList.keySet()) 
 		{
-			if (!agentLockList.containsKey(key))
+			for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : tempAllAgentNetworkFiles.entrySet())
 			{
-				//agentLockList.put(key, copyLockList.get(key));
-				nodeData1.lockRequestList.remove(key);
+				if (entry.getValue().containsKey(key))
+				{
+					//file found
+					if (!entry.getValue().get(key).isLock())
+					{
+						//not locked
+						//lockFile()
+						if(copyLockList.get(key).equals("dl"))
+						{
+							//make a download list
+						}
+						else if (copyLockList.get(key).equals("rm"))
+						{
+							//remove the file in list
+						}
+					}
+				}
 			}
 		}
 	}
