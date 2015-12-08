@@ -7,6 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.Map.Entry;
 
+import networkFunctions.Multicast;
 import networkFunctions.RMI;
 
 public class StartNameServer extends UnicastRemoteObject implements NameServerInterface
@@ -15,7 +16,7 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 	
 	private TreeMap<Integer,String> nodeMap = new TreeMap<Integer,String>();
 	private static final long serialVersionUID = 1L;
-	
+	Multicast multi=new Multicast("228.5.6.7", 6789);
 
 	public StartNameServer() throws RemoteException 
 	{
@@ -24,10 +25,11 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 	
 	public void startNameServer() throws IOException
 	{
+		multi.joinMulticastGroup();
 		StartNameServer nameServer=this;
 		NameServerInterface nameint = nameServer;	
 		rmi.bindObjectRMI(1099, "localhost", "NameServer", nameint);
-		NameServerNodeDetection nameservernodedetection=new NameServerNodeDetection(nameServer);
+		NameServerNodeDetection nameservernodedetection=new NameServerNodeDetection(nameServer,multi);
 		nameservernodedetection.start();
 	}
 
@@ -92,5 +94,31 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 
 	public void setNodeMap(TreeMap<Integer, String> nodeMap) {
 		this.nodeMap = nodeMap;
+	}
+	
+	public void thisNodeFails(int failingNodeID){
+		int prevNodeID;
+		String prevNodeIP;
+		int nextNodeID;
+		String nextNodeIP;
+		if(nodeMap.lowerKey(failingNodeID) == null){
+			prevNodeID = nodeMap.lastKey();
+			prevNodeIP = nodeMap.get(prevNodeID);
+		}
+		else{
+			prevNodeID = nodeMap.lowerKey(failingNodeID);
+			prevNodeIP = nodeMap.get(prevNodeID);
+		}
+		if(nodeMap.higherKey(failingNodeID)==null){
+			nextNodeID = nodeMap.firstKey();
+			nextNodeIP = nodeMap.get(nextNodeID);
+		}
+		else{
+			nextNodeID = nodeMap.higherKey(failingNodeID);
+			nextNodeIP = nodeMap.get(nextNodeID);
+		}
+		String text="1"+"-"+failingNodeID+"-"+prevNodeID+"-"+nextNodeID+"-"+prevNodeIP+"-"+nextNodeIP;
+		multi.sendMulticast(text);
+		
 	}
 }

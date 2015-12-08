@@ -7,14 +7,14 @@ import networkFunctions.Multicast;
 public class NameServerNodeDetection extends Thread 
 {
 	StartNameServer nameServer;
-	public NameServerNodeDetection(StartNameServer nameServer)
+	Multicast multi;
+	public NameServerNodeDetection(StartNameServer nameServer,Multicast multi)
 	{
 		this.nameServer=nameServer;
+		this.multi = multi;
 	}
 	public void run()
 	{
-		Multicast multi=new Multicast("228.5.6.7", 6789);
-		multi.joinMulticastGroup();
 		while(!Thread.interrupted())
 		{
 			DatagramPacket messageIn = multi.receiveMulticast();
