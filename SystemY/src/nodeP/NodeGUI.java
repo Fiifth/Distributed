@@ -28,9 +28,10 @@ public class NodeGUI {
 	
 	public NodeGUI(){
 		
-		
-		//TODO errormsg nameservertimeout, nodenaam al in gebruik 
-		//TODO eventueel aantal nodes
+		//TODO download all, remove all
+		//TODO close download, rm window when button pressed
+		//TODO scrollfix?
+		//TODO functies in guifunctions.java
 		
 		JFrame nameframe = new JFrame();
 		nameframe.setTitle("Node startup");
@@ -38,7 +39,7 @@ public class NodeGUI {
 		nameframe.setResizable(true);
 		nameframe.getContentPane().setBackground(Color.WHITE);
 		nameframe.setBackground(Color.WHITE);
-		nameframe.setBounds(20, 20, 300, 180);
+		nameframe.setBounds(20, 20, 300, 160);
 		nameframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		nameframe.getContentPane().setLayout(null);
                
@@ -79,7 +80,7 @@ public class NodeGUI {
         			errortext.setText(nodenaam + " is geen geldige nodenaam.");
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
-        	        errortext.setBounds(10, 120, 290, 20);
+        	        errortext.setBounds(10, 100, 290, 20);
         	        errortext.setColumns(10);        			
         	        nameframe.getContentPane().add(errortext);
         		}
@@ -171,14 +172,14 @@ public class NodeGUI {
                             	rmframe.getContentPane().setLayout(null);
                                        
                                 JTextField filename = new JTextField();
-                                filename.setBounds(130, 50, 250, 20);
+                                filename.setBounds(115, 50, 260, 20);
                                 rmframe.getContentPane().add(filename);
                                 filename.setColumns(10);
                                 
                                 JTextPane txtpnfilename = new JTextPane();
                                 txtpnfilename.setEditable(false);
                                 txtpnfilename.setText("File to remove: ");
-                                txtpnfilename.setBounds(10, 50, 110, 20);
+                                txtpnfilename.setBounds(10, 50, 100, 20);
                                 rmframe.getContentPane().add(txtpnfilename);
                                 
                                 JButton rmbutton = new JButton("Remove");
@@ -211,7 +212,7 @@ public class NodeGUI {
                             	dlframe.getContentPane().setLayout(null);
                                        
                                 JTextField dlfilename = new JTextField();
-                                dlfilename.setBounds(130, 50, 250, 20);
+                                dlfilename.setBounds(115, 50, 260, 20);
                                 dlframe.getContentPane().add(dlfilename);
                                 dlfilename.setColumns(10);
                                 
@@ -227,6 +228,7 @@ public class NodeGUI {
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										String filetodl = dlfilename.getText();	
+										//TODO in functie (guifunctions)
 										node1.nodedata1.lockRequestList.put(Math.abs(filetodl.hashCode()%32768), "dl");
 									}
                                 
@@ -253,7 +255,7 @@ public class NodeGUI {
                     btnQuit.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                     node1.nodedata1.setToQuit(true);
-                                    nodeframe.setVisible(false);
+                                    //nodeframe.setVisible(false);
                                     }
                     });
         	        

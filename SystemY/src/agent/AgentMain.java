@@ -104,6 +104,7 @@ public class AgentMain extends Thread implements Serializable
 						if(copyLockList.get(key).equals("dl"))
 						{
 							//make a download list
+							System.out.println(entry.getValue().get(key).getFileName());
 						}
 						else if (copyLockList.get(key).equals("rm"))
 						{
