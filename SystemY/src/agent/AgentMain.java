@@ -44,6 +44,10 @@ public class AgentMain extends Thread implements Serializable
 			//Update local node's file list
 			updateLocalAllFiles();	
 		}
+		else
+		{
+			
+		}
 	}
 
 	public void updateAgentNetworkFiles()
