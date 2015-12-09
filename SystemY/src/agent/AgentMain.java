@@ -61,7 +61,7 @@ public class AgentMain extends Thread implements Serializable
 		
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{
-			if(!allAgentNetworkFiles.get(nodeData1.getMyNodeID()).equals(nodeData1.replFiles))
+			if(!(allAgentNetworkFiles.get(nodeData1.getMyNodeID()) ==nodeData1.replFiles))
 			{
 				
 				TreeMap<Integer,FileData> tempMyFilesOnNode=new TreeMap<Integer,FileData>();
