@@ -1,6 +1,11 @@
 package agent;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,8 +23,8 @@ public class FailureAgentTemp extends Thread implements Serializable
 	public TreeMap<Integer,FileData> agentLockList;
 	public TreeMap<Integer,FileData> nodeReplFiles;
 	
-	NodeData nodeData1;
-	NodeData failedNodeData;
+	public NodeData nodeData1;
+	public NodeData failedNodeData;
 	boolean typeOfAgent;
 	public FailureAgentTemp(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> agentLockList,NodeData failedNodeData)
 	{
@@ -44,12 +49,29 @@ public class FailureAgentTemp extends Thread implements Serializable
 		}
 	}
 	public void checkReplicationFiles(){
-		nodeReplFiles = nodeData1.replFiles;
-		for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) {
+		TreeMap<Integer,FileData> nodeReplFiles = nodeData1.replFiles;
+		for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) 
+		{
 			  Integer key = entry.getKey();
-			  FileData value = entry.getValue();
-
-			  System.out.println(key + " => " + value);
+			  FileData tempFD = entry.getValue();
+			  ArrayList<Integer> localFileOwners = tempFD.getLocalOwners();
+			  for(int temp : localFileOwners)
+			  {
+				  if(temp == failedNodeData.getMyNodeID())
+				  {
+					  if(tempFD.removeOwner(temp))//returns true if no owners remain
+					  {//if no local owners remain remove file from replication lists
+						  nodeData1.replFiles.remove(key);
+						  Path source = Paths.get(tempFD.getFolderLocation()+"\\"+tempFD.getFileName());
+						  try {Files.delete(source);} catch (IOException e) {}
+					  }
+					  else
+					  {//if other owners exist update file in list
+						  nodeData1.replFiles.put(key,tempFD);
+					  }
+				  }
+			  }
+			  
 			}
 	}
 }

@@ -3,11 +3,6 @@
 4) recoveryAgent
 	*stuur multicast met nodeID,nextNode,PrevNode
 	*start agent
-		*laat bij iedereen replication files afgaan 
-			als de falende node een lokale owner was van een van de replication files
-				de id uit de lokale owner lijst verwijderen
-				(de file zal automatisch verwijderd worden als de falende node de enige eigenaar was
-				van de file)
 		*laat bij iedereen local files afgaan en check of replowner falende node is
 			if true: file.refreshReplicateOwner -> sendQueue (zie FileDetection)
 	*stop agent als we de agent object terug krijgen
