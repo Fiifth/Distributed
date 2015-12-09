@@ -17,7 +17,6 @@ public class AgentMain extends Thread implements Serializable
 	private static final long serialVersionUID = 1L;
 	public TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles;
 	public TreeMap<Integer,FileData> agentLockList;
-	public TreeMap<Integer,FileData> nodeReplFiles;
 	
 	NodeData nodeData1;
 	NodeData failedNodeData;
