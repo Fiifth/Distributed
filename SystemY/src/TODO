@@ -1,7 +1,6 @@
 
 
 4) recoveryAgent
-	*stuur multicast met nodeID,nextNode,PrevNode
 	*start agent
 		*laat bij iedereen local files afgaan en check of replowner falende node is
 			if true: file.refreshReplicateOwner -> sendQueue (zie FileDetection)

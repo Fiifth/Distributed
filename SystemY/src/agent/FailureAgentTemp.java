@@ -45,7 +45,9 @@ public class FailureAgentTemp extends Thread implements Serializable
 		}
 		else
 		{
+			//check if local owners equals failing node id, if so remove owner from owners list
 			checkReplicationFiles();
+			checkReplicationOwnerOfLocalFiles();
 		}
 	}
 	public void checkReplicationFiles(){
@@ -72,6 +74,21 @@ public class FailureAgentTemp extends Thread implements Serializable
 				  }
 			  }
 			  
+		}
+	}
+	
+	public void checkReplicationOwnerOfLocalFiles(){
+		TreeMap<Integer,FileData> nodeLocalFiles = nodeData1.localFiles;
+		for(Map.Entry<Integer,FileData> entry : nodeLocalFiles.entrySet())
+		{
+			Integer key = entry.getKey();
+			FileData tempFD = entry.getValue();
+			if(tempFD.getReplicateOwnerID() == failedNodeData.getMyNodeID())
+			{
+				tempFD.refreshReplicateOwner(nodeData1);
+				nodeData1.sendQueue.add(tempFD);
+				nodeData1.localFiles.put(key,tempFD);
 			}
+		}
 	}
 }
