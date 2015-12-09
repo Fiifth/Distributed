@@ -2,8 +2,7 @@
 
 4) recoveryAgent
 	*start agent
-		*laat bij iedereen local files afgaan en check of replowner falende node is
-			if true: file.refreshReplicateOwner -> sendQueue (zie FileDetection)
+	
 	*stop agent als we de agent object terug krijgen
 	
 	
