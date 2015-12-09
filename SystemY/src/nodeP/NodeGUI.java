@@ -344,8 +344,6 @@ public class NodeGUI {
         {
         	listModel.addElement(s);
         }
-        
-
 		System.out.println("all files: " + allFileNames);
         displayAllList = new JList<>(listModel);
         JScrollPane allfile = new JScrollPane(displayAllList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
