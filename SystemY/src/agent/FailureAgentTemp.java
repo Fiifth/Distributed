@@ -16,6 +16,7 @@ public class FailureAgentTemp extends Thread implements Serializable
 	private static final long serialVersionUID = 1L;
 	public TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles;
 	public TreeMap<Integer,FileData> agentLockList;
+	public TreeMap<Integer,FileData> nodeReplFiles;
 	
 	NodeData nodeData1;
 	NodeData failedNodeData;
@@ -43,6 +44,12 @@ public class FailureAgentTemp extends Thread implements Serializable
 		}
 	}
 	public void checkReplicationFiles(){
-		
+		nodeReplFiles = nodeData1.replFiles;
+		for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) {
+			  String key = entry.getKey();
+			  Integer value = entry.getValue();
+
+			  System.out.println(key + " => " + value);
+			}
 	}
 }
