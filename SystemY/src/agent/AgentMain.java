@@ -68,10 +68,12 @@ public class AgentMain extends Thread implements Serializable
 					if(!(tempMyFilesOnNode.containsKey(key)))
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
+						nodeData1.setChanged(true);
 					}
 					else if (!tempMyFilesOnNode.get(key).getLocalOwners().equals(nodeData1.replFiles.get(key).getLocalOwners()))
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
+						nodeData1.setChanged(true);
 					}
 				}
 				TreeMap<Integer,FileData> tempMyFilesOnNode2=new TreeMap<Integer,FileData>();
@@ -81,6 +83,7 @@ public class AgentMain extends Thread implements Serializable
 					if(!(nodeData1.replFiles.containsKey(key)))
 					{
 						tempMyFilesOnNode.remove(key);
+						nodeData1.setChanged(true);
 					}
 				}
 				allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
@@ -89,12 +92,6 @@ public class AgentMain extends Thread implements Serializable
 		}
 		else
 			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
-	if (temp==allAgentNetworkFiles)	
-		{
-		nodeData1.setChanged(false);
-		}
-	else
-		nodeData1.setChanged(true);
 	}
 	
 
