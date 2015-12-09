@@ -27,6 +27,7 @@ public class NodeData implements Serializable {
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
 	private volatile boolean sending;
+	private volatile boolean changed;
 	private volatile String bind;
 	private volatile int numberOfNodesStart;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
@@ -135,6 +136,12 @@ public class NodeData implements Serializable {
 	}
 	public void setSending(boolean sending) {
 		this.sending = sending;
+	}
+	public boolean isChanged() {
+		return changed;
+	}
+	public void setChanged(boolean changed) {
+		this.changed = changed;
 	}
 	public int getNumberOfNodesStart() {
 		return numberOfNodesStart;
