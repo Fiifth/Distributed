@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -23,7 +24,7 @@ public class NodeGUI {
 	public JTextField textField;
 	public String nodenaam;
 	public StartNode node1;
-	public JList<Object> displayAllList;
+	public JList<String> displayAllList;
 
 	
 	public NodeGUI(){
@@ -56,7 +57,7 @@ public class NodeGUI {
         
         nodeframe = new JFrame();
 		nodeframe.getContentPane().setForeground(Color.BLACK);
-		nodeframe.setResizable(true);
+		nodeframe.setResizable(false);
 		nodeframe.getContentPane().setBackground(Color.WHITE);
 		nodeframe.setBackground(Color.WHITE);
 		nodeframe.setBounds(20, 20, 700, 500);
@@ -268,7 +269,7 @@ public class NodeGUI {
         	            			node1.nodedata1.setChanged(false);
         	            		}
         	            		try {
-									Thread.sleep(1000);
+									Thread.sleep(3000);
 								} catch (InterruptedException e) {}
         	            	}
         	            }
@@ -312,10 +313,15 @@ public class NodeGUI {
         		localFileNames.add(value.getFileName());
         	}
         }
-        
-        JList<Object> displayList = new JList<>(localFileNames.toArray());
+        DefaultListModel<String> listModelOwn = new DefaultListModel<String>();
+        for (String s : localFileNames)
+        {
+        	listModelOwn.addElement(s);
+        }
+
+		System.out.println("own files: "+ localFileNames);
+        JList<String> displayList = new JList<>(listModelOwn);
         JScrollPane ownfile = new JScrollPane(displayList);
-        ownfile.setPreferredSize(null);
         ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(ownfile);
@@ -333,9 +339,17 @@ public class NodeGUI {
 	        	}
 	        }
         }
+        DefaultListModel<String> listModel = new DefaultListModel<String>();
+        for (String s : allFileNames)
+        {
+        	listModel.addElement(s);
+        }
         
-        displayAllList = new JList<>(allFileNames.toArray());
-        JScrollPane allfile = new JScrollPane(displayAllList);
+
+		System.out.println("all files: " + allFileNames);
+        displayAllList = new JList<>(listModel);
+        JScrollPane allfile = new JScrollPane(displayAllList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(allfile);
