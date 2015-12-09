@@ -46,8 +46,8 @@ public class FailureAgentTemp extends Thread implements Serializable
 	public void checkReplicationFiles(){
 		nodeReplFiles = nodeData1.replFiles;
 		for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) {
-			  String key = entry.getKey();
-			  Integer value = entry.getValue();
+			  Integer key = entry.getKey();
+			  FileData value = entry.getValue();
 
 			  System.out.println(key + " => " + value);
 			}
