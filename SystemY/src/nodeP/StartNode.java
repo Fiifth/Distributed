@@ -74,7 +74,7 @@ public class StartNode
 			{
 				TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
 				TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
-				AgentMain fileAgent = new AgentMain(true, initTree,agentLockList);
+				AgentMain fileAgent = new AgentMain(true, initTree,agentLockList, null);
 				fileAgent.setNodeData1(nodedata1);
 				fileAgent.run();
 				

@@ -19,13 +19,14 @@ public class AgentMain extends Thread implements Serializable
 	public TreeMap<Integer,FileData> agentLockList;
 	
 	NodeData nodeData1;
-	
+	NodeData failedNodeData;
 	boolean typeOfAgent;
-	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> agentLockList)
+	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> agentLockList, NodeData failedNodeData)
 	{
 		this.typeOfAgent = typeOfAgent;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
 		this.agentLockList=agentLockList;
+		this.failedNodeData = failedNodeData;
 	}
 	public void setNodeData1(NodeData nodeData1) 
 	{

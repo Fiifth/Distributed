@@ -13,7 +13,7 @@ public class Fail{
 	NodeData nodeData1;
 	NodeData failedNodeData;
 	RMI rmi=new RMI();
-	AgentMain agent = new AgentMain(false,null,null);
+	AgentMain agent = new AgentMain(false,null,null,failedNodeData);
 	public Fail(NodeData nodeData1, NodeData failedNodeData) {
 		this.nodeData1 = nodeData1;
 		this.failedNodeData = failedNodeData;
