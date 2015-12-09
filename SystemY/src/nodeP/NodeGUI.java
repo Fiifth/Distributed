@@ -36,7 +36,7 @@ public class NodeGUI {
 		JFrame nameframe = new JFrame();
 		nameframe.setTitle("Node startup");
 		nameframe.getContentPane().setForeground(Color.BLACK);
-		nameframe.setResizable(true);
+		nameframe.setResizable(false);
 		nameframe.getContentPane().setBackground(Color.WHITE);
 		nameframe.setBackground(Color.WHITE);
 		nameframe.setBounds(20, 20, 300, 160);
@@ -100,9 +100,6 @@ public class NodeGUI {
         			//created node
         			nameframe.setVisible(false);
         			nodeframe.setTitle("Node " + nodenaam);
-        			
-        			
-        			
         			
         			JTextPane Nodenaam = new JTextPane();
         			Nodenaam.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -258,21 +255,25 @@ public class NodeGUI {
                                     //nodeframe.setVisible(false);
                                     }
                     });
-        	        
-        	        
+                    
+        	        generateLists();
         			
         			new Thread() {
         	            public void run() {
         	            	while(true){
-        	            		generateLists();
-            	            	try {
-    								sleep(1000);
-    							} catch (InterruptedException e) {}
+        	            		if(node1.nodedata1.isChanged())
+        	            		{
+        	            			System.out.println("changed list");
+        	            			generateLists();
+        	            			node1.nodedata1.setChanged(false);
+        	            		}
+        	            		try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {}
         	            	}
         	            }
         	        }.start();
-        	        
-
+        	       
         			nodeframe.setVisible(true);
 
         		}
@@ -314,6 +315,7 @@ public class NodeGUI {
         
         JList<Object> displayList = new JList<>(localFileNames.toArray());
         JScrollPane ownfile = new JScrollPane(displayList);
+        ownfile.setPreferredSize(null);
         ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(ownfile);
