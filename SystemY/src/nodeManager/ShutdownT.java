@@ -33,6 +33,12 @@ public class ShutdownT extends Thread
 		boolean stay = true;
 		while(stay)
 		{
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			//true if node wants to quit
 			if(nodedata1.getToQuit())
 				{
