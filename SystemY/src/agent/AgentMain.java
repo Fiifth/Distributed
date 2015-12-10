@@ -41,7 +41,7 @@ public class AgentMain extends Thread implements Serializable
 			//Check for lock requests before updating local node's file list
 			attemptToLock();
 			//Iterate local locks and add to send list
-			checkAgentLocks();
+			checkAgentLockAction();
 			//Update local node's file list
 			updateLocalAllFiles();	
 		}
@@ -116,11 +116,14 @@ public class AgentMain extends Thread implements Serializable
 						if(copyLockList.get(key).equals("dl"))
 						{
 							//make a download list
+							//add to receive queue
+							//lokal owner,(filename,partID,size,desitnation)
 							System.out.println(entry.getValue().get(key).getFileName());
 						}
 						else if (copyLockList.get(key).equals("rm"))
 						{
-							//remove the file in list
+							//make remove list
+							//(lokal owner,fileID)
 						}
 					}
 				}
@@ -128,20 +131,16 @@ public class AgentMain extends Thread implements Serializable
 		}
 	}
 	
-	public void checkAgentLocks()
+	public void checkAgentLockAction()
 	{
-		TreeMap<Integer,FileData> lockedFiles=agentLockList;
-		//TODO verzend als je een lokale eigenaar bent en zet iets op verzonden zodat de volgende dit ook niet verzend
-		//check of ik een file gelockt heb-->heb ik het ontvangen-->verwijder uit locklist
-		for (FileData value : lockedFiles.values())
-		{
-			if(value.getReplicateOwnerID()==nodeData1.getMyNodeID())
-			{
-				nodeData1.sendQueue.add(value);
-				agentLockList.remove(Math.abs(value.getFileName().hashCode()%32768));
-			}
-			
-		}
+		//TODO iterate download list
+			//if key==my id
+				//add to sendqueue
+		//TODO iterate remove list
+			//if key==my id
+				//lookup fileID in local list -->remove
+				//remove file
+				
 	}
 	
 	public void updateLocalAllFiles()

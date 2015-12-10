@@ -117,7 +117,7 @@ public class FileDetectionT extends Thread{
 		{
 			FileData file1=new FileData();
 			file1.setNewFileData(fileName, nodedata1);
-			file1.setDestinationFolderReplication(true);
+			file1.setDestinationFolder("rep");
 			file1.addOwner(nodedata1.getMyNodeID());
 			file1.setSourceIP(file1.getLocalOwnerIP());
 			file1.setSourceID(nodedata1.getMyNodeID());

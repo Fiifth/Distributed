@@ -47,30 +47,34 @@ public class Sender extends Thread
 				nodedata1.setSending(true);
 			} catch (InterruptedException e1) {return;}
 
-			if (file1.isOwner(nodedata1.getMyNodeID())&&file1.isDestinationFolderReplication()==true&&file1.getDestinationID()==nodedata1.getMyNodeID())
+			if (file1.isOwner(nodedata1.getMyNodeID())&&file1.getDestinationFolder().equals("rep")&&file1.getDestinationID()==nodedata1.getMyNodeID())
 			{
 				copyFileLocally(nodedata1,file1);	
 			}
-			else
+			else if (file1.getDestinationFolder().equals("rep"))
 			{
 				boolean filePresent;
+				file1.setSourceIP(nodedata1.getMyIP());
+				file1.setSourceID(nodedata1.getMyNodeID());
 				try 
 				{
 					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
-					file1.setSourceIP(nodedata1.getMyIP());
-					file1.setSourceID(nodedata1.getMyNodeID());
-					
 					filePresent=recInt.receiveThisFile(file1);
 				} catch (Exception e) {System.out.println("failed connection to RMI of the node"); filePresent=true;}
+				
 				if (!filePresent)
 				{
-					sendFile(file1); //TODO if return false --> start failure
+					sendFile(file1);
 					if (file1.getRemoveAfterSend()) 
 					{
 						Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
 						try {Files.delete(source);} catch (IOException e) {}
 					}
 				}
+			}
+			else if (file1.getDestinationFolder().equals("lok"))
+			{
+				//TODO get part file and add to sendlist
 			}
 			nodedata1.setSending(false);
 		}
@@ -85,6 +89,7 @@ public class Sender extends Thread
         BufferedInputStream bis=null;
         try 
         {
+        	System.out.println("SENDING");
             welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
             connectionSocket = welcomeSocket.accept();
             outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());

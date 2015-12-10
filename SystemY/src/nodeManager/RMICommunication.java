@@ -32,7 +32,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public boolean receiveThisFile(FileData file1) throws RemoteException 
 	{
 		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
-		if (file1.isDestinationFolderReplication()&&nodedata1.replFiles.containsKey(fileNameHash))
+		if (file1.getDestinationFolder().equals("rep")&&nodedata1.replFiles.containsKey(fileNameHash))
 		{
 			FileData temp=nodedata1.replFiles.get(fileNameHash);
 			temp.addOwner(file1.getSourceID());

@@ -21,7 +21,7 @@ public class FileData implements Serializable
 	private volatile boolean removeAfterSend;
 	private volatile int destinationID;
 	private volatile String destinationIP;
-	private volatile boolean destinationFolderReplication;
+	private volatile String destinationFolder;
 	private volatile boolean lock;
 	
 	public ArrayList<Integer> getLocalOwners()
@@ -111,12 +111,12 @@ public class FileData implements Serializable
 		this.destinationIP = destinationIP;
 	}
 
-	public boolean isDestinationFolderReplication() {
-		return destinationFolderReplication;
+	public String getDestinationFolder() {
+		return destinationFolder;
 	}
 
-	public void setDestinationFolderReplication(boolean destinationFolderReplication) {
-		this.destinationFolderReplication = destinationFolderReplication;
+	public void setDestinationFolder(String destinationFolder) {
+		this.destinationFolder = destinationFolder;
 	}
 
 	public boolean isLock() {
@@ -137,7 +137,7 @@ public class FileData implements Serializable
 		replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
 		destinationID = replicateOwnerID;
 		destinationIP = replicateOwnerIP;
-		setDestinationFolderReplication(true);
+		setDestinationFolder("rep");
 		 return !(replicateOwnerID==nodedata1.getMyNodeID());	
 	}
 }

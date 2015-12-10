@@ -31,7 +31,7 @@ public class Receiver extends Thread
 	public void receiveFile(FileData file1, NodeData nodedata1) 
 	{
 		String DestinationFolder;
-		if(file1.isDestinationFolderReplication()) 
+		if(file1.getDestinationFolder().equals("rep")) 
 		{
 			
 			DestinationFolder=nodedata1.getMyReplFolder();
@@ -44,10 +44,14 @@ public class Receiver extends Thread
 		       		
 		       } 
 		}
-		else DestinationFolder=nodedata1.getMyLocalFolder();
+		else if(file1.getDestinationFolder().equals("lok")) 
+			DestinationFolder=nodedata1.getMyLocalFolder();
+		else
+			DestinationFolder=nodedata1.getMyReplFolder(); //TODO destination part
 		
         int serverPort = file1.getSourceID()+32768;
-        String fileOutput = DestinationFolder+"\\"+file1.getFileName();      
-        tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); //TODO if return false --> start failure
+        String fileOutput = DestinationFolder+"\\"+file1.getFileName(); 
+        System.out.println("recieving");
+        tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
     }
 }
