@@ -24,7 +24,14 @@ public class NodeGUI {
 	public JTextField textField;
 	public String nodenaam;
 	public StartNode node1;
-	public JList<String> displayAllList;
+	public ArrayList<String> localFileNames = new ArrayList<String>();
+	public ArrayList<String> allFileNames = new ArrayList<String>();
+	public TreeMap<Integer, FileData> tempLocalFiles;
+	public TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles;
+	public static JList<Object> displayAllList;
+	public static JList<Object> displayList;
+	
+	
 
 	
 	public NodeGUI(){
@@ -253,11 +260,12 @@ public class NodeGUI {
                     btnQuit.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                     node1.nodedata1.setToQuit(true);
-                                    //nodeframe.setVisible(false);
                                     }
-                    });
+                    });                   
                     
-        	        generateLists();
+                    generateLists();
+                    
+        	        nodeframe.setVisible(true);
         			
         			new Thread() {
         	            public void run() {
@@ -274,9 +282,6 @@ public class NodeGUI {
         	            	}
         	            }
         	        }.start();
-        	       
-        			nodeframe.setVisible(true);
-
         		}
         		
         		else
@@ -297,15 +302,10 @@ public class NodeGUI {
 	
 	public void generateLists(){
 		
-		JTextPane test = new JTextPane();
-        test.setFont(new Font("Tahoma", Font.BOLD, 13));
-        test.setText("All Files:");
-        test.setBounds(230, 30, 100, 20);
-        nodeframe.getContentPane().add(test); 
+		tempLocalFiles = node1.nodedata1.localFiles;
+        tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
 		
-		TreeMap<Integer, FileData> tempLocalFiles = node1.nodedata1.localFiles;
-		ArrayList<String> localFileNames = new ArrayList<String>();
-		
+		//update local files				
         if(tempLocalFiles.size() != 0)
         {
         	for (FileData value : tempLocalFiles.values())
@@ -313,22 +313,14 @@ public class NodeGUI {
         		localFileNames.add(value.getFileName());
         	}
         }
-        DefaultListModel<String> listModelOwn = new DefaultListModel<String>();
-        for (String s : localFileNames)
-        {
-        	listModelOwn.addElement(s);
-        }
-
-		System.out.println("own files: "+ localFileNames);
-        JList<String> displayList = new JList<>(listModelOwn);
+        String[] OwnNamesArray = localFileNames.toArray(new String[localFileNames.size()]);
+        displayList = new JList<>(OwnNamesArray);
         JScrollPane ownfile = new JScrollPane(displayList);
         ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(ownfile);
         
-        
-        TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
-        ArrayList<String> allFileNames = new ArrayList<String>();
+        //update all files        
         if (tempAllNetworkFiles.size() > 0)
         {
 	        for (TreeMap<Integer, FileData> value : tempAllNetworkFiles.values())
@@ -339,17 +331,12 @@ public class NodeGUI {
 	        	}
 	        }
         }
-        DefaultListModel<String> listModel = new DefaultListModel<String>();
-        for (String s : allFileNames)
-        {
-        	listModel.addElement(s);
-        }
-		System.out.println("all files: " + allFileNames);
-        displayAllList = new JList<>(listModel);
-        JScrollPane allfile = new JScrollPane(displayAllList,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        String[] AllNamesArray = allFileNames.toArray(new String[allFileNames.size()]);
+        displayAllList = new JList<>(AllNamesArray);
+        JScrollPane allfile = new JScrollPane(displayAllList);
         allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(allfile);
+        
 	}	
 }
