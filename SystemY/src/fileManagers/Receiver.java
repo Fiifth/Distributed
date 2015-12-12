@@ -51,7 +51,6 @@ public class Receiver extends Thread
 		
         int serverPort = file1.getSourceID()+32768;
         String fileOutput = DestinationFolder+"\\"+file1.getFileName(); 
-        System.out.println("recieving");
         tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
     }
 }

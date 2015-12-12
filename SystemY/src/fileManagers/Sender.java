@@ -89,7 +89,6 @@ public class Sender extends Thread
         BufferedInputStream bis=null;
         try 
         {
-        	System.out.println("SENDING");
             welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
             connectionSocket = welcomeSocket.accept();
             outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());

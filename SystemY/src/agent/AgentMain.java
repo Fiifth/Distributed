@@ -10,22 +10,21 @@ import fileManagers.FileData;
 
 public class AgentMain extends Thread implements Serializable
 {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles;
-	public TreeMap<Integer,FileData> agentLockList;
+	public TreeMap<Integer,FileData> downloadMap; //local owner,filedata
+	public TreeMap<Integer,Integer> removeMap; //local owner,fileID
+	public boolean networkFilesChanged;
+	
 	
 	NodeData nodeData1;
 	NodeData failedNodeData;
 	boolean typeOfAgent;
-	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> agentLockList, NodeData failedNodeData)
+	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> downloadMap, NodeData failedNodeData)
 	{
 		this.typeOfAgent = typeOfAgent;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
-		this.agentLockList=agentLockList;
+		this.downloadMap=downloadMap;
 		this.failedNodeData = failedNodeData;
 	}
 	public void setNodeData1(NodeData nodeData1) 
@@ -56,6 +55,8 @@ public class AgentMain extends Thread implements Serializable
 	
 		TreeMap<Integer, TreeMap<Integer,FileData>> temp=new TreeMap<Integer, TreeMap<Integer,FileData>>();
 		temp.putAll(allAgentNetworkFiles);
+		nodeData1.setChanged(networkFilesChanged);
+		networkFilesChanged=false;
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{
 			if(!(allAgentNetworkFiles.get(nodeData1.getMyNodeID()) ==nodeData1.replFiles))
@@ -68,12 +69,12 @@ public class AgentMain extends Thread implements Serializable
 					if(!(tempMyFilesOnNode.containsKey(key)))
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
-						nodeData1.setChanged(true);
+						networkFilesChanged=true;
 					}
 					else if (!tempMyFilesOnNode.get(key).getLocalOwners().equals(nodeData1.replFiles.get(key).getLocalOwners()))
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
-						nodeData1.setChanged(true);
+						networkFilesChanged=true;
 					}
 				}
 				TreeMap<Integer,FileData> tempMyFilesOnNode2=new TreeMap<Integer,FileData>();
@@ -83,11 +84,15 @@ public class AgentMain extends Thread implements Serializable
 					if(!(nodeData1.replFiles.containsKey(key)))
 					{
 						tempMyFilesOnNode.remove(key);
-						nodeData1.setChanged(true);
+						networkFilesChanged=true;
 					}
 				}
-				allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
-				allAgentNetworkFiles.put(nodeData1.getMyNodeID(),tempMyFilesOnNode);
+				if (networkFilesChanged=true)
+				{
+					allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
+					allAgentNetworkFiles.put(nodeData1.getMyNodeID(),tempMyFilesOnNode);
+					nodeData1.setChanged(networkFilesChanged);
+				}
 			}
 		}
 		else
@@ -117,7 +122,10 @@ public class AgentMain extends Thread implements Serializable
 						{
 							//make a download list
 							//add to receive queue
-							//lokal owner,(filename,partID,size,desitnation)
+							//local list that starts merging when empty
+								//fileID,list of parts
+								//remove parts when receiving
+							//local owner,(nodedata)
 							System.out.println(entry.getValue().get(key).getFileName());
 						}
 						else if (copyLockList.get(key).equals("rm"))

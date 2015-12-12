@@ -58,7 +58,12 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_MODIFY)
 				{
-					addFile(fileName.toString());
+					try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}	
+					File varTmpDir = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
+					if ((varTmpDir.exists()))
+					{
+					addFile(fileName.toString(),varTmpDir.length());
+					}
 				}
 				else if(kind == ENTRY_DELETE)
 				{
@@ -98,7 +103,7 @@ public class FileDetectionT extends Thread{
 			{
 				if(file.isFile())
 				{
-					addFile(file.getName());
+					addFile(file.getName(),file.length());
 				}
 			}
 		}
@@ -110,7 +115,7 @@ public class FileDetectionT extends Thread{
 			dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 		} catch (IOException e) {}
 	}
-	public void addFile(String fileName)
+	public void addFile(String fileName,long size)
 	{
 		int fileNameHash=Math.abs(fileName.hashCode()%32768);
 		if (!nodedata1.localFiles.containsKey(fileNameHash))
@@ -122,6 +127,7 @@ public class FileDetectionT extends Thread{
 			file1.setSourceIP(file1.getLocalOwnerIP());
 			file1.setSourceID(nodedata1.getMyNodeID());
 			file1.refreshReplicateOwner(nodedata1);
+			file1.setSize(size);
 			nodedata1.sendQueue.add(file1);
 			nodedata1.localFiles.put(fileNameHash,file1);
 		}		

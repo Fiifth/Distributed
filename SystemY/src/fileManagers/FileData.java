@@ -22,6 +22,8 @@ public class FileData implements Serializable
 	private volatile int destinationID;
 	private volatile String destinationIP;
 	private volatile String destinationFolder;
+	private volatile long size;
+	private volatile int partID;
 	private volatile boolean lock;
 	
 	public ArrayList<Integer> getLocalOwners()
@@ -124,6 +126,18 @@ public class FileData implements Serializable
 	}
 	public void setLock(boolean lock) {
 		this.lock = lock;
+	}
+	public long getSize() {
+		return size;
+	}
+	public void setSize(long size) {
+		this.size = size;
+	}
+	public int getPartID() {
+		return partID;
+	}
+	public void setPartID(int partID) {
+		this.partID = partID;
 	}
 	public boolean refreshReplicateOwner(NodeData nodedata1)
 	{
