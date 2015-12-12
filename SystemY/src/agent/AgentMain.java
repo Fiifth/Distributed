@@ -2,6 +2,7 @@ package agent;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -70,6 +71,7 @@ public class AgentMain extends Thread implements Serializable
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
 						networkFilesChanged=true;
+						System.out.println("this");
 					}
 					else if (!tempMyFilesOnNode.get(key).getLocalOwners().equals(nodeData1.replFiles.get(key).getLocalOwners()))
 					{
@@ -87,12 +89,14 @@ public class AgentMain extends Thread implements Serializable
 						networkFilesChanged=true;
 					}
 				}
-				if (networkFilesChanged=true)
+				
+				if (networkFilesChanged==true)
 				{
 					allAgentNetworkFiles.remove(nodeData1.getMyNodeID());
 					allAgentNetworkFiles.put(nodeData1.getMyNodeID(),tempMyFilesOnNode);
 					nodeData1.setChanged(networkFilesChanged);
 				}
+				nodeData1.setChanged(networkFilesChanged);
 			}
 		}
 		else
@@ -116,10 +120,20 @@ public class AgentMain extends Thread implements Serializable
 					//file found
 					if (!entry.getValue().get(key).isLock())
 					{
-						//not locked
-						//lockFile()
+						allAgentNetworkFiles.get(entry.getKey()).get(key).setLock(true);
 						if(copyLockList.get(key).equals("dl"))
 						{
+							int partID=1;
+							ArrayList<Integer> parts=new ArrayList<Integer>();
+							for(int temp:entry.getValue().get(key).getLocalOwners())
+							{
+								parts.add(partID);
+								entry.getValue().get(key).setPartID(partID);
+								downloadMap.put(temp, entry.getValue().get(key));
+								nodeData1.receiveQueue.add(entry.getValue().get(key));
+								partID++;
+							}
+							nodeData1.partMap.put(key, parts);
 							//make a download list
 							//add to receive queue
 							//local list that starts merging when empty

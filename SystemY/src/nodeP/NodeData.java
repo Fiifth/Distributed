@@ -2,6 +2,7 @@ package nodeP;
 
 import java.io.Serializable;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -37,6 +38,7 @@ public class NodeData implements Serializable {
 	public volatile TreeMap<Integer,String> lockRequestList = new TreeMap<Integer,String>();
 	public volatile TreeMap<Integer, FileData> localFiles = new TreeMap<Integer,FileData>();
 	public volatile TreeMap<Integer, FileData> replFiles = new TreeMap<Integer,FileData>();
+	public volatile TreeMap<Integer,ArrayList<Integer>> partMap=new TreeMap<Integer,ArrayList<Integer>>();//map(fileID,Arraylist(nodeID))
 	
 	
 	
