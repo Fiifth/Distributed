@@ -28,7 +28,7 @@ public class NodeData implements Serializable {
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
 	private volatile boolean sending;
-	private volatile boolean changed;
+	private volatile boolean changed = true;
 	private volatile String bind;
 	private volatile int numberOfNodesStart;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);

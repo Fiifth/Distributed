@@ -130,6 +130,7 @@ public class FileDetectionT extends Thread{
 			file1.setSize(size);
 			nodedata1.sendQueue.add(file1);
 			nodedata1.localFiles.put(fileNameHash,file1);
+			nodedata1.setChanged(true);
 		}		
 	}
 

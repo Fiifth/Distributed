@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -24,20 +23,14 @@ public class NodeGUI {
 	public JTextField textField;
 	public String nodenaam;
 	public StartNode node1;
-	public ArrayList<String> localFileNames = new ArrayList<String>();
-	public ArrayList<String> allFileNames = new ArrayList<String>();
 	public TreeMap<Integer, FileData> tempLocalFiles;
 	public TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles;
-	public static JList<Object> displayAllList;
-	public static JList<Object> displayList;
-	
-	
-
+	public DefaultListModel<String> filelist = new DefaultListModel<String>();
+	public DefaultListModel<String> allfilelist = new DefaultListModel<String>();
 	
 	public NodeGUI(){
 		
 		//TODO download all, remove all
-		//TODO close download, rm window when button pressed
 		//TODO scrollfix?
 		//TODO functies in guifunctions.java
 		
@@ -157,6 +150,7 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnaddFile);
                     btnaddFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
+                            		System.out.println("lijstenfixke knop");
                                     generateLists();                                       
                             }
                     });
@@ -194,6 +188,7 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										String filetorm = filename.getText();
 										node1.nodedata1.lockRequestList.put(Math.abs(filetorm.hashCode()%32768), "rm");
+										rmframe.setVisible(false);
 									}
                                 
                                 }); 
@@ -235,6 +230,7 @@ public class NodeGUI {
 										String filetodl = dlfilename.getText();	
 										//TODO in functie (guifunctions)
 										node1.nodedata1.lockRequestList.put(Math.abs(filetodl.hashCode()%32768), "dl");
+										dlframe.setVisible(false);
 									}
                                 
                                 }); 
@@ -263,6 +259,7 @@ public class NodeGUI {
                                     }
                     });                   
                     
+                    System.out.println("Eerste keer lijsten fixen");
                     generateLists();
                     
         	        nodeframe.setVisible(true);
@@ -305,34 +302,34 @@ public class NodeGUI {
 		tempLocalFiles = node1.nodedata1.localFiles;
         tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
 		
-		//update local files				
+		//update local files
+        filelist.clear();
         if(tempLocalFiles.size() != 0)
         {
         	for (FileData value : tempLocalFiles.values())
         	{
-        		localFileNames.add(value.getFileName());
+        		filelist.addElement(value.getFileName());
         	}
-        }
-        String[] OwnNamesArray = localFileNames.toArray(new String[localFileNames.size()]);
-        displayList = new JList<>(OwnNamesArray);
+        }        
+        JList<String> displayList = new JList<String>(filelist);
         JScrollPane ownfile = new JScrollPane(displayList);
         ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(ownfile);
         
-        //update all files        
+        //update all files  
+        allfilelist.clear();
         if (tempAllNetworkFiles.size() > 0)
         {
 	        for (TreeMap<Integer, FileData> value : tempAllNetworkFiles.values())
 	        {
 	        	for (FileData temp : value.values())
 	        	{
-	        		allFileNames.add(temp.getFileName());
+	        		allfilelist.addElement(temp.getFileName());
 	        	}
 	        }
         }
-        String[] AllNamesArray = allFileNames.toArray(new String[allFileNames.size()]);
-        displayAllList = new JList<>(AllNamesArray);
+        JList<String> displayAllList = new JList<String>(allfilelist);
         JScrollPane allfile = new JScrollPane(displayAllList);
         allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);

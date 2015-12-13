@@ -71,7 +71,6 @@ public class AgentMain extends Thread implements Serializable
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
 						networkFilesChanged=true;
-						System.out.println("this");
 					}
 					else if (!tempMyFilesOnNode.get(key).getLocalOwners().equals(nodeData1.replFiles.get(key).getLocalOwners()))
 					{
