@@ -92,7 +92,7 @@ public class NodeGUI {
         			errortext.setText("Name already exists, try another one");
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
-        	        errortext.setBounds(10, 120, 290, 20);
+        	        errortext.setBounds(10, 100, 290, 20);
         	        errortext.setColumns(10);        			
         	        nameframe.getContentPane().add(errortext);
         		}
@@ -288,7 +288,7 @@ public class NodeGUI {
         			errortext.setText("No nameserver found");
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
-        	        errortext.setBounds(10, 120, 290, 20);
+        	        errortext.setBounds(10, 100, 290, 20);
         	        errortext.setColumns(10);        			
         	        nameframe.getContentPane().add(errortext);
         		}
