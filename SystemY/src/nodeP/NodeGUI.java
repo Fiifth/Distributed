@@ -259,10 +259,7 @@ public class NodeGUI {
                                     }
                     });                   
                     
-                    System.out.println("Eerste keer lijsten fixen");
-                    generateLists();
-                    
-        	        nodeframe.setVisible(true);
+                    nodeframe.setVisible(true);
         			
         			new Thread() {
         	            public void run() {
