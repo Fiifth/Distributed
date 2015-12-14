@@ -42,6 +42,12 @@ public class NodeData implements Serializable {
 	
 	
 	
+	public  void remove(Integer arg0, Integer arg1) 
+	{
+		//TODO remove part from the arraylist
+		//check if it is empty
+		//if empty() remove and start merge
+	}
 	public String getNodeName() {
 		return nodeName;
 	}

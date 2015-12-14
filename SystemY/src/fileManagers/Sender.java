@@ -74,7 +74,12 @@ public class Sender extends Thread
 			}
 			else if (file1.getDestinationFolder().equals("lok"))
 			{
-				//TODO get part file and add to sendlist
+				//TODO size<length localOwners.size download to local folder
+			}
+			else if (file1.getDestinationFolder().equals("part"))
+			{
+				//TODO create part file
+				//TODO send this part file
 			}
 			nodedata1.setSending(false);
 		}
