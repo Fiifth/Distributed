@@ -27,11 +27,12 @@ public class NodeGUI {
 	public TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles;
 	public DefaultListModel<String> filelist = new DefaultListModel<String>();
 	public DefaultListModel<String> allfilelist = new DefaultListModel<String>();
+	public JList<String> displayAllList;
+	public JList<String> displayList;
 	
 	public NodeGUI(){
 		
 		//TODO download all, remove all
-		//TODO scrollfix?
 		//TODO functies in guifunctions.java
 		
 		JFrame nameframe = new JFrame();
@@ -201,8 +202,12 @@ public class NodeGUI {
                     btnDLFile.setBounds(500, 150, 150, 30);
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                            	JFrame dlframe = new JFrame();
+                            public void actionPerformed(ActionEvent e) {                            	
+                            	String filetodl = displayList.getSelectedValue();
+                            	System.out.println("file to dl: "+filetodl);
+								//TODO in functie (guifunctions)
+								//node1.nodedata1.lockRequestList.put(Math.abs(filetodl.hashCode()%32768), "dl");
+                            	/*JFrame dlframe = new JFrame();
                             	dlframe.setTitle("Download File");
                             	dlframe.getContentPane().setForeground(Color.BLACK);
                             	dlframe.setResizable(true);
@@ -234,7 +239,7 @@ public class NodeGUI {
 									}
                                 
                                 }); 
-                                dlframe.setVisible(true);
+                                dlframe.setVisible(true);*/
                             	
                             }
                     });
@@ -270,9 +275,6 @@ public class NodeGUI {
         	            			generateLists();
         	            			node1.nodedata1.setChanged(false);
         	            		}
-        	            		try {
-									Thread.sleep(3000);
-								} catch (InterruptedException e) {}
         	            	}
         	            }
         	        }.start();
@@ -308,7 +310,7 @@ public class NodeGUI {
         		filelist.addElement(value.getFileName());
         	}
         }        
-        JList<String> displayList = new JList<String>(filelist);
+        displayList = new JList<String>(filelist);
         JScrollPane ownfile = new JScrollPane(displayList);
         ownfile.setBounds(5, 50, 220, 410);
         ownfile.setBackground(Color.WHITE);
@@ -326,7 +328,7 @@ public class NodeGUI {
 	        	}
 	        }
         }
-        JList<String> displayAllList = new JList<String>(allfilelist);
+        displayAllList = new JList<String>(allfilelist);
         JScrollPane allfile = new JScrollPane(displayAllList);
         allfile.setBounds(230, 50, 220, 410);
         allfile.setBackground(Color.WHITE);
