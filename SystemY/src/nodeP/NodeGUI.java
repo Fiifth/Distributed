@@ -23,12 +23,13 @@ public class NodeGUI {
 	public JTextField textField;
 	public String nodenaam;
 	public StartNode node1;
+	public JButton btnDLFile;
 	public TreeMap<Integer, FileData> tempLocalFiles;
 	public TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles;
 	public DefaultListModel<String> filelist = new DefaultListModel<String>();
 	public DefaultListModel<String> allfilelist = new DefaultListModel<String>();
-	public JList<String> displayAllList;
-	public JList<String> displayList;
+	public volatile JList<String> displayAllList;
+	public volatile JList<String> displayList;
 	
 	public NodeGUI(){
 		
@@ -198,16 +199,14 @@ public class NodeGUI {
                             }
                     });
                    
-                    JButton btnDLFile = new JButton("Download File");
+                    btnDLFile = new JButton("Download File");
                     btnDLFile.setBounds(500, 150, 150, 30);
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {                            	
-                            	String filetodl = displayList.getSelectedValue();
-                            	System.out.println("file to dl: "+filetodl);
+							public void actionPerformed(ActionEvent e) {
 								//TODO in functie (guifunctions)
-								//node1.nodedata1.lockRequestList.put(Math.abs(filetodl.hashCode()%32768), "dl");
-                            	/*JFrame dlframe = new JFrame();
+								//TODO lijstje geven jlist selecteren brol
+                            	JFrame dlframe = new JFrame();
                             	dlframe.setTitle("Download File");
                             	dlframe.getContentPane().setForeground(Color.BLACK);
                             	dlframe.setResizable(true);
@@ -235,11 +234,12 @@ public class NodeGUI {
 										String filetodl = dlfilename.getText();	
 										//TODO in functie (guifunctions)
 										node1.nodedata1.lockRequestList.put(Math.abs(filetodl.hashCode()%32768), "dl");
+										System.out.println("file to download" + filetodl);
 										dlframe.setVisible(false);
 									}
                                 
                                 }); 
-                                dlframe.setVisible(true);*/
+                                dlframe.setVisible(true);
                             	
                             }
                     });
