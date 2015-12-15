@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import agent.AgentMain;
+import agent.Fail;
 import fileManagers.FileData;
 import networkFunctions.RMI;
 import nodeP.NodeData;
@@ -62,7 +63,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public boolean addOwner(FileData file1) throws RemoteException {
 		return false;
 	}
-	public void rmiAgentExecution(AgentMain fileAgent) throws RemoteException
+	public void rmiFileAgentExecution(AgentMain fileAgent) throws RemoteException
 	{
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	
 		if (nodedata1.getPrevNode()!=nodedata1.getMyNodeID())
@@ -76,9 +77,12 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	            	RMICommunicationInt recInt;
 					try {
 						recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getPrevNodeIP()+":"+nodedata1.getPrevNode()+"/RMICommunication");
-						recInt.rmiAgentExecution(fileAgent);
+						recInt.rmiFileAgentExecution(fileAgent);
 					} catch (MalformedURLException | RemoteException | NotBoundException e) {
 						// TODO Auto-generated catch block
+						Fail fail = new Fail();
+						int failedNodeID = nodedata1.getPrevNode();
+						fail.failureDetected(nodedata1, failedNodeID);
 						e.printStackTrace();
 					}
 	            }

@@ -1,7 +1,11 @@
 package agent;
 
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,14 +24,16 @@ public class AgentMain extends Thread implements Serializable
 	
 	
 	NodeData nodeData1;
-	NodeData failedNodeData;
+	int failedNodeID;
+	int startingNodeID;
 	boolean typeOfAgent;
-	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> downloadMap, NodeData failedNodeData)
+	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> downloadMap, int failedNodeID, int failStarterID)
 	{
 		this.typeOfAgent = typeOfAgent;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
 		this.downloadMap=downloadMap;
-		this.failedNodeData = failedNodeData;
+		this.failedNodeID = failedNodeID;
+		startingNodeID = failStarterID;
 	}
 	public void setNodeData1(NodeData nodeData1) 
 	{
@@ -48,10 +54,11 @@ public class AgentMain extends Thread implements Serializable
 		}
 		else
 		{
-			
+			//check if local owners equals failing node id, if so remove owner from owners list
+			checkReplicationFiles();
+			checkReplicationOwnerOfLocalFiles();
 		}
 	}
-
 	public void updateAgentNetworkFiles()
 	{
 	
@@ -100,8 +107,6 @@ public class AgentMain extends Thread implements Serializable
 		else
 			allAgentNetworkFiles.put(nodeData1.getMyNodeID(), nodeData1.replFiles);
 	}
-	
-
 	public void attemptToLock()
 	{
 		
@@ -151,7 +156,6 @@ public class AgentMain extends Thread implements Serializable
 			}
 		}
 	}
-	
 	public void checkAgentLockAction()
 	{
 		/*for(Entry<Integer, FileData> entry : downloadMap.entrySet()) 
@@ -166,7 +170,6 @@ public class AgentMain extends Thread implements Serializable
 				//lookup fileID in local list -->remove
 				//remove file	
 	}
-	
 	public void updateLocalAllFiles()
 	{
 		boolean changed=false;
@@ -187,5 +190,45 @@ public class AgentMain extends Thread implements Serializable
 			nodeData1.setChanged(true);
 		}
 	}
-	
+	public void checkReplicationFiles(){
+		TreeMap<Integer,FileData> nodeReplFiles = nodeData1.replFiles;
+		for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) 
+		{
+			  Integer key = entry.getKey();
+			  FileData tempFD = entry.getValue();
+			  ArrayList<Integer> localFileOwners = tempFD.getLocalOwners();
+			  for(int temp : localFileOwners)
+			  {
+				  if(temp == failedNodeID)
+				  {
+					  if(tempFD.removeOwner(temp))//returns true if no owners remain
+					  {//if no local owners remain remove file from replication lists
+						  nodeData1.replFiles.remove(key);
+						  Path source = Paths.get(tempFD.getFolderLocation()+"\\"+tempFD.getFileName());
+						  try {Files.delete(source);} catch (IOException e) {}
+					  }
+					  else
+					  {//if other owners exist update file in list
+						  nodeData1.replFiles.put(key,tempFD);
+					  }
+				  }
+			  }
+			  
+		}
+	}
+	public void checkReplicationOwnerOfLocalFiles(){
+		TreeMap<Integer,FileData> nodeLocalFiles = nodeData1.localFiles;
+		for(Map.Entry<Integer,FileData> entry : nodeLocalFiles.entrySet())
+		{
+			Integer key = entry.getKey();
+			FileData tempFD = entry.getValue();
+			if(tempFD.getReplicateOwnerID() == failedNodeID)
+			{
+				tempFD.refreshReplicateOwner(nodeData1);
+				nodeData1.sendQueue.add(tempFD);
+				nodeData1.localFiles.put(key,tempFD);
+			}
+		}
+	}
 }
+
