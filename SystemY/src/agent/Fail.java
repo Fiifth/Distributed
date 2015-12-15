@@ -3,6 +3,8 @@ package agent;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.TreeMap;
+
 import fileManagers.FileData;
 import nameServer.NameServerInterface;
 import networkFunctions.RMI;
@@ -34,6 +36,21 @@ public class Fail{
 			try 
 			{
 				recInt.rmiFileAgentExecution(failAgent);
+			} catch (RemoteException e) {e.printStackTrace();}
+		}
+		else{//restart file agent
+			TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
+			TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
+			AgentMain fileAgent = new AgentMain(true, initTree,agentLockList, 0, 0);
+			fileAgent.setNodeData1(nodeData1);
+			fileAgent.run();
+			
+			while(fileAgent.isAlive()){}
+			
+			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodeData1.getPrevNode(), nodeData1.getPrevNodeIP(), "RMICommunication");
+			try 
+			{
+				recInt.rmiFileAgentExecution(fileAgent);
 			} catch (RemoteException e) {e.printStackTrace();}
 		}
 	}
