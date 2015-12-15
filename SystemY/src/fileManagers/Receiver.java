@@ -30,27 +30,26 @@ public class Receiver extends Thread
 	
 	public void receiveFile(FileData file1, NodeData nodedata1) 
 	{
-		String DestinationFolder;
+		String fileOutput;
 		if(file1.getDestinationFolder().equals("rep")) 
 		{
-			
-			DestinationFolder=nodedata1.getMyReplFolder();
+			fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
 			int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
 			if (!nodedata1.replFiles.containsKey(fileNameHash))
 		       {
-		       		file1.setFolderLocation(DestinationFolder);
+		       		file1.setFolderLocation(nodedata1.getMyReplFolder());
 		       		file1.setRemoveAfterSend(false);
 		       		nodedata1.replFiles.put(fileNameHash,file1);
 		       		
 		       } 
 		}
 		else if(file1.getDestinationFolder().equals("lok")) 
-			DestinationFolder=nodedata1.getMyLocalFolder();
-		else
-			DestinationFolder=nodedata1.getMyReplFolder(); //TODO get my part folder
+		fileOutput = nodedata1.getMyLocalFolder()+"\\"+file1.getFileName();
+		else //TODO make partFileFolder
+		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName()+"."+file1.getPartID();
 		
         int serverPort = file1.getSourceID()+32768;
-        String fileOutput = DestinationFolder+"\\"+file1.getFileName(); 
+   
         tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
         //TODO remove part from nodedata.filepart list
     }

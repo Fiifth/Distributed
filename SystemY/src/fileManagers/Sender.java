@@ -22,6 +22,7 @@ import networkFunctions.RMI;
 import networkFunctions.TCP;
 import nodeManager.RMICommunicationInt;
 import nodeP.NodeData;
+import splitAndMerge.GetPartOfFile;
 
 public class Sender extends Thread
 {
@@ -78,8 +79,11 @@ public class Sender extends Thread
 			}
 			else if (file1.getDestinationFolder().equals("part"))
 			{
-				//TODO create part file
+				//GetPartOfFile partGetter=new GetPartOfFile();
+				//partGetter.getPart(file1.getPartSize(), file1.getPartID(), f);
 				//TODO send this part file
+				//setFolderLocation part folder
+				//setFileName generated part filename
 			}
 			nodedata1.setSending(false);
 		}

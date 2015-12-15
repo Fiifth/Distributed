@@ -75,6 +75,7 @@ public class AgentMain extends Thread implements Serializable
 					else if (!tempMyFilesOnNode.get(key).getLocalOwners().equals(nodeData1.replFiles.get(key).getLocalOwners()))
 					{
 						tempMyFilesOnNode.put(key,nodeData1.replFiles.get(key));
+						//TODO check if lock
 						networkFilesChanged=true;
 					}
 				}
@@ -117,23 +118,28 @@ public class AgentMain extends Thread implements Serializable
 					//file found
 					if (!entry.getValue().get(key).isLock())
 					{
+						//TODO remove from downloadlist
 						allAgentNetworkFiles.get(entry.getKey()).get(key).setLock(true);
 						if(copyLockList.get(key).equals("dl"))
 						{
 							//TODO check for length (if size<length localOwners.size don't use parts)
+							//TODO check if sizelocalowners <1 don't use parts
 							int partID=1;
 							ArrayList<Integer> parts=new ArrayList<Integer>();
-							for(int temp:entry.getValue().get(key).getLocalOwners())
+							for(int owner:entry.getValue().get(key).getLocalOwners())
 							{
 								parts.add(partID);
+								//TODO file1.setPartSize
 								entry.getValue().get(key).setPartID(partID);
 								entry.getValue().get(key).setDestinationFolder("part");
-								downloadMap.put(temp, entry.getValue().get(key));
-								nodeData1.receiveQueue.add(entry.getValue().get(key));
+								downloadMap.put(owner, entry.getValue().get(key));
+								//nodeData1.receiveQueue.add(entry.getValue().get(key));
 								partID++;
+								System.out.println(entry.getValue().get(key).getFileName()+"-"+owner);
 							}
 							nodeData1.partMap.put(key, parts);
-							System.out.println(entry.getValue().get(key).getFileName());
+							//TODO generate merge list (still has to be added to nodedata
+							
 						}
 						else if (copyLockList.get(key).equals("rm"))
 						{
@@ -148,13 +154,13 @@ public class AgentMain extends Thread implements Serializable
 	
 	public void checkAgentLockAction()
 	{
-		for(Entry<Integer, FileData> entry : downloadMap.entrySet()) 
+		/*for(Entry<Integer, FileData> entry : downloadMap.entrySet()) 
 		{
 			if (entry.getKey()== nodeData1.getMyNodeID())
 			{
 				nodeData1.sendQueue.add(entry.getValue());
 			}
-		}
+		}*/
 		//TODO iterate remove list
 			//if key==my id
 				//lookup fileID in local list -->remove
@@ -163,7 +169,19 @@ public class AgentMain extends Thread implements Serializable
 	
 	public void updateLocalAllFiles()
 	{
-		if(!nodeData1.allNetworkFiles.equals(allAgentNetworkFiles))
+		boolean changed=false;
+		if(!(nodeData1.allNetworkFiles.size()==(allAgentNetworkFiles.size())))
+		changed=true;
+		else
+		{
+			for(Entry<Integer, TreeMap<Integer, FileData>> entry : allAgentNetworkFiles.entrySet()) 
+			{
+				if (!(nodeData1.allNetworkFiles.get(entry.getKey()).size()==entry.getValue().size()))
+					changed=true;
+			}
+		}
+		
+		if (changed)
 		{
 			nodeData1.setChanged(true);
 			nodeData1.allNetworkFiles = allAgentNetworkFiles;
