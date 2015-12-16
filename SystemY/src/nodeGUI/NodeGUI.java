@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -214,29 +215,34 @@ public class NodeGUI {
                             	dlframe.setResizable(true);
                             	dlframe.getContentPane().setBackground(Color.WHITE);
                             	dlframe.setBackground(Color.WHITE);
-                            	dlframe.setBounds(200, 200, 400, 200);
+                            	dlframe.setBounds(200, 200, 300, 600);
                             	dlframe.getContentPane().setLayout(null);
-                                       
-                                JTextField dlfilename = new JTextField();
-                                dlfilename.setBounds(115, 50, 260, 20);
-                                dlframe.getContentPane().add(dlfilename);
-                                dlfilename.setColumns(10);
-                                
-                                JTextPane dltxtpnfilename = new JTextPane();
+                            	
+                            	JTextPane dltxtpnfilename = new JTextPane();
+                                dltxtpnfilename.setFont(new Font("Tahoma", Font.BOLD, 13));
                                 dltxtpnfilename.setEditable(false);
-                                dltxtpnfilename.setText("File to download: ");
-                                dltxtpnfilename.setBounds(10, 50, 110, 20);
+                                dltxtpnfilename.setText("Files to download: ");
+                                dltxtpnfilename.setBounds(5, 10, 280, 20);
                                 dlframe.getContentPane().add(dltxtpnfilename);
                                 
+                                JList displayDownloadList = new JList<String>(allfilelist);
+                                JScrollPane filestodl = new JScrollPane(displayDownloadList);
+                                filestodl.setBounds(5, 30, 275, 480);
+                                filestodl.setBackground(Color.WHITE);
+                                dlframe.getContentPane().add(filestodl);
+                                
                                 JButton dlbutton = new JButton("Download");
-                                dlbutton.setBounds(125, 100 , 150, 30);
+                                dlbutton.setBounds(75, 520 , 150, 30);
                                 dlframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										String filetodl = dlfilename.getText();	
-										//TODO in functie (guifunctions)
-										node1.nodedata1.lockRequestList.put(Math.abs(filetodl.hashCode()%32768), "dl");
-										System.out.println("file to download" + filetodl);
+										List<String> selectedValues = displayDownloadList.getSelectedValuesList();
+										for(String value : selectedValues)
+										{
+											System.out.println(value);
+											node1.nodedata1.lockRequestList.put(Math.abs(value.hashCode()%32768), "dl");
+										}
+										
 										dlframe.setVisible(false);
 									}
                                 
