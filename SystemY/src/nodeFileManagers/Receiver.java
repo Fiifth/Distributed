@@ -46,11 +46,15 @@ public class Receiver extends Thread
 		else if(file1.getDestinationFolder().equals("lok")) 
 		fileOutput = nodedata1.getMyLocalFolder()+"\\"+file1.getFileName();
 		else //TODO make partFileFolder
-		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName()+"."+file1.getPartID();
+		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName()+"."+String.format("%03d", file1.getPartID());
 		
         int serverPort = file1.getSourceID()+32768;
    
         tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
-        //TODO remove part from nodedata.filepart list
+        int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
+        if(file1.getDestinationFolder().equals("part"));
+        {
+        	nodedata1.removeFromPartMap(fileNameHash, file1.getSourceID());
+        }
     }
 }

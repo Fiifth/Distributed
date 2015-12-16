@@ -38,11 +38,22 @@ public class NodeData implements Serializable {
 	
 	
 	
-	public  void removeFromPartMap(Integer arg0, Integer arg1) 
+	public  void removeFromPartMap(Integer fileID, Integer nodeID) 
 	{
-		//TODO remove part from the arraylist
-		//check if it is empty
-		//if empty() remove and start merge
+		if (partMap.containsKey(fileID))
+		{
+			ArrayList<Integer> nodes=new ArrayList<Integer>();
+			nodes.addAll(partMap.get(fileID));
+			nodes.remove(nodeID);
+			if (nodes.isEmpty())
+			{
+				partMap.remove(fileID);
+				//TODO start merge(nodeID)
+				System.out.println("received them all!");
+			}
+			else
+				partMap.put(fileID, nodes);
+		}
 	}
 	public String getNodeName() {
 		return nodeName;

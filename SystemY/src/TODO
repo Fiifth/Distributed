@@ -45,5 +45,4 @@ TESTEN
 		1) sluit een node af
 		2) controlleer of de volgorde juist is geupdate
 		
-		
-localOwners -->Map<ID,IP>
+

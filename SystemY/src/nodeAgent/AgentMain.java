@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -131,17 +132,22 @@ public class AgentMain extends Thread implements Serializable
 						FileData wantedFile=entry.getValue().get(fileHash);
 						ArrayList<Integer> parts=new ArrayList<Integer>();
 						int partSize =(int)(Math.ceil(wantedFile.getSize()/wantedFile.getNumberOfOwners()));
+						List<Integer> owners = new ArrayList<Integer>(wantedFile.getLocalOwners().keySet());
 						
 						if ((partSize>1)&&(wantedFile.getNumberOfOwners()>1))
 						{
-							for(int owner:wantedFile.getLocalOwners())
+							for(int owner:owners)
 							{
+								System.out.println("owner"); 
 								parts.add(partID);
 								wantedFile.setPartSize(partSize);
 								wantedFile.setPartID(partID);
 								wantedFile.setDestinationFolder("part");
+								wantedFile.setSourceID(owner);
+								wantedFile.setSourceIP(wantedFile.getLocalOwners().get(owner));
 								downloadMap.put(owner, wantedFile);
-								//nodeData1.receiveQueue.add(wantedFile);
+								nodeData1.receiveQueue.add(wantedFile);
+								System.out.println("receive: "+wantedFile.getFileName()+"."+wantedFile.getPartID());
 								partID++;
 							}
 							nodeData1.partMap.put(fileHash, parts);
@@ -149,7 +155,9 @@ public class AgentMain extends Thread implements Serializable
 						else
 						{
 							wantedFile.setDestinationFolder("lok");
-							downloadMap.put(wantedFile.getLocalOwners().get(0), wantedFile);
+							wantedFile.setSourceID(owners.get(0));
+							wantedFile.setSourceIP(wantedFile.getLocalOwners().get(owners.get(0)));
+							downloadMap.put(owners.get(0), wantedFile);
 							//nodeData1.receiveQueue.add(wantedFile);
 						}
 					}
@@ -164,13 +172,17 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void checkAgentLockAction()
 	{
-		/*for(Entry<Integer, FileData> entry : downloadMap.entrySet()) 
+		TreeMap<Integer, FileData> tempDownloadMap=new TreeMap<Integer, FileData>();
+		tempDownloadMap.putAll(downloadMap);
+		for(Entry<Integer, FileData> entry : tempDownloadMap.entrySet()) 
 		{
 			if (entry.getKey()== nodeData1.getMyNodeID())
 			{
+				System.out.println("sending: "+entry.getValue().getFileName()+"."+entry.getValue().getPartID());
 				nodeData1.sendQueue.add(entry.getValue());
+				downloadMap.remove(entry.getKey());
 			}
-		}*/
+		}
 		//TODO iterate remove list
 			//if key==my id
 				//lookup fileID in local list -->remove
@@ -202,9 +214,10 @@ public class AgentMain extends Thread implements Serializable
 		{
 		  Integer fileHash = entry.getKey();
 		  FileData tempFD = entry.getValue();
-		  ArrayList<Integer> localFileOwners =new ArrayList<Integer>();
-		  localFileOwners.addAll(tempFD.getLocalOwners());
-		  for(int temp : localFileOwners)
+		  TreeMap<Integer,String> localFileOwners =new TreeMap<Integer,String>();
+		  localFileOwners.putAll(tempFD.getLocalOwners());
+		  List<Integer> owners = new ArrayList<Integer>(localFileOwners.keySet());
+		  for(int temp : owners)
 		  {
 			  if(temp == failedNodeID)
 			  {

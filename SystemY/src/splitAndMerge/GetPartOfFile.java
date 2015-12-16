@@ -14,7 +14,7 @@ public class GetPartOfFile
 	@SuppressWarnings("resource")
 	public void getPart(int sizeOfFiles, int part,Path source,Path Destinaion)
 	{
-		        
+		       System.out.println("jow"); 
         FileChannel fc = null;
 		try {
 			fc = (FileChannel.open(source));

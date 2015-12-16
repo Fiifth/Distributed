@@ -36,7 +36,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		if (file1.getDestinationFolder().equals("rep")&&nodedata1.replFiles.containsKey(fileNameHash))
 		{
 			FileData temp=nodedata1.replFiles.get(fileNameHash);
-			temp.addOwner(file1.getSourceID());
+			temp.addOwner(file1.getSourceID(),file1.getSourceIP());
 			nodedata1.replFiles.put(fileNameHash, temp);
 			return true;
 		}

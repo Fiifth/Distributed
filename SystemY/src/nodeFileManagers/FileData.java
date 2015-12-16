@@ -3,6 +3,7 @@ package nodeFileManagers;
 import java.io.Serializable;
 import java.rmi.Naming;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import nameServer.NameServerInterface;
 import nodeStart.NodeData;
@@ -13,7 +14,7 @@ public class FileData implements Serializable
 	private volatile String fileName;
 	private volatile String folderLocation;
 	private volatile String localOwnerIP;
-	private ArrayList<Integer> localOwners = new ArrayList<Integer>();
+	public volatile TreeMap<Integer,String> localOwners = new TreeMap<Integer,String>();
 	private volatile String sourceIP;
 	private volatile int sourceID;
 	private volatile int replicateOwnerID;
@@ -27,7 +28,7 @@ public class FileData implements Serializable
 	private volatile int partSize;
 	private volatile boolean lock;
 	
-	public ArrayList<Integer> getLocalOwners()
+	public TreeMap<Integer, String> getLocalOwners()
 	{
 		return localOwners;
 	}
@@ -35,19 +36,19 @@ public class FileData implements Serializable
 	{
 		return localOwners.size();
 	}
-	public void addOwner (int ownerID)
+	public void addOwner (int ownerID,String ip)
 	{
-		localOwners.add(ownerID);
+		localOwners.put(ownerID, ip);
 	}
 	public boolean removeOwner (Integer ownerID)
 	{
-		if (localOwners.contains(ownerID))
+		if (localOwners.containsKey(ownerID))
 			localOwners.remove(ownerID);
 		return localOwners.isEmpty();
 	}
 	public boolean isOwner(int ownerID)
 	{
-		return localOwners.contains(ownerID);		
+		return localOwners.containsKey(ownerID);		
 	}
 	public void setNewFileData(String fileName, NodeData nodedata1)
 	{
@@ -63,6 +64,9 @@ public class FileData implements Serializable
 
 	public String getFileName() {
 		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	public String getFolderLocation() {
 		return folderLocation;

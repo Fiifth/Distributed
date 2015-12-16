@@ -75,7 +75,8 @@ public class Sender extends Thread
 			}
 			else if (file1.getDestinationFolder().equals("lok"))
 			{
-				//setFolderLocation
+				file1.setFolderLocation(nodedata1.getMyLocalFolder());
+				sendFile(file1);
 			}
 			else if (file1.getDestinationFolder().equals("part"))
 			{
@@ -83,11 +84,9 @@ public class Sender extends Thread
 				Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
 				Path dest = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 				partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
-				//TODO setfolderlocation
-				//TODO setFileName
-				//TODO send this part file
-				//setFolderLocation part folder
-				//setFileName generated part filename
+				file1.setFolderLocation(nodedata1.getMyReplFolder());
+				file1.setFileName(file1.getFileName()+"."+String.format("%03d", file1.getPartID()));
+				sendFile(file1);
 			}
 			nodedata1.setSending(false);
 		}
