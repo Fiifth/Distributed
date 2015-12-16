@@ -28,6 +28,20 @@ public class FileData implements Serializable
 	private volatile int partSize;
 	private volatile boolean lock;
 	
+	public void deepCopy(FileData file1)
+	{
+		this.fileName=file1.fileName;
+		this.folderLocation=file1.folderLocation;
+		this.localOwners=file1.localOwners;
+		this.sourceIP=file1.sourceIP;
+		this.sourceID=file1.sourceID;
+		this.destinationID=file1.destinationID;
+		this.destinationIP=file1.destinationIP;
+		this.destinationFolder=file1.destinationFolder;
+		this.size=file1.size;
+		this.partID=file1.partID;
+		this.partSize=file1.partSize;
+	}
 	public TreeMap<Integer, String> getLocalOwners()
 	{
 		return localOwners;

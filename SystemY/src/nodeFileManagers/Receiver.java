@@ -50,7 +50,7 @@ public class Receiver extends Thread
 		}
 		else //TODO make partFileFolder
 		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName()+"."+String.format("%03d", file1.getPartID());
-		
+		System.out.println("receive: "+fileOutput);
         int serverPort = file1.getSourceID()+32768;
    
         tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 

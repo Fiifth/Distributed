@@ -138,6 +138,7 @@ public class AgentMain extends Thread implements Serializable
 						{
 							for(int owner:owners)
 							{
+								
 								partID=partID+1;
 								System.out.println("owner: "+owner); 
 								parts.add(partID);
@@ -146,9 +147,11 @@ public class AgentMain extends Thread implements Serializable
 								wantedFile.setDestinationFolder("part");
 								wantedFile.setSourceID(owner);
 								wantedFile.setSourceIP(wantedFile.getLocalOwners().get(owner));
-								downloadMap.put(owner, wantedFile);
-								nodeData1.receiveQueue.add(wantedFile);
-								System.out.println("receive: "+wantedFile.getFileName()+"."+wantedFile.getPartID());
+								FileData file1=new FileData();
+								file1.deepCopy(wantedFile);
+								downloadMap.put(owner, file1);
+								nodeData1.receiveQueue.add(file1);
+								System.out.println("receive: "+file1.getFileName()+"."+file1.getPartID());
 							}
 							nodeData1.partMap.put(fileHash, parts);
 						}
@@ -158,7 +161,7 @@ public class AgentMain extends Thread implements Serializable
 							wantedFile.setSourceID(owners.get(0));
 							wantedFile.setSourceIP(wantedFile.getLocalOwners().get(owners.get(0)));
 							downloadMap.put(owners.get(0), wantedFile);
-							//nodeData1.receiveQueue.add(wantedFile);
+							nodeData1.receiveQueue.add(wantedFile);
 						}
 					}
 					else if (copyLockList.get(fileHash).equals("rm"))

@@ -308,12 +308,17 @@ public class NodeGUI {
         			
         			new Thread() {
         	            public void run() {
+        	            	
         	            	while(true){
         	            		if(node1.nodedata1.isChanged())
         	            		{
         	            			System.out.println("changed list");
         	            			generateLists();
         	            			node1.nodedata1.setChanged(false);
+        	            		}
+        	            		else
+        	            		{
+        	            			try { Thread.sleep(1000);} catch (InterruptedException e) {}
         	            		}
         	            	}
         	            }
