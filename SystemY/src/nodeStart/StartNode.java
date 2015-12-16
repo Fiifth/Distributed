@@ -1,12 +1,12 @@
-package nodeP;
+package nodeStart;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import agent.AgentMain;
-import agent.Fail;
-import fileManagers.*;
 import networkFunctions.*;
+import nodeAgent.AgentMain;
+import nodeAgent.Fail;
+import nodeFileManagers.*;
 import nodeManager.*;
 
 public class StartNode 

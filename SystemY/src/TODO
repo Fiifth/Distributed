@@ -1,13 +1,3 @@
-
-
-4) recoveryAgent
-	*start agent
-	
-	*stop agent als we de agent object terug krijgen
-	
-	
-
-
 TESTEN
 1) fileReplicatie
 	- algemene replicatie
@@ -54,3 +44,6 @@ TESTEN
 	-afsluiten node
 		1) sluit een node af
 		2) controlleer of de volgorde juist is geupdate
+		
+		
+localOwners -->Map<ID,IP>

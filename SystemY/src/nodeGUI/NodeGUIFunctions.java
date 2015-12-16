@@ -1,4 +1,4 @@
-package nodeP;
+package nodeGUI;
 
 public class NodeGUIFunctions {
 

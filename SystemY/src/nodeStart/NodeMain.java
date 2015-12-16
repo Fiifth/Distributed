@@ -1,4 +1,6 @@
-package nodeP;
+package nodeStart;
+
+import nodeGUI.NodeGUI;
 
 public class NodeMain {
 

@@ -2,7 +2,7 @@ package testCode;
 
 import java.io.IOException;
 import nameServer.StartNameServer;
-import nodeP.StartNode;
+import nodeStart.StartNode;
 
 public class NodeOrderTest {
 

@@ -10,11 +10,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import agent.AgentMain;
-import agent.Fail;
-import fileManagers.FileData;
 import networkFunctions.RMI;
-import nodeP.NodeData;
+import nodeAgent.AgentMain;
+import nodeAgent.Fail;
+import nodeFileManagers.FileData;
+import nodeStart.NodeData;
 
 public class RMICommunication extends UnicastRemoteObject implements RMICommunicationInt  {
 	private static final long serialVersionUID = 1L;

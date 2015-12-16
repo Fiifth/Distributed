@@ -1,4 +1,4 @@
-package nodeP;
+package nodeGUI;
 
 import java.awt.Color;
 import java.awt.Desktop;
@@ -15,7 +15,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import fileManagers.FileData;
+
+import nodeFileManagers.FileData;
+import nodeStart.StartNode;
 
 public class NodeGUI {
 	public static Object frame;

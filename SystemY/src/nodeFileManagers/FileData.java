@@ -1,11 +1,11 @@
-package fileManagers;
+package nodeFileManagers;
 
 import java.io.Serializable;
 import java.rmi.Naming;
 import java.util.ArrayList;
 
 import nameServer.NameServerInterface;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 
 public class FileData implements Serializable
 {

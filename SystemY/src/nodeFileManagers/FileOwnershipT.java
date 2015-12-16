@@ -1,8 +1,8 @@
-package fileManagers;
+package nodeFileManagers;
 import java.util.TreeMap;
 
 import nameServer.NameServerInterface;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 
 public class FileOwnershipT extends Thread
 {

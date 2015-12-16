@@ -1,7 +1,7 @@
-package fileManagers;
+package nodeFileManagers;
 
 import networkFunctions.TCP;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 
 public class Receiver extends Thread 
 {

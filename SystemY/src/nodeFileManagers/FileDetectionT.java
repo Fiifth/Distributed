@@ -1,4 +1,4 @@
-package fileManagers;
+package nodeFileManagers;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 
 import networkFunctions.RMI;
 import nodeManager.RMICommunicationInt;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 
 public class FileDetectionT extends Thread{
 	public WatchService watcher;

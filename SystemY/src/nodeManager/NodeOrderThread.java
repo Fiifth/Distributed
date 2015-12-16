@@ -4,7 +4,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 
 import networkFunctions.TCP;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 
 public class NodeOrderThread extends Thread {
 	TCP tcp=new TCP();

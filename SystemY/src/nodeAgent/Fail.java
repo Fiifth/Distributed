@@ -1,15 +1,15 @@
-package agent;
+package nodeAgent;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import fileManagers.FileData;
 import nameServer.NameServerInterface;
 import networkFunctions.RMI;
+import nodeFileManagers.FileData;
 import nodeManager.RMICommunicationInt;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 
 public class Fail{
 	NodeData nodeData1;

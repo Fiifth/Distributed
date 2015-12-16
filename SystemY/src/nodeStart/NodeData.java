@@ -1,4 +1,4 @@
-package nodeP;
+package nodeStart;
 
 import java.io.Serializable;
 import java.net.*;
@@ -7,13 +7,10 @@ import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import fileManagers.FileData;
-import fileManagers.FileOwnershipT;
+import nodeFileManagers.FileData;
+import nodeFileManagers.FileOwnershipT;
 
 public class NodeData implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private volatile boolean toQuit = false;
 	private volatile String nodeName;
@@ -33,7 +30,6 @@ public class NodeData implements Serializable {
 	private volatile int numberOfNodesStart;
 	public volatile BlockingQueue<FileData> sendQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile BlockingQueue<FileData> receiveQueue=new ArrayBlockingQueue<FileData>(500);
-	public volatile BlockingQueue<FileData> removeQueue=new ArrayBlockingQueue<FileData>(500);
 	public volatile TreeMap<Integer, TreeMap<Integer,FileData>> allNetworkFiles = new TreeMap<Integer, TreeMap<Integer,FileData>>();
 	public volatile TreeMap<Integer,String> lockRequestList = new TreeMap<Integer,String>();
 	public volatile TreeMap<Integer, FileData> localFiles = new TreeMap<Integer,FileData>();
@@ -42,7 +38,7 @@ public class NodeData implements Serializable {
 	
 	
 	
-	public  void remove(Integer arg0, Integer arg1) 
+	public  void removeFromPartMap(Integer arg0, Integer arg1) 
 	{
 		//TODO remove part from the arraylist
 		//check if it is empty

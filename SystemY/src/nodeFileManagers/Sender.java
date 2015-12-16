@@ -1,4 +1,4 @@
-package fileManagers;
+package nodeFileManagers;
 
 /* 1) Connectie met server via RMI zodat bestemming van files opgevraagd kunnen worden
  * 2) Connectie met node waar file naartoe gestuurd moet worden 
@@ -21,7 +21,7 @@ import java.nio.file.StandardCopyOption;
 import networkFunctions.RMI;
 import networkFunctions.TCP;
 import nodeManager.RMICommunicationInt;
-import nodeP.NodeData;
+import nodeStart.NodeData;
 import splitAndMerge.GetPartOfFile;
 
 public class Sender extends Thread
@@ -75,7 +75,7 @@ public class Sender extends Thread
 			}
 			else if (file1.getDestinationFolder().equals("lok"))
 			{
-				//TODO size<length localOwners.size download to local folder
+				//setFolderLocation
 			}
 			else if (file1.getDestinationFolder().equals("part"))
 			{

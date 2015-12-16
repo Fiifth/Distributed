@@ -7,11 +7,11 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import fileManagers.FileData;
-import fileManagers.FileOwnershipT;
 import networkFunctions.Multicast;
 import networkFunctions.RMI;
-import nodeP.NodeData;
+import nodeFileManagers.FileData;
+import nodeFileManagers.FileOwnershipT;
+import nodeStart.NodeData;
 
 public class ShutdownT extends Thread
 {

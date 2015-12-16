@@ -2,8 +2,8 @@ package nodeManager;
 
 import java.rmi.RemoteException;
 
-import agent.AgentMain;
-import fileManagers.FileData;
+import nodeAgent.AgentMain;
+import nodeFileManagers.FileData;
 
 public interface RMICommunicationInt extends java.rmi.Remote
 {
