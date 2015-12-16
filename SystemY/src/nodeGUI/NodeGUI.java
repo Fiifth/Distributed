@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.TreeMap;
 import javax.swing.JFrame;
@@ -17,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
+import nameServer.StartNameServer;
 import nodeFileManagers.FileData;
 import nodeStart.StartNode;
 
@@ -69,10 +71,32 @@ public class NodeGUI {
 		nodeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		nodeframe.getContentPane().setLayout(null);
 		
+		nameframe.setVisible(true);
+        JButton btnStartNameserver = new JButton("Start NameServer");
+        btnStartNameserver.setBounds(130, 60 , 155, 23);
+        nameframe.getContentPane().add(btnStartNameserver);
+        btnStartNameserver.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	StartNameServer nameserver = null;
+				try {
+					nameserver = new StartNameServer();
+					nameserver.startNameServer();
+					JTextField errortext = new JTextField();
+        			errortext.setForeground(Color.GREEN);
+        			errortext.setText("NameServer started.");
+        			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
+        			errortext.setBorder(null);
+        	        errortext.setBounds(10, 100, 290, 20);
+        	        errortext.setColumns(10);        			
+        	        nameframe.getContentPane().add(errortext);
+				} catch (RemoteException e1) {} catch (IOException e1) {}        		
+            }
+    });
+		
 		
 		nameframe.setVisible(true);
-        JButton btnStartNode = new JButton("START Node");
-        btnStartNode.setBounds(90, 60 , 120, 23);
+        JButton btnStartNode = new JButton("Start Node");
+        btnStartNode.setBounds(10, 60 , 110, 23);
         nameframe.getContentPane().add(btnStartNode);
         btnStartNode.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -172,33 +196,41 @@ public class NodeGUI {
                             	rmframe.setResizable(true);
                             	rmframe.getContentPane().setBackground(Color.WHITE);
                             	rmframe.setBackground(Color.WHITE);
-                            	rmframe.setBounds(200, 200, 400, 200);
+                            	rmframe.setBounds(200, 200, 300, 400);
+                            	rmframe.setResizable(false);
                             	rmframe.getContentPane().setLayout(null);
-                                       
-                                JTextField filename = new JTextField();
-                                filename.setBounds(115, 50, 260, 20);
-                                rmframe.getContentPane().add(filename);
-                                filename.setColumns(10);
+                            	
+                            	JTextPane dltxtpnfilename = new JTextPane();
+                                dltxtpnfilename.setFont(new Font("Tahoma", Font.BOLD, 13));
+                                dltxtpnfilename.setEditable(false);
+                                dltxtpnfilename.setText("Files to remove: ");
+                                dltxtpnfilename.setBounds(5, 10, 280, 20);
+                                rmframe.getContentPane().add(dltxtpnfilename);
                                 
-                                JTextPane txtpnfilename = new JTextPane();
-                                txtpnfilename.setEditable(false);
-                                txtpnfilename.setText("File to remove: ");
-                                txtpnfilename.setBounds(10, 50, 100, 20);
-                                rmframe.getContentPane().add(txtpnfilename);
+                                JList<String> displayRemoveList = new JList<String>(allfilelist);
+                                JScrollPane filestorm = new JScrollPane(displayRemoveList);
+                                filestorm.setBounds(5, 30, 275, 280);
+                                filestorm.setBackground(Color.WHITE);
+                                rmframe.getContentPane().add(filestorm);
                                 
-                                JButton rmbutton = new JButton("Remove");
-                                rmbutton.setBounds(125, 100 , 150, 30);
-                                rmframe.getContentPane().add(rmbutton);
-                                rmbutton.addActionListener(new ActionListener() {
+                                JButton dlbutton = new JButton("Remove");
+                                dlbutton.setBounds(75, 320 , 150, 30);
+                                rmframe.getContentPane().add(dlbutton);
+                                dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										String filetorm = filename.getText();
-										node1.nodedata1.lockRequestList.put(Math.abs(filetorm.hashCode()%32768), "rm");
+										List<String> selectedRMValues = displayRemoveList.getSelectedValuesList();
+										for(String value : selectedRMValues)
+										{
+											System.out.println(value);
+											node1.nodedata1.lockRequestList.put(Math.abs(value.hashCode()%32768), "rm");
+										}
+										
 										rmframe.setVisible(false);
 									}
                                 
                                 }); 
                                 rmframe.setVisible(true);
-                            	                          
+                            	
                             }
                     });
                    
@@ -208,14 +240,14 @@ public class NodeGUI {
                     btnDLFile.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								//TODO in functie (guifunctions)
-								//TODO lijstje geven jlist selecteren brol
                             	JFrame dlframe = new JFrame();
                             	dlframe.setTitle("Download File");
                             	dlframe.getContentPane().setForeground(Color.BLACK);
                             	dlframe.setResizable(true);
                             	dlframe.getContentPane().setBackground(Color.WHITE);
                             	dlframe.setBackground(Color.WHITE);
-                            	dlframe.setBounds(200, 200, 300, 600);
+                            	dlframe.setBounds(200, 200, 300, 400);
+                            	dlframe.setResizable(false);
                             	dlframe.getContentPane().setLayout(null);
                             	
                             	JTextPane dltxtpnfilename = new JTextPane();
@@ -225,14 +257,14 @@ public class NodeGUI {
                                 dltxtpnfilename.setBounds(5, 10, 280, 20);
                                 dlframe.getContentPane().add(dltxtpnfilename);
                                 
-                                JList displayDownloadList = new JList<String>(allfilelist);
+                                JList<String> displayDownloadList = new JList<String>(allfilelist);
                                 JScrollPane filestodl = new JScrollPane(displayDownloadList);
-                                filestodl.setBounds(5, 30, 275, 480);
+                                filestodl.setBounds(5, 30, 275, 280);
                                 filestodl.setBackground(Color.WHITE);
                                 dlframe.getContentPane().add(filestodl);
                                 
                                 JButton dlbutton = new JButton("Download");
-                                dlbutton.setBounds(75, 520 , 150, 30);
+                                dlbutton.setBounds(75, 320 , 150, 30);
                                 dlframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {

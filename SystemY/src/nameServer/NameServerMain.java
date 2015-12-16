@@ -6,7 +6,7 @@ public class NameServerMain
 {
 	public static void main(String[] args) throws IOException
 	{
-	StartNameServer nameserver= new StartNameServer();
-	nameserver.startNameServer();
+		StartNameServer nameserver= new StartNameServer();
+		nameserver.startNameServer();
 	}
 }
