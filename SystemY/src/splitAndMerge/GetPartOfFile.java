@@ -14,7 +14,7 @@ public class GetPartOfFile
 	@SuppressWarnings("resource")
 	public void getPart(int sizeOfFiles, int part,Path source,Path Destinaion)
 	{
-		       System.out.println("jow"); 
+		      
         FileChannel fc = null;
 		try {
 			fc = (FileChannel.open(source));
@@ -33,9 +33,8 @@ public class GetPartOfFile
 		}
         buf.flip();
         File file = new File(Destinaion+"."+String.format("%03d", part));
-
-        @SuppressWarnings("resource")
-		FileChannel channel = null;
+        System.out.println("part file jow:"+Destinaion+"."+String.format("%03d", part)); 
+        FileChannel channel = null;
 		try {
 			channel = new FileOutputStream(file, true).getChannel();
 		} catch (FileNotFoundException e) {

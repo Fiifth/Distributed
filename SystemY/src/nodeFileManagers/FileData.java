@@ -38,7 +38,9 @@ public class FileData implements Serializable
 	}
 	public void addOwner (int ownerID,String ip)
 	{
+		
 		localOwners.put(ownerID, ip);
+		System.out.println("added an owner, size: "+localOwners.size()+" the owner: "+ownerID+" the ip: "+ip);
 	}
 	public boolean removeOwner (Integer ownerID)
 	{

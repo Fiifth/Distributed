@@ -44,7 +44,10 @@ public class Receiver extends Thread
 		       } 
 		}
 		else if(file1.getDestinationFolder().equals("lok")) 
+		{
 		fileOutput = nodedata1.getMyLocalFolder()+"\\"+file1.getFileName();
+		System.out.println(fileOutput);
+		}
 		else //TODO make partFileFolder
 		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName()+"."+String.format("%03d", file1.getPartID());
 		

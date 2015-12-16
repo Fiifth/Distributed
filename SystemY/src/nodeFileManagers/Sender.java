@@ -93,6 +93,7 @@ public class Sender extends Thread
 	}
 	public void sendFile(FileData file1)
 	{
+		System.out.println("sending");
 		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
         ServerSocket welcomeSocket = null;
         Socket connectionSocket = null;
@@ -143,7 +144,13 @@ public class Sender extends Thread
 			if (!nodedata1.replFiles.containsKey(fileNameHash))
 		       {
 		       		nodedata1.replFiles.put(fileNameHash,file1);
-		       } 
+		       }
+			else
+			{
+				FileData temp=nodedata1.replFiles.get(fileNameHash);
+				temp.addOwner(file1.getSourceID(),file1.getSourceIP());
+				nodedata1.replFiles.put(fileNameHash, temp);
+			}
 		} catch (IOException e) {System.out.println("couldn't copy file");}
 	}
 }
