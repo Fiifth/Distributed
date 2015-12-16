@@ -79,8 +79,12 @@ public class Sender extends Thread
 			}
 			else if (file1.getDestinationFolder().equals("part"))
 			{
-				//GetPartOfFile partGetter=new GetPartOfFile();
-				//partGetter.getPart(file1.getPartSize(), file1.getPartID(), f);
+				GetPartOfFile partGetter=new GetPartOfFile();
+				Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+				Path dest = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
+				partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
+				//TODO setfolderlocation
+				//TODO setFileName
 				//TODO send this part file
 				//setFolderLocation part folder
 				//setFileName generated part filename

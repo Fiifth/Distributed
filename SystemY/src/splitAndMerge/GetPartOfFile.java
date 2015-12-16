@@ -11,27 +11,56 @@ import java.nio.file.Paths;
 
 public class GetPartOfFile 
 {
-	public static void getPart(int sizeOfFiles, int part,Path f) throws FileNotFoundException, IOException
+	@SuppressWarnings("resource")
+	public void getPart(int sizeOfFiles, int part,Path source,Path Destinaion)
 	{
 		        
-        FileChannel fc = (FileChannel.open(f));
+        FileChannel fc = null;
+		try {
+			fc = (FileChannel.open(source));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         ByteBuffer buf = ByteBuffer.allocateDirect(sizeOfFiles);;
         ByteBuffer.allocateDirect(sizeOfFiles);
         
-        fc.read(buf,sizeOfFiles*(part-1));
+        try {
+			fc.read(buf,sizeOfFiles*(part-1));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         buf.flip();
-        File file = new File(f+"."+String.format("%03d", part));
+        File file = new File(Destinaion+"."+String.format("%03d", part));
 
         @SuppressWarnings("resource")
-		FileChannel channel = new FileOutputStream(file, true).getChannel();
-        channel.write(buf);
+		FileChannel channel = null;
+		try {
+			channel = new FileOutputStream(file, true).getChannel();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			channel.write(buf);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         buf.clear();
-        channel.close();        
+        try {
+			channel.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}        
 	}
 	public static void main(String[] args) throws IOException 
     {
-    	Path path = Paths.get("C:\\Tannenbaum.pdf");
+    	Path source = Paths.get("C:\\Tannenbaum.pdf");
+    	Path dest = Paths.get("C:\\TannenbaumSplit.pdf");
     	int size=1024 * 1024*5;// 1MB
-    	getPart(size,2,path);
+    	//getPart(size,2,source,dest);
     }
 }

@@ -63,11 +63,13 @@ public class AgentMain extends Thread implements Serializable
 	{
 	
 		TreeMap<Integer, TreeMap<Integer,FileData>> temp=new TreeMap<Integer, TreeMap<Integer,FileData>>();
+		TreeMap<Integer, FileData> repTemp=new TreeMap<Integer, FileData>();
+		repTemp.putAll(nodeData1.replFiles);
 		temp.putAll(allAgentNetworkFiles);
 		networkFilesChanged=false;
 		if(allAgentNetworkFiles.containsKey(nodeData1.getMyNodeID()))
 		{
-			if(!(allAgentNetworkFiles.get(nodeData1.getMyNodeID()) ==nodeData1.replFiles))
+			if(!(allAgentNetworkFiles.get(nodeData1.getMyNodeID()) ==repTemp))
 			{
 				
 				TreeMap<Integer,FileData> tempMyFilesOnNode=new TreeMap<Integer,FileData>();
@@ -120,10 +122,9 @@ public class AgentMain extends Thread implements Serializable
 			{
 				if (entry.getValue().containsKey(key))
 				{
-					//file found
 					if (!entry.getValue().get(key).isLock())
 					{
-						//TODO remove from downloadlist
+						nodeData1.lockRequestList.remove(key);
 						allAgentNetworkFiles.get(entry.getKey()).get(key).setLock(true);
 						if(copyLockList.get(key).equals("dl"))
 						{
@@ -131,10 +132,12 @@ public class AgentMain extends Thread implements Serializable
 							//TODO check if sizelocalowners <1 don't use parts
 							int partID=1;
 							ArrayList<Integer> parts=new ArrayList<Integer>();
+							int partSize =(int)(Math.ceil(entry.getValue().get(key).getSize()/entry.getValue().get(key).getNumberOfOwners()));
 							for(int owner:entry.getValue().get(key).getLocalOwners())
 							{
+								
 								parts.add(partID);
-								//TODO file1.setPartSize
+								entry.getValue().get(key).setPartSize(partSize);
 								entry.getValue().get(key).setPartID(partID);
 								entry.getValue().get(key).setDestinationFolder("part");
 								downloadMap.put(owner, entry.getValue().get(key));
@@ -196,7 +199,8 @@ public class AgentMain extends Thread implements Serializable
 		{
 			  Integer key = entry.getKey();
 			  FileData tempFD = entry.getValue();
-			  ArrayList<Integer> localFileOwners = tempFD.getLocalOwners();
+			  ArrayList<Integer> localFileOwners =new ArrayList<Integer>();
+			  localFileOwners.addAll(tempFD.getLocalOwners());
 			  for(int temp : localFileOwners)
 			  {
 				  if(temp == failedNodeID)

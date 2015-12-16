@@ -83,7 +83,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 						Fail fail = new Fail();
 						int failedNodeID = nodedata1.getPrevNode();
 						fail.failureDetected(nodedata1, failedNodeID);
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
 	            }
 	        }.start();

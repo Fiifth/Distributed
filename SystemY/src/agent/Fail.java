@@ -28,17 +28,20 @@ public class Fail{
 			nameserver.thisNodeFails(failedNodeID);
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
 		AgentMain failAgent = new AgentMain(false,null,null,failedNodeID,nodeData1.getMyNodeID());
+		failAgent.setNodeData1(nodeData1);
 		failAgent.run();
 		while(failAgent.isAlive()){}
 		//send and run failureAgent on next node
-		if(nodeData1.getNextNode() != failAgent.startingNodeID){
+		if((nodeData1.getNextNode() != failAgent.startingNodeID)&&nodeData1.getNextNode()!=failedNodeID)
+		{
 			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodeData1.getNextNode(), nodeData1.getNextNodeIP(), "RMICommunication");
 			try 
 			{
 				recInt.rmiFileAgentExecution(failAgent);
 			} catch (RemoteException e) {e.printStackTrace();}
 		}
-		else{//restart file agent
+		else if(nodeData1.getMyNodeID()!=nodeData1.getNextNode())
+		{//restart file agent
 			TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
 			TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
 			AgentMain fileAgent = new AgentMain(true, initTree,agentLockList, 0, 0);
@@ -46,7 +49,6 @@ public class Fail{
 			fileAgent.run();
 			
 			while(fileAgent.isAlive()){}
-			
 			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodeData1.getPrevNode(), nodeData1.getPrevNodeIP(), "RMICommunication");
 			try 
 			{

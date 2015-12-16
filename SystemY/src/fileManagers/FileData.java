@@ -24,11 +24,16 @@ public class FileData implements Serializable
 	private volatile String destinationFolder;
 	private volatile long size;
 	private volatile int partID;
+	private volatile int partSize;
 	private volatile boolean lock;
 	
 	public ArrayList<Integer> getLocalOwners()
 	{
 		return localOwners;
+	}
+	public int getNumberOfOwners()
+	{
+		return localOwners.size();
 	}
 	public void addOwner (int ownerID)
 	{
@@ -132,6 +137,12 @@ public class FileData implements Serializable
 	}
 	public void setSize(long size) {
 		this.size = size;
+	}
+	public int getPartSize() {
+		return partSize;
+	}
+	public void setPartSize(int partSize) {
+		this.partSize = partSize;
 	}
 	public int getPartID() {
 		return partID;

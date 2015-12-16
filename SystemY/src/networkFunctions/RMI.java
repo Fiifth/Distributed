@@ -33,6 +33,6 @@ public class RMI
 		{
 			object=Naming.lookup("//"+locationIP+":"+RMIport+"/"+locationName);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {return false;}
-		return object;
+		return (Object)object;
 	}
 }
