@@ -128,7 +128,7 @@ public class AgentMain extends Thread implements Serializable
 					allAgentNetworkFiles.get(nodeID).get(fileHash).setLock(true);
 					if(copyLockList.get(fileHash).equals("dl"))
 					{
-						int partID=1;
+						int partID=0;
 						FileData wantedFile=entry.getValue().get(fileHash);
 						ArrayList<Integer> parts=new ArrayList<Integer>();
 						int partSize =(int)(Math.ceil(wantedFile.getSize()/wantedFile.getNumberOfOwners()));
@@ -138,7 +138,8 @@ public class AgentMain extends Thread implements Serializable
 						{
 							for(int owner:owners)
 							{
-								System.out.println("owner"); 
+								partID=partID+1;
+								System.out.println("owner: "+owner); 
 								parts.add(partID);
 								wantedFile.setPartSize(partSize);
 								wantedFile.setPartID(partID);
@@ -148,7 +149,6 @@ public class AgentMain extends Thread implements Serializable
 								downloadMap.put(owner, wantedFile);
 								nodeData1.receiveQueue.add(wantedFile);
 								System.out.println("receive: "+wantedFile.getFileName()+"."+wantedFile.getPartID());
-								partID++;
 							}
 							nodeData1.partMap.put(fileHash, parts);
 						}

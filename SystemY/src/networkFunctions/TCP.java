@@ -89,6 +89,13 @@ public class TCP
 	
 	public boolean receiveFile(String sourceIP,int serverPort, String fileOutput)
 	{
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println("receiving");
 		FileOutputStream fos = null;
         BufferedOutputStream bos = null;
         Socket clientSocket = null;
@@ -99,8 +106,8 @@ public class TCP
             try {
 				clientSocket = new Socket(sourceIP, serverPort);
 				is = clientSocket.getInputStream();
-			} catch (IOException e) {return false;}	
-           
+			} catch (IOException e) { System.out.println("ERROR1");return false;}	
+            System.out.println("found");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if (is != null) 
@@ -122,7 +129,7 @@ public class TCP
                 baos.close();
                 fos.close();
                 clientSocket.close();
-            } catch (IOException ex) {return false;}
+            } catch (IOException ex) {System.out.println("ERROR2");return false;}
         }
         return true;
 	}
