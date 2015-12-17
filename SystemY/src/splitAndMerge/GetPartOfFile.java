@@ -18,48 +18,25 @@ public class GetPartOfFile
         FileChannel fc = null;
 		try {
 			fc = (FileChannel.open(source));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
         ByteBuffer buf = ByteBuffer.allocateDirect(sizeOfFiles);;
         ByteBuffer.allocateDirect(sizeOfFiles);
         
         try {
 			fc.read(buf,sizeOfFiles*(part-1));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
         buf.flip();
         File file = new File(Destinaion+"."+String.format("%03d", part));
-        System.out.println("part file jow:"+Destinaion+"."+String.format("%03d", part)); 
         FileChannel channel = null;
 		try {
 			channel = new FileOutputStream(file, true).getChannel();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (FileNotFoundException e) {}
         try {
 			channel.write(buf);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
         buf.clear();
         try {
 			channel.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}        
+		} catch (IOException e) {}        
 	}
-	public static void main(String[] args) throws IOException 
-    {
-    	Path source = Paths.get("C:\\Tannenbaum.pdf");
-    	Path dest = Paths.get("C:\\TannenbaumSplit.pdf");
-    	int size=1024 * 1024*5;// 1MB
-    	//getPart(size,2,source,dest);
-    }
 }

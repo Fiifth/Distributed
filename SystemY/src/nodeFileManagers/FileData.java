@@ -13,7 +13,6 @@ public class FileData implements Serializable
 	private static final long serialVersionUID = 1L;
 	private volatile String fileName;
 	private volatile String folderLocation;
-	private volatile String localOwnerIP;
 	public volatile TreeMap<Integer,String> localOwners = new TreeMap<Integer,String>();
 	private volatile String sourceIP;
 	private volatile int sourceID;
@@ -53,9 +52,7 @@ public class FileData implements Serializable
 	}
 	public void addOwner (int ownerID,String ip)
 	{
-		
 		localOwners.put(ownerID, ip);
-		System.out.println("added an owner, size: "+localOwners.size()+" the owner: "+ownerID+" the ip: "+ip);
 	}
 	public boolean removeOwner (Integer ownerID)
 	{
@@ -72,7 +69,6 @@ public class FileData implements Serializable
 		this.fileName=fileName;
 		lock=false;
 		folderLocation=nodedata1.getMyLocalFolder();
-		localOwnerIP=nodedata1.getMyIP();
 	}
 	
 	public void setFolderLocation(String folderLocation) {
@@ -87,9 +83,6 @@ public class FileData implements Serializable
 	}
 	public String getFolderLocation() {
 		return folderLocation;
-	}
-	public String getLocalOwnerIP() {
-		return localOwnerIP;
 	}
 
 	public int getReplicateOwnerID() {

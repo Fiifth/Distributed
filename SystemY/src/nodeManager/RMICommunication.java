@@ -49,14 +49,16 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	
 	public void removeThisOwner(FileData file1) throws RemoteException 
 	{
-		//TODO check if empty
 		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
-		FileData removedFile=nodedata1.replFiles.get(fileNameHash);
-		if (removedFile.removeOwner(file1.getSourceID()))
+		if (nodedata1.replFiles.containsKey(fileNameHash))
 		{
-			nodedata1.replFiles.remove(fileNameHash);
-			Path source = Paths.get(removedFile.getFolderLocation()+"\\"+removedFile.getFileName());
-			try {Files.delete(source);} catch (IOException e) {}
+			FileData removedFile=nodedata1.replFiles.get(fileNameHash);
+			if (removedFile.removeOwner(file1.getSourceID()))
+			{
+				nodedata1.replFiles.remove(fileNameHash);
+				Path source = Paths.get(removedFile.getFolderLocation()+"\\"+removedFile.getFileName());
+				try {Files.delete(source);} catch (IOException e) {}
+			}
 		}
 	}
 	
@@ -79,7 +81,6 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 						recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getPrevNodeIP()+":"+nodedata1.getPrevNode()+"/RMICommunication");
 						recInt.rmiFileAgentExecution(fileAgent);
 					} catch (MalformedURLException | RemoteException | NotBoundException e) {
-						// TODO Auto-generated catch block
 						Fail fail = new Fail();
 						int failedNodeID = nodedata1.getPrevNode();
 						fail.failureDetected(nodedata1, failedNodeID);
@@ -87,7 +88,6 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 					}
 	            }
 	        }.start();
-			
 		}
 		else
 			nodedata1.allNetworkFiles.clear();

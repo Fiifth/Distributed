@@ -35,28 +35,20 @@ public class ShutdownT extends Thread
 		{
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			//true if node wants to quit
+			} catch (InterruptedException e1) {}
 			if(nodedata1.getToQuit())
 				{
 				
 				for(Map.Entry<Integer, FileData> entry : nodedata1.localFiles.entrySet())
 				{
-					
 					FileData test = entry.getValue();
 					test.refreshReplicateOwner(nodedata1);
 					test.setSourceID(nodedata1.getMyNodeID());
-					//if(!(entry.getValue().getReplicateOwnerID()==nodedata1.getMyNodeID()))
-					//{
-				        RMICommunicationInt recInt=null;
-				        try {
-				        	recInt = (RMICommunicationInt) rmi.getRMIObject(test.getReplicateOwnerID(), test.getReplicateOwnerIP(), "RMICommunication");
-							recInt.removeThisOwner(test);
-						} catch (RemoteException e) {e.printStackTrace();}
-					//}
+			        RMICommunicationInt recInt=null;
+			        try {
+			        	recInt = (RMICommunicationInt) rmi.getRMIObject(test.getReplicateOwnerID(), test.getReplicateOwnerIP(), "RMICommunication");
+						recInt.removeThisOwner(test);
+					} catch (RemoteException e) {e.printStackTrace();}
 		    	}
 				
 				nodedata1.setToLeave(1);

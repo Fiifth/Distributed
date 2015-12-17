@@ -14,6 +14,6 @@ public interface NameServerInterface extends java.rmi.Remote{
 	String locateFile(String filename)throws RemoteException;
 	
 	void thisNodeFails(int failingNodeID) throws RemoteException;
-	//TODO make function-->nodeID-->nodeIP
+	
 
 }

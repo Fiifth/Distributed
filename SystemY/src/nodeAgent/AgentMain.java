@@ -140,8 +140,6 @@ public class AgentMain extends Thread implements Serializable
 							for(int owner:owners)
 							{
 								partID=partID+1;
-								System.out.println("owner: "+owner); 
-								
 								wantedFile.setPartSize(partSize);
 								wantedFile.setPartID(partID);
 								wantedFile.setDestinationFolder("part");
@@ -152,7 +150,6 @@ public class AgentMain extends Thread implements Serializable
 								FileData file1=new FileData();
 								file1.deepCopy(wantedFile);
 								downloadMap.put(owner, file1);
-								System.out.println("receive: "+file1.getFileName()+"."+file1.getPartID());
 							}
 							
 						}
@@ -185,7 +182,6 @@ public class AgentMain extends Thread implements Serializable
 		{
 			if (entry.getKey()== nodeData1.getMyNodeID())
 			{
-				System.out.println("sending: "+entry.getValue().getFileName()+"."+entry.getValue().getPartID());
 				nodeData1.sendQueue.add(entry.getValue());
 				downloadMap.remove(entry.getKey());
 			}

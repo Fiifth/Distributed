@@ -106,7 +106,6 @@ public class Sender extends Thread
 	}
 	public void sendFile(FileData file1)
 	{
-		System.out.println("sending");
 		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
         ServerSocket welcomeSocket = null;
         Socket connectionSocket = null;
