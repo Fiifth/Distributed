@@ -30,11 +30,12 @@ public class AgentMain extends Thread implements Serializable
 	int failedNodeID;
 	int startingNodeID;
 	boolean typeOfAgent;
-	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> downloadMap, int failedNodeID, int failStarterID)
+	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> downloadMap,TreeMap<Integer,Integer> removeMap, int failedNodeID, int failStarterID)
 	{
 		this.typeOfAgent = typeOfAgent;
 		this.allAgentNetworkFiles = allAgentNetworkFiles;
 		this.downloadMap=downloadMap;
+		this.removeMap=removeMap;
 		this.failedNodeID = failedNodeID;
 		startingNodeID = failStarterID;
 	}
@@ -165,8 +166,12 @@ public class AgentMain extends Thread implements Serializable
 					}
 					else if (copyLockList.get(fileHash).equals("rm"))
 					{
-						//make remove list
-						//(lokal owner,fileID)
+						FileData fileToRemove=entry.getValue().get(fileHash);
+						List<Integer> owners = new ArrayList<Integer>(fileToRemove.getLocalOwners().keySet());
+						for(int owner:owners)
+						{
+							removeMap.put(owner, fileHash);
+						}
 					}
 				}
 			}
@@ -185,10 +190,23 @@ public class AgentMain extends Thread implements Serializable
 				downloadMap.remove(entry.getKey());
 			}
 		}
-		//TODO iterate remove list
-			//if key==my id
-				//lookup fileID in local list -->remove
-				//remove file	
+		
+		TreeMap<Integer, Integer> tempRemoveMap=new TreeMap<Integer, Integer>();
+		tempRemoveMap.putAll(removeMap);
+		for(Entry<Integer, Integer> entry : tempRemoveMap.entrySet()) 
+		{
+			if (entry.getKey()== nodeData1.getMyNodeID())
+			{
+				if(nodeData1.localFiles.containsKey(entry.getValue()))
+				{
+					String fileName=nodeData1.localFiles.get(entry.getValue()).getFileName();
+					Path source = Paths.get(nodeData1.getMyLocalFolder()+"\\"+fileName);
+					try {Files.delete(source);} catch (IOException e) {}
+					removeMap.remove(entry.getKey());
+				}
+			}
+		}
+		
 	}
 	public void updateLocalAllFiles()
 	{

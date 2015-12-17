@@ -27,7 +27,7 @@ public class Fail{
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodeData1.getNameServerIP()+":1099/NameServer");
 			nameserver.thisNodeFails(failedNodeID);
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
-		AgentMain failAgent = new AgentMain(false,null,null,failedNodeID,nodeData1.getMyNodeID());
+		AgentMain failAgent = new AgentMain(false,null,null,null,failedNodeID,nodeData1.getMyNodeID());
 		failAgent.setNodeData1(nodeData1);
 		failAgent.run();
 		while(failAgent.isAlive()){}
@@ -44,7 +44,8 @@ public class Fail{
 		{//restart file agent
 			TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
 			TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
-			AgentMain fileAgent = new AgentMain(true, initTree,agentLockList, 0, 0);
+			TreeMap<Integer,Integer> removeMap=new TreeMap<Integer,Integer>();
+			AgentMain fileAgent = new AgentMain(true, initTree,agentLockList,removeMap, 0, 0);
 			fileAgent.setNodeData1(nodeData1);
 			fileAgent.run();
 			
