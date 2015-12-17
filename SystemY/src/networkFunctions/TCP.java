@@ -89,12 +89,7 @@ public class TCP
 	
 	public boolean receiveFile(String sourceIP,int serverPort, String fileOutput)
 	{
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	
 		System.out.println("receiving");
 		FileOutputStream fos = null;
         BufferedOutputStream bos = null;
@@ -103,10 +98,16 @@ public class TCP
 		byte[] aByte = new byte[1];
         int bytesRead;
 
-            try {
-				clientSocket = new Socket(sourceIP, serverPort);
-				is = clientSocket.getInputStream();
-			} catch (IOException e) { System.out.println("ERROR1");return false;}	
+            
+				try {
+					clientSocket = new Socket(sourceIP, serverPort);
+					is = clientSocket.getInputStream();
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
             System.out.println("found");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 

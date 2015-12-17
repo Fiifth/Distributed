@@ -76,6 +76,13 @@ public class Sender extends Thread
 			else if (file1.getDestinationFolder().equals("lok"))
 			{
 				file1.setFolderLocation(nodedata1.getMyLocalFolder());
+				
+				try 
+				{
+					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
+					recInt.receiveThisFile(file1);
+				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
+				
 				sendFile(file1);
 			}
 			else if (file1.getDestinationFolder().equals("part"))
@@ -86,6 +93,12 @@ public class Sender extends Thread
 				partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
 				file1.setFolderLocation(nodedata1.getMyReplFolder());
 				file1.setFileName(file1.getFileName()+"."+String.format("%03d", file1.getPartID()));
+				try 
+				{
+					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
+					recInt.receiveThisFile(file1);
+				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
+				
 				sendFile(file1);
 			}
 			nodedata1.setSending(false);

@@ -49,15 +49,19 @@ public class Receiver extends Thread
 		System.out.println(fileOutput);
 		}
 		else //TODO make partFileFolder
-		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName()+"."+String.format("%03d", file1.getPartID());
+		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
 		System.out.println("receive: "+fileOutput);
         int serverPort = file1.getSourceID()+32768;
    
         tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
-        int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
-        if(file1.getDestinationFolder().equals("part"));
+        if (file1.getFileName().length()>=5)
         {
-        	nodedata1.removeFromPartMap(fileNameHash, file1.getSourceID());
+	        String temp= file1.getFileName().substring(0, file1.getFileName().length() - 4);
+	        int fileNameHash=Math.abs(temp.hashCode()%32768);
+	        if(file1.getDestinationFolder().equals("part"));
+	        {
+	        	nodedata1.removeFromPartMap(fileNameHash, file1.getSourceID());
+	        }
         }
     }
 }
