@@ -56,11 +56,12 @@ public class Receiver extends Thread
         tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
         if (file1.getFileName().length()>=5)
         {
-	        String temp= file1.getFileName().substring(0, file1.getFileName().length() - 4);
-	        int fileNameHash=Math.abs(temp.hashCode()%32768);
+	        String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4);
+	        System.out.println(fileName);
+	        int fileNameHash=Math.abs(fileName.hashCode()%32768);
 	        if(file1.getDestinationFolder().equals("part"));
 	        {
-	        	nodedata1.removeFromPartMap(fileNameHash, file1.getSourceID());
+				nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfOwners(), fileName);
 	        }
         }
     }

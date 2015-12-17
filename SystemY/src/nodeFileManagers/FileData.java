@@ -39,6 +39,7 @@ public class FileData implements Serializable
 		this.destinationIP=file1.destinationIP;
 		this.destinationFolder=file1.destinationFolder;
 		this.size=file1.size;
+		this.localOwners=file1.localOwners;
 		this.partID=file1.partID;
 		this.partSize=file1.partSize;
 	}

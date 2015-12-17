@@ -140,7 +140,7 @@ public class AgentMain extends Thread implements Serializable
 							{
 								partID=partID+1;
 								System.out.println("owner: "+owner); 
-								parts.add(partID);
+								
 								wantedFile.setPartSize(partSize);
 								wantedFile.setPartID(partID);
 								wantedFile.setDestinationFolder("part");
@@ -153,7 +153,7 @@ public class AgentMain extends Thread implements Serializable
 								downloadMap.put(owner, file1);
 								System.out.println("receive: "+file1.getFileName()+"."+file1.getPartID());
 							}
-							nodeData1.partMap.put(fileHash, parts);
+							
 						}
 						else
 						{

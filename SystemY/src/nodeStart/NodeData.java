@@ -1,14 +1,18 @@
 package nodeStart;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import nodeFileManagers.FileData;
 import nodeFileManagers.FileOwnershipT;
+import splitAndMerge.Merge;
 
 public class NodeData implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,27 +38,10 @@ public class NodeData implements Serializable {
 	public volatile TreeMap<Integer,String> lockRequestList = new TreeMap<Integer,String>();
 	public volatile TreeMap<Integer, FileData> localFiles = new TreeMap<Integer,FileData>();
 	public volatile TreeMap<Integer, FileData> replFiles = new TreeMap<Integer,FileData>();
-	public volatile TreeMap<Integer,ArrayList<Integer>> partMap=new TreeMap<Integer,ArrayList<Integer>>();//map(fileID,Arraylist(nodeID))
+	public volatile TreeMap<Integer,ArrayList<File>> partMap=new TreeMap<Integer,ArrayList<File>>();//map(fileID,Arraylist(nodeID))
 	
 	
 	
-	public  void removeFromPartMap(Integer fileID, Integer nodeID) 
-	{
-		if (partMap.containsKey(fileID))
-		{
-			ArrayList<Integer> nodes=new ArrayList<Integer>();
-			nodes.addAll(partMap.get(fileID));
-			nodes.remove(nodeID);
-			if (nodes.isEmpty())
-			{
-				partMap.remove(fileID);
-				//TODO start merge(nodeID)
-				System.out.println("received them all!");
-			}
-			else
-				partMap.put(fileID, nodes);
-		}
-	}
 	public String getNodeName() {
 		return nodeName;
 	}
@@ -164,6 +151,33 @@ public class NodeData implements Serializable {
 	public void setNumberOfNodesStart(int numberOfNodesStart) {
 		this.numberOfNodesStart = numberOfNodesStart;
 	}
-
-	
+	public void addAPart(int fileID, String fileOutput, int TotalNumberOfParts,String fileName) 
+	{
+		System.out.println("addpart");
+		ArrayList<File> files=new ArrayList<File>();
+		
+		if (partMap.containsKey(fileID))
+		{
+			files.addAll(partMap.get(fileID));
+			
+			files.add(new File(fileOutput));
+			System.out.println(files.size());
+			if (files.size()==TotalNumberOfParts)
+			{
+				File destination=new File(myLocalFolder+"\\"+fileName);
+				Collections.sort(files);
+				System.out.println("received them all!");
+				Merge merger=new Merge();
+				merger.mergeFiles(files, destination);
+				partMap.remove(fileID);
+			}
+			else
+				partMap.put(fileID, files);
+		}
+		else
+		{
+			files.add(new File(fileOutput));
+			partMap.put(fileID, files);
+		}
+	}
 }

@@ -2,6 +2,7 @@ package splitAndMerge;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 
 public class Merge 
 {
-	public static ArrayList<File> listOfFilesToMerge(String fileName) 
+	public ArrayList<File> listOfFilesToMerge(String fileName) 
 	{
 		File oneOfFiles=new File(fileName);
 	    String tmpName = oneOfFiles.getName();//{name}.{number}
@@ -20,15 +21,20 @@ public class Merge
 	    return (new ArrayList<File>(Arrays.asList(files)));
 	}
 	
-	public static void mergeFiles(ArrayList<File> files, File into) throws IOException 
+	public void mergeFiles(ArrayList<File> files, File into) 
 	{
-	    try (BufferedOutputStream mergingStream = new BufferedOutputStream(
-	            new FileOutputStream(into))) 
+	    try (BufferedOutputStream mergingStream = new BufferedOutputStream(new FileOutputStream(into))) 
 	    {
 	        for (File f : files) 
 	        {
 	            Files.copy(f.toPath(), mergingStream);
 	        }
-	    }
+	    } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
