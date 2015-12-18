@@ -36,7 +36,7 @@ public class Fail{
 			RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodeData1.getNextNode(), nodeData1.getNextNodeIP(), "RMICommunication");
 			try 
 			{
-				recInt.rmiFileAgentExecution(failAgent);
+				recInt.rmiFailAgentExecution(failAgent);
 			} catch (RemoteException e) {e.printStackTrace();}
 		}
 		else if(nodeData1.getMyNodeID()!=nodeData1.getNextNode())

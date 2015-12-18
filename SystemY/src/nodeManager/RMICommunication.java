@@ -92,4 +92,24 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		else
 			nodedata1.allNetworkFiles.clear();
 	}
+	public void rmiFailAgentExecution(AgentMain failAgent) throws RemoteException
+	{
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	
+		if(nodedata1.getNextNode() != nodedata1.getMyNodeID())
+		{
+			failAgent.setNodeData1(nodedata1);
+			failAgent.run();
+			while(failAgent.isAlive()){}
+			new Thread() {
+				public void run()
+				{
+					RMICommunicationInt recInt;
+					try{
+						recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getNextNodeIP()+":"+nodedata1.getNextNode()+"/RMICommunication");
+						recInt.rmiFailAgentExecution(failAgent);
+					} catch (MalformedURLException | RemoteException | NotBoundException e){}
+				}
+			}.start();
+		}
+	}
 }

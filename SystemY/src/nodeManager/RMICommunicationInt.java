@@ -11,4 +11,5 @@ public interface RMICommunicationInt extends java.rmi.Remote
 	void removeThisOwner(FileData file1) throws RemoteException;
 	boolean addOwner(FileData file1) throws RemoteException;
 	void rmiFileAgentExecution(AgentMain fileAgent) throws RemoteException;
+	void rmiFailAgentExecution(AgentMain failAgent) throws RemoteException;
 }
