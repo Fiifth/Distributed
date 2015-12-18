@@ -24,8 +24,14 @@ public class Receiver extends Thread
 				file1=nodedata1.receiveQueue.take();
 			} 
 			catch (InterruptedException e) {return;}
-			
-			receiveFile(file1,nodedata1); 
+			final FileData file=file1;
+			new Thread() 
+			{
+	            public void run() 
+	            {
+	            	receiveFile(file,nodedata1); 
+	            }
+			 }.start();
 		}
 	}
 	

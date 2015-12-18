@@ -80,6 +80,7 @@ public class FileDetectionT extends Thread{
 							recInt.removeThisOwner(removedFile);
 						} catch (RemoteException e) {e.printStackTrace();}
 				        nodedata1.localFiles.remove(fileNameHash);
+				        nodedata1.setChanged(true);
 					}
 				}
 				key.reset();
