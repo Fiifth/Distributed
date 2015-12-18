@@ -47,7 +47,6 @@ public class Multicast
 		{
 			multicastSocket.receive(messageIn);
 		} catch (IOException e) {e.printStackTrace();}
-		//String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 		return messageIn;
 	}
 	

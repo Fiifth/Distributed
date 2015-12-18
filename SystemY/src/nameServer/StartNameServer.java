@@ -71,9 +71,10 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 		return (TreeMap<Integer, String>) nodeMap;
 	}
 	
-	public String locateFile(String filename)throws RemoteException
+	public String[] locateFile(String filename)throws RemoteException
 	{
 		//TODO change String to String[]
+		String[] toSend=new String[2];
 		int destinationKey=0;
 		int hashedFN = Math.abs(filename.hashCode()%32768);
 		if(nodeMap.lowerKey(hashedFN)==null)
@@ -84,9 +85,10 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 			destinationKey=nodeMap.lowerKey(hashedFN);
 		if (destinationKey==0) destinationKey=nodeMap.lastKey();
 		
-		String toSend=nodeMap.get(destinationKey)+"-"+destinationKey;
+		toSend[0]=nodeMap.get(destinationKey);
+		toSend[1]=Integer.toString(destinationKey);
 
-		return (toSend);		
+		return toSend;		
 	}
 
 	public TreeMap<Integer, String> getNodeMap() {

@@ -5,7 +5,6 @@ import java.util.TreeMap;
 
 import networkFunctions.*;
 import nodeAgent.AgentMain;
-import nodeAgent.Fail;
 import nodeFileManagers.*;
 import nodeManager.*;
 
@@ -37,22 +36,28 @@ public class StartNode
 		{
 			RMICommunication rmiCom=new RMICommunication(nodedata1);
 			rmiCom.setUpRMI();
-		} catch (RemoteException e1) {e1.printStackTrace();}
+		} catch (RemoteException e1) {e1.printStackTrace(); return;}
+		
 		if (!setSurroundingNodes(nodedata1)) return;
+		
 		ArrayList<Object> threadList = new ArrayList<Object>();
 		
 		FileDetectionT filedetector =new FileDetectionT(nodedata1);
 		filedetector.start();
 		threadList.add(filedetector);
+		
 		Receiver receiver = new Receiver(nodedata1);
 		receiver.start();
 		threadList.add(receiver);
+		
 		Sender sender = new Sender(nodedata1);
 		sender.start();
 		threadList.add(sender);
+		
 		NodeDetection nodedetection =new NodeDetection(nodedata1,multi);
 		nodedetection.start();
 		threadList.add(nodedetection);
+		
 		ShutdownT shutdown = new ShutdownT(nodedata1,threadList,multi);
 		shutdown.start();
 	}

@@ -49,9 +49,9 @@ public class AgentMain extends Thread implements Serializable
 		{
 			//Update agent's network files list
 			updateAgentNetworkFiles();
-			//Check for lock requests before updating local node's file list
+			//Iterate local locks and add actions for other nodes
 			attemptToLock();
-			//Iterate local locks and add to send list
+			//Check if current node has to take action (send/remove)
 			checkAgentLockAction();
 			//Update local node's file list
 			updateLocalAllFiles();	
@@ -131,27 +131,26 @@ public class AgentMain extends Thread implements Serializable
 					{
 						int partID=0;
 						FileData wantedFile=entry.getValue().get(fileHash);
-						ArrayList<Integer> parts=new ArrayList<Integer>();
 						int partSize =(int)(Math.ceil(wantedFile.getSize()/wantedFile.getNumberOfOwners()));
 						List<Integer> owners = new ArrayList<Integer>(wantedFile.getLocalOwners().keySet());
 						
 						if ((partSize>1)&&(wantedFile.getNumberOfOwners()>1))
 						{
+							wantedFile.setPartSize(partSize);
+							wantedFile.setDestinationFolder("part");
+							wantedFile.setDestinationID(nodeData1.getMyNodeID());
+							wantedFile.setDestinationIP(nodeData1.getMyIP());
+							
 							for(int owner:owners)
 							{
 								partID=partID+1;
-								wantedFile.setPartSize(partSize);
 								wantedFile.setPartID(partID);
-								wantedFile.setDestinationFolder("part");
 								wantedFile.setSourceID(owner);
 								wantedFile.setSourceIP(wantedFile.getLocalOwners().get(owner));
-								wantedFile.setDestinationID(nodeData1.getMyNodeID());
-								wantedFile.setDestinationIP(nodeData1.getMyIP());
 								FileData file1=new FileData();
 								file1.deepCopy(wantedFile);
 								downloadMap.put(owner, file1);
 							}
-							
 						}
 						else
 						{

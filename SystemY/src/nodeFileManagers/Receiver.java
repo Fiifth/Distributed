@@ -24,9 +24,10 @@ public class Receiver extends Thread
 				file1=nodedata1.receiveQueue.take();
 			} 
 			catch (InterruptedException e) {return;}
+			
 			receiveFile(file1,nodedata1); 
-			}
 		}
+	}
 	
 	public void receiveFile(FileData file1, NodeData nodedata1) 
 	{
@@ -34,33 +35,36 @@ public class Receiver extends Thread
 		if(file1.getDestinationFolder().equals("rep")) 
 		{
 			fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
-			int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
-			if (!nodedata1.replFiles.containsKey(fileNameHash))
-		       {
-		       		file1.setFolderLocation(nodedata1.getMyReplFolder());
-		       		file1.setRemoveAfterSend(false);
-		       		nodedata1.replFiles.put(fileNameHash,file1);
-		       		
-		       } 
 		}
 		else if(file1.getDestinationFolder().equals("lok")) 
 		{
-		fileOutput = nodedata1.getMyLocalFolder()+"\\"+file1.getFileName();
+			fileOutput = nodedata1.getMyLocalFolder()+"\\"+file1.getFileName();
 		}
 		else 
-		fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
+			fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
+		
         int serverPort = file1.getSourceID()+32768;
-   
-        tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput); 
-        if (file1.getFileName().length()>=5)
+        
+        if (tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput))
         {
-	        String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4);
-	        System.out.println(fileName);
-	        int fileNameHash=Math.abs(fileName.hashCode()%32768);
-	        if(file1.getDestinationFolder().equals("part"));
-	        {
-				nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfOwners(), fileName);
+	        if (file1.getDestinationFolder().equals("part") )
+	        {	        
+		        if(file1.getFileName().length()>=5);
+		        {
+		        	String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4);
+			        int fileNameHash=Math.abs(fileName.hashCode()%32768);
+					nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfOwners(), fileName);
+		        }
 	        }
+	        else if(file1.getDestinationFolder().equals("rep")) 
+			{
+	        	int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
+				if (!nodedata1.replFiles.containsKey(fileNameHash))
+			    {
+			       	file1.setFolderLocation(nodedata1.getMyReplFolder());
+			       	nodedata1.replFiles.put(fileNameHash,file1);	
+			    } 
+			}
         }
     }
 }

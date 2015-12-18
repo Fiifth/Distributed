@@ -41,7 +41,6 @@ public class Sender extends Thread
 		while(!Thread.interrupted())
 		{
 			FileData file1=null;
-			RMICommunicationInt recInt=null;
 			try 
 			{
 				file1 = nodedata1.sendQueue.take();
@@ -54,55 +53,57 @@ public class Sender extends Thread
 			}
 			else if (file1.getDestinationFolder().equals("rep"))
 			{
-				boolean filePresent;
 				file1.setSourceIP(nodedata1.getMyIP());
 				file1.setSourceID(nodedata1.getMyNodeID());
-				try 
-				{
-					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
-					filePresent=recInt.receiveThisFile(file1);
-				} catch (Exception e) {System.out.println("failed connection to RMI of the node"); filePresent=true;}
 				
-				if (!filePresent)
+				if (!tellNodeToReceive(file1))
 				{
 					sendFile(file1);
 					if (file1.getRemoveAfterSend()) 
-					{
-						Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
-						try {Files.delete(source);} catch (IOException e) {}
-					}
+						removeFile(file1);
 				}
 			}
 			else if (file1.getDestinationFolder().equals("lok"))
 			{
 				file1.setFolderLocation(nodedata1.getMyLocalFolder());
-				
-				try 
-				{
-					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
-					recInt.receiveThisFile(file1);
-				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
-				
+				tellNodeToReceive(file1);
 				sendFile(file1);
 			}
 			else if (file1.getDestinationFolder().equals("part"))
 			{
-				GetPartOfFile partGetter=new GetPartOfFile();
-				Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
-				Path dest = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
-				partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
-				file1.setFolderLocation(nodedata1.getMyReplFolder());
-				file1.setFileName(file1.getFileName()+"."+String.format("%03d", file1.getPartID()));
-				try 
-				{
-					recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
-					recInt.receiveThisFile(file1);
-				} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
-				
+				createPartOfFile(file1);
+				tellNodeToReceive(file1);
 				sendFile(file1);
 			}
 			nodedata1.setSending(false);
 		}
+	}
+	
+	public void createPartOfFile(FileData file1)
+	{
+		GetPartOfFile partGetter=new GetPartOfFile();
+		Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+		Path dest = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
+		partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
+		file1.setFolderLocation(nodedata1.getMyReplFolder());
+		file1.setFileName(file1.getFileName()+"."+String.format("%03d", file1.getPartID()));
+	}
+	public void removeFile(FileData file1)
+	{
+		Path source = Paths.get(file1.getFolderLocation()+"\\"+file1.getFileName());
+		try {Files.delete(source);} catch (IOException e) {}
+	}
+	public boolean tellNodeToReceive(FileData file1)
+	{
+		RMICommunicationInt recInt=null;
+		boolean filePresent=true;
+		try 
+		{
+			recInt = (RMICommunicationInt) rmi.getRMIObject(file1.getDestinationID(), file1.getDestinationIP(), "RMICommunication");
+			filePresent=recInt.receiveThisFile(file1);
+		} catch (Exception e) {System.out.println("failed connection to RMI of the node"); filePresent=true;}
+		
+		return filePresent;
 	}
 	public void sendFile(FileData file1)
 	{

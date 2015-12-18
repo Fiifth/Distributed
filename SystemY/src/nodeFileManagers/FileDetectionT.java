@@ -132,5 +132,4 @@ public class FileDetectionT extends Thread{
 			nodedata1.setChanged(true);
 		}		
 	}
-
 }	

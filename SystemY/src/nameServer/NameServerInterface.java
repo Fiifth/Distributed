@@ -11,7 +11,7 @@ public interface NameServerInterface extends java.rmi.Remote{
 	
 	TreeMap<Integer, String> showList() throws RemoteException;
 	
-	String locateFile(String filename)throws RemoteException;
+	String[] locateFile(String filename)throws RemoteException;
 	
 	void thisNodeFails(int failingNodeID) throws RemoteException;
 	

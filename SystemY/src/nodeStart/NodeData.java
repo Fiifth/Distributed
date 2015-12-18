@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -153,7 +152,6 @@ public class NodeData implements Serializable {
 	}
 	public void addAPart(int fileID, String fileOutput, int TotalNumberOfParts,String fileName) 
 	{
-		System.out.println("addpart");
 		ArrayList<File> files=new ArrayList<File>();
 		
 		if (partMap.containsKey(fileID))
@@ -166,7 +164,6 @@ public class NodeData implements Serializable {
 			{
 				File destination=new File(myLocalFolder+"\\"+fileName);
 				Collections.sort(files);
-				System.out.println("received them all!");
 				Merge merger=new Merge();
 				merger.mergeFiles(files, destination);
 				partMap.remove(fileID);

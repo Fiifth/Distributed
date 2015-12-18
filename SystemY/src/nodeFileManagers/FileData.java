@@ -2,7 +2,6 @@ package nodeFileManagers;
 
 import java.io.Serializable;
 import java.rmi.Naming;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import nameServer.NameServerInterface;
@@ -169,8 +168,7 @@ public class FileData implements Serializable
 		String[] ipAndIDArray=null;
 		try {
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
-			String ipAndID = nameserver.locateFile(getFileName());
-			ipAndIDArray=ipAndID.split("-");
+			ipAndIDArray = nameserver.locateFile(getFileName());
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
 		replicateOwnerIP=ipAndIDArray[0];
 		replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
