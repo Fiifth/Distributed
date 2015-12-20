@@ -130,7 +130,9 @@ public class AgentMain extends Thread implements Serializable
 					if(copyLockList.get(fileHash).equals("dl"))
 					{
 						int partID=0;
-						FileData wantedFile=entry.getValue().get(fileHash);
+						FileData tempFile=entry.getValue().get(fileHash);
+						FileData wantedFile=new FileData();
+						wantedFile.deepCopy(tempFile);
 						int partSize =(int)(Math.ceil(wantedFile.getSize()/wantedFile.getNumberOfOwners()));
 						List<Integer> owners = new ArrayList<Integer>(wantedFile.getLocalOwners().keySet());
 						
@@ -154,6 +156,8 @@ public class AgentMain extends Thread implements Serializable
 						}
 						else
 						{
+							wantedFile.setDestinationID(nodeData1.getMyNodeID());
+							wantedFile.setDestinationIP(nodeData1.getMyIP());
 							wantedFile.setDestinationFolder("lok");
 							wantedFile.setSourceID(owners.get(0));
 							wantedFile.setSourceIP(wantedFile.getLocalOwners().get(owners.get(0)));

@@ -170,11 +170,11 @@ public class FileData implements Serializable
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodedata1.getNameServerIP()+":1099/NameServer");
 			ipAndIDArray = nameserver.locateFile(getFileName());
 		} catch (Exception e) {System.out.println("failed connection to RMI of the server and get ip");}
-		replicateOwnerIP=ipAndIDArray[0];
-		replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
-		destinationID = replicateOwnerID;
-		destinationIP = replicateOwnerIP;
-		setDestinationFolder("rep");
+		this.replicateOwnerIP=ipAndIDArray[0];
+		this.replicateOwnerID=Integer.parseInt(ipAndIDArray[1]);
+		this.destinationID = replicateOwnerID;
+		this.destinationIP = replicateOwnerIP;
+		this.setDestinationFolder("rep");
 		 return !(replicateOwnerID==nodedata1.getMyNodeID());	
 	}
 }
