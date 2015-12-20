@@ -175,7 +175,7 @@ public class NodeGUI {
         	        nodeframe.getContentPane().add(allfiles);       	        
         	        
         	        //refresh button, not needed because list refreshes automatically
-        	        /*JButton btnaddFile = new JButton("Refresh Files");
+        	        JButton btnaddFile = new JButton("Refresh Files");
                     btnaddFile.setBounds(500, 50, 150, 30);
                     nodeframe.getContentPane().add(btnaddFile);
                     btnaddFile.addActionListener(new ActionListener() {
@@ -183,7 +183,7 @@ public class NodeGUI {
                             		System.out.println("lijstenfixke knop");
                                     generateLists();                                       
                             }
-                    });*/
+                    });
                    
                    
                     JButton btnRMFile = new JButton("Remove File");
