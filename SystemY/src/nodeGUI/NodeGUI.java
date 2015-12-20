@@ -38,9 +38,7 @@ public class NodeGUI {
 	
 	public NodeGUI(){
 		
-		//TODO download all, remove all
-		//TODO functies in guifunctions.java
-		
+		//startupframe where user can start nameserver and choose name of node
 		JFrame nameframe = new JFrame();
 		nameframe.setTitle("Node startup");
 		nameframe.getContentPane().setForeground(Color.BLACK);
@@ -79,16 +77,17 @@ public class NodeGUI {
             public void actionPerformed(ActionEvent e) {
             	StartNameServer nameserver = null;
 				try {
+					//start nameserver
 					nameserver = new StartNameServer();
 					nameserver.startNameServer();
-					JTextField errortext = new JTextField();
-        			errortext.setForeground(Color.GREEN);
-        			errortext.setText("NameServer started.");
-        			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
-        			errortext.setBorder(null);
-        	        errortext.setBounds(10, 100, 290, 20);
-        	        errortext.setColumns(10);        			
-        	        nameframe.getContentPane().add(errortext);
+					JTextField started = new JTextField();
+					started.setForeground(Color.GREEN);
+					started.setText("NameServer started.");
+					started.setFont(new Font("Tahoma", Font.BOLD, 13));
+					started.setBorder(null);
+					started.setBounds(10, 100, 290, 20);
+					started.setColumns(10);        			
+        	        nameframe.getContentPane().add(started);
 				} catch (RemoteException e1) {} catch (IOException e1) {}        		
             }
     });
@@ -105,6 +104,7 @@ public class NodeGUI {
     			node1.startNewNode();
         		if(nodenaam.contains(" "))
         		{
+        			//bad nodename
         			JTextField errortext = new JTextField();
         			errortext.setForeground(Color.RED);
         			errortext.setText(nodenaam + " is geen geldige nodenaam.");
@@ -116,6 +116,7 @@ public class NodeGUI {
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() == 0)
         		{
+        			//name already exists
         			JTextField errortext = new JTextField();
         			errortext.setForeground(Color.RED);
         			errortext.setText("Name already exists, try another one");
@@ -127,7 +128,7 @@ public class NodeGUI {
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() >= 1 )
         		{	
-        			//created node
+        			//good name, node starts
         			nameframe.setVisible(false);
         			nodeframe.setTitle("Node " + nodenaam);
         			
@@ -173,8 +174,8 @@ public class NodeGUI {
         	        allfiles.setBounds(230, 30, 100, 20);
         	        nodeframe.getContentPane().add(allfiles);       	        
         	        
-        	        
-        	        JButton btnaddFile = new JButton("Refresh Files");
+        	        //refresh button, not needed because list refreshes automatically
+        	        /*JButton btnaddFile = new JButton("Refresh Files");
                     btnaddFile.setBounds(500, 50, 150, 30);
                     nodeframe.getContentPane().add(btnaddFile);
                     btnaddFile.addActionListener(new ActionListener() {
@@ -182,7 +183,7 @@ public class NodeGUI {
                             		System.out.println("lijstenfixke knop");
                                     generateLists();                                       
                             }
-                    });
+                    });*/
                    
                    
                     JButton btnRMFile = new JButton("Remove File");
@@ -190,6 +191,7 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnRMFile);
                     btnRMFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
+                            	//let the user choose which files to remove
                             	JFrame rmframe = new JFrame();
                             	rmframe.setTitle("Remove File");
                             	rmframe.getContentPane().setForeground(Color.BLACK);
@@ -219,8 +221,10 @@ public class NodeGUI {
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										List<String> selectedRMValues = displayRemoveList.getSelectedValuesList();
+										//iterate selected values
 										for(String value : selectedRMValues)
 										{
+											//send lockrequest for file to remove
 											System.out.println(value);
 											node1.nodedata1.lockRequestList.put(Math.abs(value.hashCode()%32768), "rm");
 										}
@@ -239,8 +243,8 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-								//TODO in functie (guifunctions)
-                            	JFrame dlframe = new JFrame();
+								//let user choose which files to download
+								JFrame dlframe = new JFrame();
                             	dlframe.setTitle("Download File");
                             	dlframe.getContentPane().setForeground(Color.BLACK);
                             	dlframe.setResizable(true);
@@ -269,8 +273,10 @@ public class NodeGUI {
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										List<String> selectedValues = displayDownloadList.getSelectedValuesList();
+										//iterate selected files
 										for(String value : selectedValues)
 										{
+											//send lockrequest for file to download
 											System.out.println(value);
 											node1.nodedata1.lockRequestList.put(Math.abs(value.hashCode()%32768), "dl");
 										}
@@ -306,6 +312,7 @@ public class NodeGUI {
                     
                     nodeframe.setVisible(true);
         			
+                    //listen for changes and update lists in GUI
         			new Thread() {
         	            public void run() {
         	            	
@@ -327,6 +334,7 @@ public class NodeGUI {
         		
         		else
         		{
+        			//no nameserver found, node does not start
         			JTextField errortext = new JTextField();
         			errortext.setForeground(Color.RED);
         			errortext.setText("No nameserver found");
@@ -343,10 +351,14 @@ public class NodeGUI {
 	
 	public void generateLists(){
 		
+		//method to update the lists with new values
+		
 		tempLocalFiles = node1.nodedata1.localFiles;
         tempAllNetworkFiles = node1.nodedata1.allNetworkFiles;
 		
 		//update local files
+        DefaultListModel<String> filelisttemp = filelist;
+        displayList = new JList<String>(filelisttemp);
         filelist.clear();
         if(tempLocalFiles.size() != 0)
         {
@@ -361,7 +373,9 @@ public class NodeGUI {
         ownfile.setBackground(Color.WHITE);
         nodeframe.getContentPane().add(ownfile);
         
-        //update all files  
+        //update all files
+        DefaultListModel<String> allfilelisttemp = allfilelist;
+        displayAllList = new JList<String>(allfilelisttemp);
         allfilelist.clear();
         if (tempAllNetworkFiles.size() > 0)
         {
