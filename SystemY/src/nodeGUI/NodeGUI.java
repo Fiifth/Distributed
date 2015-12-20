@@ -205,7 +205,7 @@ public class NodeGUI {
                             	JTextPane dltxtpnfilename = new JTextPane();
                                 dltxtpnfilename.setFont(new Font("Tahoma", Font.BOLD, 13));
                                 dltxtpnfilename.setEditable(false);
-                                dltxtpnfilename.setText("Files to remove: ");
+                                dltxtpnfilename.setText("File to remove: ");
                                 dltxtpnfilename.setBounds(5, 10, 280, 20);
                                 rmframe.getContentPane().add(dltxtpnfilename);
                                 
@@ -220,15 +220,9 @@ public class NodeGUI {
                                 rmframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										List<String> selectedRMValues = displayRemoveList.getSelectedValuesList();
-										//iterate selected values
-										for(String value : selectedRMValues)
-										{
-											//send lockrequest for file to remove
-											System.out.println(value);
-											node1.nodedata1.lockRequestList.put(Math.abs(value.hashCode()%32768), "rm");
-										}
-										
+										//send lockrequest for file to remove
+										String selectedRMValue = displayRemoveList.getSelectedValue();
+										node1.nodedata1.lockRequestList.put(Math.abs(selectedRMValue.hashCode()%32768), "rm");										
 										rmframe.setVisible(false);
 									}
                                 
@@ -257,7 +251,7 @@ public class NodeGUI {
                             	JTextPane dltxtpnfilename = new JTextPane();
                                 dltxtpnfilename.setFont(new Font("Tahoma", Font.BOLD, 13));
                                 dltxtpnfilename.setEditable(false);
-                                dltxtpnfilename.setText("Files to download: ");
+                                dltxtpnfilename.setText("File to download: ");
                                 dltxtpnfilename.setBounds(5, 10, 280, 20);
                                 dlframe.getContentPane().add(dltxtpnfilename);
                                 
@@ -272,15 +266,9 @@ public class NodeGUI {
                                 dlframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										List<String> selectedValues = displayDownloadList.getSelectedValuesList();
-										//iterate selected files
-										for(String value : selectedValues)
-										{
-											//send lockrequest for file to download
-											System.out.println(value);
-											node1.nodedata1.lockRequestList.put(Math.abs(value.hashCode()%32768), "dl");
-										}
-										
+										//send lockrequest for file to download
+										String selectedValue = displayDownloadList.getSelectedValue();
+										node1.nodedata1.lockRequestList.put(Math.abs(selectedValue.hashCode()%32768), "dl");										
 										dlframe.setVisible(false);
 									}
                                 
