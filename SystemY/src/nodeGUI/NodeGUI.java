@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.TreeMap;
@@ -175,10 +178,10 @@ public class NodeGUI {
         	        nodeframe.getContentPane().add(allfiles);       	        
         	        
         	        //refresh button, not needed because list refreshes automatically
-        	        JButton btnaddFile = new JButton("Refresh Files");
-                    btnaddFile.setBounds(500, 50, 150, 30);
-                    nodeframe.getContentPane().add(btnaddFile);
-                    btnaddFile.addActionListener(new ActionListener() {
+        	        JButton btnRefresh = new JButton("Refresh Files");
+        	        btnRefresh.setBounds(500, 50, 150, 30);
+                    nodeframe.getContentPane().add(btnRefresh);
+                    btnRefresh.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                             		System.out.println("lijstenfixke knop");
                                     generateLists();                                       
@@ -231,9 +234,58 @@ public class NodeGUI {
                             	
                             }
                     });
+                    
+                    //button to remove local files
+        	        JButton btnRemoveLocal = new JButton("Remove Local File");
+        	        btnRemoveLocal.setBounds(500, 150, 150, 30);
+                    nodeframe.getContentPane().add(btnRemoveLocal);
+                    btnRemoveLocal.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                            	//let the user choose which files to remove
+                            	JFrame rmframe = new JFrame();
+                            	rmframe.setTitle("Remove Local Files");
+                            	rmframe.getContentPane().setForeground(Color.BLACK);
+                            	rmframe.setResizable(true);
+                            	rmframe.getContentPane().setBackground(Color.WHITE);
+                            	rmframe.setBackground(Color.WHITE);
+                            	rmframe.setBounds(200, 200, 300, 400);
+                            	rmframe.setResizable(false);
+                            	rmframe.getContentPane().setLayout(null);
+                            	
+                            	JTextPane dltxtpnfilename = new JTextPane();
+                                dltxtpnfilename.setFont(new Font("Tahoma", Font.BOLD, 13));
+                                dltxtpnfilename.setEditable(false);
+                                dltxtpnfilename.setText("Local file to remove: ");
+                                dltxtpnfilename.setBounds(5, 10, 280, 20);
+                                rmframe.getContentPane().add(dltxtpnfilename);
+                                
+                                JList<String> displayRemoveLocalList = new JList<String>(filelist);
+                                JScrollPane localfilestorm = new JScrollPane(displayRemoveLocalList);
+                                localfilestorm.setBounds(5, 30, 275, 280);
+                                localfilestorm.setBackground(Color.WHITE);
+                                rmframe.getContentPane().add(localfilestorm);
+                                
+                                JButton rmbutton = new JButton("Remove");
+                                rmbutton.setBounds(75, 320 , 150, 30);
+                                rmframe.getContentPane().add(rmbutton);
+                                rmbutton.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										//remove local file
+										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
+										Path source = Paths.get(node1.nodedata1.getMyLocalFolder()+"\\"+selectedRMValue);
+										try {Files.delete(source);} catch (IOException e1) {}
+										rmframe.setVisible(false);
+									}
+                                
+                                }); 
+                                rmframe.setVisible(true);	                                   
+                            }
+                    });
+                    
+                    
                    
                     btnDLFile = new JButton("Download File");
-                    btnDLFile.setBounds(500, 150, 150, 30);
+                    btnDLFile.setBounds(500, 200, 150, 30);
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
@@ -279,7 +331,7 @@ public class NodeGUI {
                     });
                    
                     JButton btnOpenFolder = new JButton("Open Folder");
-                    btnOpenFolder.setBounds(500, 200, 150, 30);
+                    btnOpenFolder.setBounds(500, 250, 150, 30);
                     nodeframe.getContentPane().add(btnOpenFolder);
                     btnOpenFolder.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
@@ -290,7 +342,7 @@ public class NodeGUI {
                     });
                    
                     JButton btnQuit = new JButton("Quit Node");
-                    btnQuit.setBounds(500, 250, 150, 30);
+                    btnQuit.setBounds(500, 300, 150, 30);
                     nodeframe.getContentPane().add(btnQuit);
                     btnQuit.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
