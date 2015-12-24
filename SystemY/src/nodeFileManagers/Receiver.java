@@ -59,7 +59,9 @@ public class Receiver extends Thread
 		        {
 		        	String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4);
 			        int fileNameHash=Math.abs(fileName.hashCode()%32768);
-					nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfOwners(), fileName);
+			        nodedata1.acquire();
+					nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfParts(), fileName);
+					nodedata1.release();
 		        }
 	        }
 	        else if(file1.getDestinationFolder().equals("rep")) 

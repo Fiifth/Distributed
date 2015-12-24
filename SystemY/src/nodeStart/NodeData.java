@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
 
 import nodeFileManagers.FileData;
 import nodeFileManagers.FileOwnershipT;
@@ -38,7 +39,7 @@ public class NodeData implements Serializable {
 	public volatile TreeMap<Integer, FileData> localFiles = new TreeMap<Integer,FileData>();
 	public volatile TreeMap<Integer, FileData> replFiles = new TreeMap<Integer,FileData>();
 	public volatile TreeMap<Integer,ArrayList<File>> partMap=new TreeMap<Integer,ArrayList<File>>();//map(fileID,Arraylist(nodeID))
-	
+	public volatile Semaphore semaphore = new Semaphore(1);
 	
 	
 	public String getNodeName() {
@@ -144,6 +145,14 @@ public class NodeData implements Serializable {
 	public void setChanged(boolean changed) {
 		this.changed = changed;
 	}
+	public void acquire() {
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {return;}
+	}
+	public void release() {
+		semaphore.release();
+	}
 	public int getNumberOfNodesStart() {
 		return numberOfNodesStart;
 	}
@@ -157,9 +166,8 @@ public class NodeData implements Serializable {
 		if (partMap.containsKey(fileID))
 		{
 			files.addAll(partMap.get(fileID));
-			
 			files.add(new File(fileOutput));
-			System.out.println(files.size());
+			
 			if (files.size()==TotalNumberOfParts)
 			{
 				File destination=new File(myLocalFolder+"\\"+fileName);

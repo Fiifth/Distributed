@@ -30,6 +30,7 @@ public class GetPartOfFile
 			outChannel.write(buf);
 			buf.clear();
 			outChannel.close();
+			inChannel.close();
 		} catch (IOException e) {}       
 	}
 }

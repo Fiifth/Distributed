@@ -272,8 +272,16 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										//remove local file
 										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
-										Path source = Paths.get(node1.nodedata1.getMyLocalFolder()+"\\"+selectedRMValue);
-										try {Files.delete(source);} catch (IOException e1) {}
+										FileData temp=node1.nodedata1.localFiles.get(Math.abs(selectedRMValue.hashCode()%32768));
+										if (temp.getNumberOfOwners()==1)
+										{
+											//TODO show error
+										}
+										else
+										{
+											Path source = Paths.get(node1.nodedata1.getMyLocalFolder()+"\\"+selectedRMValue);
+											try {Files.delete(source);} catch (IOException e1) {}
+										}
 										rmframe.setVisible(false);
 									}
                                 

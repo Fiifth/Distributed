@@ -129,19 +129,49 @@ public class AgentMain extends Thread implements Serializable
 					allAgentNetworkFiles.get(nodeID).get(fileHash).setLock(true);
 					if(copyLockList.get(fileHash).equals("dl"))
 					{
-						int partID=0;
+						int partID;
+						int numberOfParts;
+						int partSize;
+						boolean sendFromRepOwner;
 						FileData tempFile=entry.getValue().get(fileHash);
 						FileData wantedFile=new FileData();
 						wantedFile.deepCopy(tempFile);
-						int partSize =(int)(Math.ceil(wantedFile.getSize()/wantedFile.getNumberOfOwners()));
+						
+						if(tempFile.isOwner(wantedFile.getReplicateOwnerID()))
+						{
+							partID=0;
+							sendFromRepOwner=false;
+							numberOfParts=wantedFile.getNumberOfOwners();
+							partSize =(int)(Math.ceil(wantedFile.getSize()/numberOfParts));
+						}
+						else
+						{
+							partID=1;
+							sendFromRepOwner=true;
+							numberOfParts=wantedFile.getNumberOfOwners()+1;
+							partSize =(int)(Math.ceil(wantedFile.getSize()/numberOfParts));
+						}
+						
+						
 						List<Integer> owners = new ArrayList<Integer>(wantedFile.getLocalOwners().keySet());
 						
-						if ((partSize>1)&&(wantedFile.getNumberOfOwners()>1))
+						if ((partSize>1)&&(numberOfParts>1))
 						{
 							wantedFile.setPartSize(partSize);
+							wantedFile.setNumberOfParts(numberOfParts);
 							wantedFile.setDestinationFolder("part");
 							wantedFile.setDestinationID(nodeData1.getMyNodeID());
 							wantedFile.setDestinationIP(nodeData1.getMyIP());
+							
+							if(sendFromRepOwner)
+							{
+								wantedFile.setPartID(partID);
+								wantedFile.setSourceID(wantedFile.getReplicateOwnerID());
+								wantedFile.setSourceIP(wantedFile.getReplicateOwnerIP());
+								FileData file1=new FileData();
+								file1.deepCopy(wantedFile);
+								downloadMap.put(tempFile.getReplicateOwnerID(), file1);
+							}
 							
 							for(int owner:owners)
 							{

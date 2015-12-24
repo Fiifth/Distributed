@@ -24,6 +24,7 @@ public class FileData implements Serializable
 	private volatile long size;
 	private volatile int partID;
 	private volatile int partSize;
+	private volatile int numberOfParts;
 	private volatile boolean lock;
 	
 	public void deepCopy(FileData file1)
@@ -40,6 +41,9 @@ public class FileData implements Serializable
 		this.localOwners=file1.localOwners;
 		this.partID=file1.partID;
 		this.partSize=file1.partSize;
+		this.replicateOwnerIP=file1.replicateOwnerIP;
+		this.replicateOwnerID=file1.replicateOwnerID;
+		this.numberOfParts=file1.numberOfParts;
 	}
 	public TreeMap<Integer, String> getLocalOwners()
 	{
@@ -162,6 +166,12 @@ public class FileData implements Serializable
 	}
 	public void setPartID(int partID) {
 		this.partID = partID;
+	}
+	public int getNumberOfParts() {
+		return numberOfParts;
+	}
+	public void setNumberOfParts(int numberOfParts) {
+		this.numberOfParts = numberOfParts;
 	}
 	public boolean refreshReplicateOwner(NodeData nodedata1)
 	{

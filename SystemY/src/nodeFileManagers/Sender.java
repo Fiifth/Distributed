@@ -81,8 +81,17 @@ public class Sender extends Thread
 	
 	public void createPartOfFile(FileData file1)
 	{
+		Path source;
+		
+		if(nodedata1.localFiles.containsKey(Math.abs(file1.getFileName().hashCode()%32768)))
+		{
+			source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+		}
+		else
+			source = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
+
 		GetPartOfFile partGetter=new GetPartOfFile();
-		Path source = Paths.get(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+		
 		Path dest = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 		partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
 		file1.setFolderLocation(nodedata1.getMyReplFolder());
