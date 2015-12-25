@@ -24,11 +24,10 @@ public class AgentMain extends Thread implements Serializable
 	public TreeMap<Integer,FileData> downloadMap; //local owner,filedata
 	public TreeMap<Integer,Integer> removeMap; //local owner,fileID
 	public boolean networkFilesChanged;
-	
+	public int startingNodeID;
 	
 	NodeData nodeData1;
 	int failedNodeID;
-	int startingNodeID;
 	boolean typeOfAgent;
 	public AgentMain(boolean typeOfAgent, TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles,TreeMap<Integer,FileData> downloadMap,TreeMap<Integer,Integer> removeMap, int failedNodeID, int failStarterID)
 	{
