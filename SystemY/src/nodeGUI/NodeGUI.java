@@ -72,7 +72,6 @@ public class NodeGUI {
 		nodeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		nodeframe.getContentPane().setLayout(null);
 		
-		nameframe.setVisible(true);
         JButton btnStartNameserver = new JButton("Start NameServer");
         btnStartNameserver.setBounds(130, 60 , 155, 23);
         nameframe.getContentPane().add(btnStartNameserver);
@@ -96,7 +95,7 @@ public class NodeGUI {
     });
 		
 		
-		nameframe.setVisible(true);
+		
         JButton btnStartNode = new JButton("Start Node");
         btnStartNode.setBounds(10, 60 , 110, 23);
         nameframe.getContentPane().add(btnStartNode);
@@ -275,14 +274,21 @@ public class NodeGUI {
 										FileData temp=node1.nodedata1.localFiles.get(Math.abs(selectedRMValue.hashCode()%32768));
 										if (temp.getNumberOfOwners()==1)
 										{
-											//TODO show error
+											JTextField rmerrortext = new JTextField();
+											rmerrortext.setForeground(Color.RED);
+											rmerrortext.setText("Not allowed, you are the only owner.");
+											rmerrortext.setFont(new Font("Tahoma", Font.BOLD, 13));
+											rmerrortext.setBorder(null);
+											rmerrortext.setBounds(10, 345 , 300, 30);
+											rmerrortext.setColumns(10);        			
+						        	        rmframe.getContentPane().add(rmerrortext);
 										}
 										else
 										{
 											Path source = Paths.get(node1.nodedata1.getMyLocalFolder()+"\\"+selectedRMValue);
 											try {Files.delete(source);} catch (IOException e1) {}
+											rmframe.setVisible(false);
 										}
-										rmframe.setVisible(false);
 									}
                                 
                                 }); 
@@ -292,26 +298,26 @@ public class NodeGUI {
                     
                     
                    
-                    btnDLFile = new JButton("Download File");
+                    btnDLFile = new JButton("Open File");
                     btnDLFile.setBounds(500, 200, 150, 30);
                     nodeframe.getContentPane().add(btnDLFile);
                     btnDLFile.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								//let user choose which files to download
 								JFrame dlframe = new JFrame();
-                            	dlframe.setTitle("Download File");
+                            	dlframe.setTitle("Open File");
                             	dlframe.getContentPane().setForeground(Color.BLACK);
                             	dlframe.setResizable(true);
                             	dlframe.getContentPane().setBackground(Color.WHITE);
                             	dlframe.setBackground(Color.WHITE);
-                            	dlframe.setBounds(200, 200, 300, 400);
+                            	dlframe.setBounds(200, 200, 300, 410);
                             	dlframe.setResizable(false);
                             	dlframe.getContentPane().setLayout(null);
                             	
                             	JTextPane dltxtpnfilename = new JTextPane();
                                 dltxtpnfilename.setFont(new Font("Tahoma", Font.BOLD, 13));
                                 dltxtpnfilename.setEditable(false);
-                                dltxtpnfilename.setText("File to download: ");
+                                dltxtpnfilename.setText("File to open: ");
                                 dltxtpnfilename.setBounds(5, 10, 280, 20);
                                 dlframe.getContentPane().add(dltxtpnfilename);
                                 
@@ -321,14 +327,46 @@ public class NodeGUI {
                                 filestodl.setBackground(Color.WHITE);
                                 dlframe.getContentPane().add(filestodl);
                                 
-                                JButton dlbutton = new JButton("Download");
+                                JButton dlbutton = new JButton("Open");
                                 dlbutton.setBounds(75, 320 , 150, 30);
                                 dlframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										//send lockrequest for file to download
 										String selectedValue = displayDownloadList.getSelectedValue();
-										node1.nodedata1.lockRequestList.put(Math.abs(selectedValue.hashCode()%32768), "dl");										
+										int valuehash = Math.abs(selectedValue.hashCode()%32768);
+										Desktop desktop = Desktop.getDesktop();
+										if(node1.nodedata1.localFiles.containsKey(valuehash))
+										{
+											//file is in localfolder
+											File file = new File(node1.nodedata1.getMyLocalFolder() + "\\" + selectedValue);
+											try {
+												desktop.open(file);
+											} catch (IOException e1) {}
+										}
+										else if(node1.nodedata1.replFiles.containsKey(valuehash))
+										{
+											//file is in replfolder
+											File file = new File(node1.nodedata1.getMyReplFolder() + "\\" + selectedValue);
+											try {
+												desktop.open(file);
+											} catch (IOException e1) {}
+										}
+										else
+										{
+											//file needs to be downloaded to local folder
+											node1.nodedata1.lockRequestList.put(Math.abs(selectedValue.hashCode()%32768), "dl");
+											while(!node1.nodedata1.localFiles.containsKey(valuehash))
+											{
+												try {
+													Thread.sleep(300);
+												} catch (InterruptedException e1) {}												
+											}
+											File file = new File(node1.nodedata1.getMyLocalFolder() + "\\" + selectedValue);
+											try {
+												desktop.open(file);
+											} catch (IOException e1) {}
+										}										
 										dlframe.setVisible(false);
 									}
                                 
@@ -359,6 +397,8 @@ public class NodeGUI {
                     });                   
                     
                     nodeframe.setVisible(true);
+                    
+                    generateLists();
         			
                     //listen for changes and update lists in GUI
         			new Thread() {
@@ -394,7 +434,8 @@ public class NodeGUI {
         		}
         	}
         });
-
+        
+        nameframe.setVisible(true);
 	}
 	
 	public void generateLists(){
