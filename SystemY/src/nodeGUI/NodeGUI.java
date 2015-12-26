@@ -369,6 +369,14 @@ public class NodeGUI {
 										else
 										{
 											//file needs to be downloaded to local folder
+											JTextField dltext = new JTextField();
+											dltext.setForeground(Color.GREEN);
+											dltext.setText("Downloading file, will open when finished.");
+											dltext.setFont(new Font("Tahoma", Font.BOLD, 13));
+											dltext.setBorder(null);
+											dltext.setBounds(10, 390, 280, 30);
+											dltext.setColumns(10);        			
+						        	        dlframe.getContentPane().add(dltext);
 											node1.nodedata1.lockRequestList.put(Math.abs(selectedValue.hashCode()%32768), "dl");
 											while(!node1.nodedata1.localFiles.containsKey(valuehash))
 											{
