@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -271,8 +272,21 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										//remove local file
 										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
-										FileData temp=node1.nodedata1.localFiles.get(Math.abs(selectedRMValue.hashCode()%32768));
-										if (temp.getNumberOfOwners()==1)
+										int filehash=Math.abs(selectedRMValue.hashCode()%32768);
+										int numberOfOwners = 1;
+										TreeMap<Integer, TreeMap<Integer, FileData>> temp=new TreeMap<Integer, TreeMap<Integer, FileData>>();
+										temp.putAll(node1.nodedata1.allNetworkFiles);
+										for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : temp.entrySet())
+										{
+											TreeMap<Integer, FileData> nodeRepFiles =entry.getValue();
+											if (nodeRepFiles.containsKey(filehash))
+											{
+												FileData file=nodeRepFiles.get(filehash);
+												numberOfOwners=file.getNumberOfOwners();
+												System.out.println("found= "+numberOfOwners);
+											}
+										}
+										if (numberOfOwners==1)
 										{
 											JTextField rmerrortext = new JTextField();
 											rmerrortext.setForeground(Color.RED);
