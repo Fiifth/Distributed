@@ -55,11 +55,16 @@ public class Receiver extends Thread
         {
 	        if (file1.getDestinationFolder().equals("part") )
 	        {	        
-		        if(file1.getFileName().length()>=5);
+		        if(file1.getFileName().length()>=5) //extra controle
 		        {
+		        	//bestandnaam.*** (***is part nummer)
 		        	String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4);
 			        int fileNameHash=Math.abs(fileName.hashCode()%32768);
+			     	//we zorgen ervoor dat verschillende threads de addAPart functie niet tegelijk oproepen
+			        //door gebruik te maken van een Semaphore.
 			        nodedata1.acquire();
+			        //de functie addAPart zorgt voor een lijst met parts. Wanneer deze compleet is worden 
+			        //de parts samengevoegd.
 					nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfParts(), fileName);
 					nodedata1.release();
 		        }

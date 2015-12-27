@@ -36,9 +36,10 @@ public class ShutdownT extends Thread
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e1) {}
+			
 			if(nodedata1.getToQuit())
-				{
-				
+			{
+				//waarschuw de replicatie eigenaar dat de file niet meer beschikbaar gaat zijn
 				for(Map.Entry<Integer, FileData> entry : nodedata1.localFiles.entrySet())
 				{
 					FileData test = entry.getValue();
@@ -53,32 +54,33 @@ public class ShutdownT extends Thread
 				
 				nodedata1.setToLeave(1);
 				String text="1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode()+"-"+nodedata1.getPrevNodeIP()+"-"+nodedata1.getNextNodeIP();
-				
+				//laat alle nodes weten dat de node weg gaat
 				multi.sendMulticast(text);
 
 				stay = false;
 				try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}		
-
+				//stuur alle files door die deze node gerepliceerd heeft naar een nieuwe rep eigenaar
 				FileOwnershipT COT =new FileOwnershipT(nodedata1);
 				COT.start();
-
+				//wacht tot alle bestanden behandeld zijn
 				while(COT.isAlive()){}
-				
+				//wacht tot alle bestanden verstuurd zijn
 				while(!nodedata1.sendQueue.isEmpty()){}
-	
+				//het laatste bestand zal nog verstuurd moeten worden als de sendQueue leeg is dus wordt er
+				//gebruik gemaakt van een extra flag die bepaald of de node aan het sturen is.
 				while(nodedata1.isSending()){}
-				
+			
 				try {
 					Naming.unbind(nodedata1.getBind());
 				} catch (RemoteException | MalformedURLException | NotBoundException e) {}
 				
 				multi.LeaveMulticast();
-				
+				//sluit alle threads
 				for (Object temp:threadList)
 				{
 					((Thread) temp).interrupt();
 				}
-				System.exit(1);
+				System.exit(1);//sluit het systeem volledig af
 			}
 		}	
 	}

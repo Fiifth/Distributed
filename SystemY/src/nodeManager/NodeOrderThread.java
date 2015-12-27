@@ -26,7 +26,7 @@ public class NodeOrderThread extends Thread {
 
 	public void run() {
 		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-		//message = 0-nodeName or 1-nodename-prevnode-nextnode
+		//message = 0-nodeName or 1-nodename-prevnode-nextnode-prevnodeIP-nextnodeIP
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
 		String[] msgs = msg.split("-");
@@ -50,6 +50,9 @@ public class NodeOrderThread extends Thread {
 			{
 				nodedata1.setNextNode(newNextID);
 				nodedata1.setNextNodeIP(newNextIP);
+				//telkens als setNextNodeIP opgeroepen wordt zal FileOwnershipT gestart worden
+				//wanneer de next node veranderd kan het namelijk zijn dat de bestanden een nieuwe
+				//replicatie eigenaar moeten hebben
 			}
 		}
 		//adding new node

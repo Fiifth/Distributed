@@ -18,6 +18,8 @@ public class NameServerThread extends Thread {
 	
 	public void run() 
 	{
+			//bericht dat ontvangen wordt van de node bevat eerst 0(nieuwe node) of 1(node die weg gaat) 
+			//hierna een '-' vervolgd door de nodeID
 		String msgs = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
 		String[] message = msgs.split("-");
 		int toLeave=Integer.parseInt(message[0]);
@@ -36,6 +38,8 @@ public class NameServerThread extends Thread {
 		{
 			String numOfNodesString=null;
 			boolean isNewNode=false;
+			//Addnode gaat een boolean terug geven die ons weergeeft of de nodeID al in de map aanwezig was
+			//Wanneer dit het geval is zal hij een "0" terug sturen naar de node zodat hij dit ook weet
 			try 
 			{
 				isNewNode = nameServer.addNode(message[1], nodeIP);

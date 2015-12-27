@@ -33,6 +33,8 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public boolean receiveThisFile(FileData file1) throws RemoteException 
 	{
 		int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
+		//controleer of het bestand al aanwezig is. Wanneer dit het geval is moet het bestand niet doorgestuurd worden
+		//en kunnen we de node als lokale eigenaar toevoegen
 		if (file1.getDestinationFolder().equals("rep")&&nodedata1.replFiles.containsKey(fileNameHash))
 		{
 			FileData temp=nodedata1.replFiles.get(fileNameHash);
@@ -62,9 +64,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		}
 	}
 	
-	public boolean addOwner(FileData file1) throws RemoteException {
-		return false;
-	}
+	
 	public void rmiFileAgentExecution(AgentMain fileAgent) throws RemoteException
 	{
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	

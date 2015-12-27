@@ -171,7 +171,7 @@ public class NodeData implements Serializable {
 			if (files.size()==TotalNumberOfParts)
 			{
 				File destination=new File(myLocalFolder+"\\"+fileName);
-				Collections.sort(files);
+				Collections.sort(files); //zorgt ervoor dat de parts in juiste volgorde staan om te mergen
 				Merge merger=new Merge();
 				merger.mergeFiles(files, destination);
 				partMap.remove(fileID);

@@ -21,7 +21,7 @@ public class FileOwnershipT extends Thread
 
 		for (Integer key : tempRepFiles.keySet())
 		{
-			if (tempRepFiles.get(key).refreshReplicateOwner(nodedata1))
+			if (tempRepFiles.get(key).refreshReplicateOwner(nodedata1)) //return waarde geeft weer of rep eigenaar veranderd is
 			{
 				nodedata1.replFiles.remove(key);
 				tempRepFiles.get(key).setRemoveAfterSend(true);
