@@ -270,10 +270,11 @@ public class AgentMain extends Thread implements Serializable
 				{
 					if(temp == failedNodeID)
 					{
-						if(tempFD.removeOwner(temp))//returns true if no owners remain
+						FileData fd = nodeData1.replFiles.get(fileHash);
+						if(fd.removeOwner(temp))//returns true if no owners remain
 						{//if no local owners remain remove file from replication lists
 							nodeData1.replFiles.remove(fileHash);
-							Path source = Paths.get(tempFD.getFolderLocation()+"\\"+tempFD.getFileName());
+							Path source = Paths.get(fd.getFolderLocation()+"\\"+tempFD.getFileName());
 							try {Files.delete(source);} catch (IOException e) {}
 						}
 						else
@@ -294,12 +295,12 @@ public class AgentMain extends Thread implements Serializable
 			for(Map.Entry<Integer,FileData> entry : nodeLocalFiles.entrySet())
 			{
 				Integer fileHash = entry.getKey();
-				FileData tempFD = entry.getValue();
-				if(tempFD.getReplicateOwnerID() == failedNodeID)
+				FileData fd = nodeData1.localFiles.get(fileHash);
+				if(fd.getReplicateOwnerID() == failedNodeID)
 				{
-					tempFD.refreshReplicateOwner(nodeData1);
-					nodeData1.sendQueue.add(tempFD);
-					nodeData1.localFiles.put(fileHash,tempFD);
+					fd.refreshReplicateOwner(nodeData1);
+					nodeData1.sendQueue.add(fd);
+					nodeData1.localFiles.put(fileHash,fd);
 				}
 			}
 		}
