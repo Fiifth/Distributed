@@ -185,6 +185,6 @@ public class FileData implements Serializable
 		this.destinationID = replicateOwnerID;
 		this.destinationIP = replicateOwnerIP;
 		this.setDestinationFolder("rep");
-		 return !(replicateOwnerID==nodedata1.getMyNodeID());	
+		 return !(replicateOwnerID==nodedata1.getMyNodeID());//deze waarde zorgt ervoor dat we weten of men van rep eigenaar is veranderd
 	}
 }

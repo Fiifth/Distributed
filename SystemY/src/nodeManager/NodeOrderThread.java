@@ -50,6 +50,9 @@ public class NodeOrderThread extends Thread {
 			{
 				nodedata1.setNextNode(newNextID);
 				nodedata1.setNextNodeIP(newNextIP);
+				//telkens als setNextNodeIP opgeroepen wordt zal FileOwnershipT gestart worden
+				//wanneer de next node veranderd kan het namelijk zijn dat de bestanden een nieuwe
+				//replicatie eigenaar moeten hebben
 			}
 		}
 		//adding new node

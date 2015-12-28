@@ -14,6 +14,7 @@ public class FileReplicationTest {
 
 	public static void main(String[] args) throws IOException, InterruptedException 
 	{
+		//voor deze test moet nodeManager/shutdown de regel System.exit(1) gecomment worden
 		StartNameServer nameserver= new StartNameServer();
 		nameserver.startNameServer();
 		Thread.sleep(1000);

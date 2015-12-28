@@ -49,7 +49,9 @@ public class Sender extends Thread
 
 			if (file1.isOwner(nodedata1.getMyNodeID())&&file1.getDestinationFolder().equals("rep")&&file1.getDestinationID()==nodedata1.getMyNodeID())
 			{
-				copyFileLocally(nodedata1,file1);	
+				copyFileLocally(nodedata1,file1);
+				//Indien de lokale eigenaar hetzelfde is als de replicatie eigenaar kan het bestand simpelweg
+				//gekopieerd worden.
 			}
 			else if (file1.getDestinationFolder().equals("rep"))
 			{
@@ -91,7 +93,7 @@ public class Sender extends Thread
 			source = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 
 		GetPartOfFile partGetter=new GetPartOfFile();
-		
+		//de functie getPart maakt het stukje van de file aan dat verstuurd moet worden.
 		Path dest = Paths.get(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 		partGetter.getPart(file1.getPartSize(), file1.getPartID(),source ,dest);
 		file1.setFolderLocation(nodedata1.getMyReplFolder());

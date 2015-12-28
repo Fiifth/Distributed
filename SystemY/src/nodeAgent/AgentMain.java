@@ -64,7 +64,11 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void updateAgentNetworkFiles()
 	{
-	
+		//Deze functie update de Treemap als de node een verandering heeft bij zijn replicatie files
+		//Hierbij worden entries enkel verwijderd, toegevoegd of vervangen indien er verandering zijn
+		//Een filedata wordt vervangent indien de eigenaar lijst van de file wijzigd. Dit zorgt ervoor dat
+		//wanneer iemand een file download/verwijderd zal de lock automatisch verdwijnen aangezien een
+		//eigenaar van de file toegevoegd/verwijderd wordt.
 		TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFilesTemp=new TreeMap<Integer, TreeMap<Integer,FileData>>();
 		TreeMap<Integer, FileData> repFilesTemp=new TreeMap<Integer, FileData>();
 		repFilesTemp.putAll(nodeData1.replFiles);
@@ -110,7 +114,14 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void attemptToLock()
 	{
+		//Bij deze functie wordt de lokale lock lijst afgegaan. Wanneer de file die men wenst te locken
+		//unlocked gevonden wordt zal verdere actie ondernomen worden.
+		//De actie kan downloaden of verwijderen zijn. De actie die ondernomen moet worden zal toegevoegd
+		//worden aan een lijst die de agent bijhoud. Deze lijst bevat de ID van de node die een actie moet
+		//ondernemen en wat hij juist moet doen.
 		
+		//opm: bij doorsturen van parts zal de replicatie eigenaar enkel een stuk doorsturen indien
+		//hij ook geen gewone eigenaar is (anders zou hij 2 parts moeten doorsturen)
 		TreeMap<Integer, TreeMap<Integer, FileData>> tempAllAgentNetworkFiles=new TreeMap<Integer,TreeMap<Integer,FileData>>();
 		tempAllAgentNetworkFiles.putAll(allAgentNetworkFiles);
 		TreeMap<Integer,String> copyLockList=new TreeMap<Integer,String>();
@@ -154,7 +165,7 @@ public class AgentMain extends Thread implements Serializable
 						
 						List<Integer> owners = new ArrayList<Integer>(wantedFile.getLocalOwners().keySet());
 						
-						if ((partSize>1)&&(numberOfParts>1))
+						if ((partSize>1)&&(numberOfParts>1)) //kan het bestand wel in stukken doorgestuurd worden?
 						{
 							wantedFile.setPartSize(partSize);
 							wantedFile.setNumberOfParts(numberOfParts);
@@ -183,7 +194,7 @@ public class AgentMain extends Thread implements Serializable
 								downloadMap.put(owner, file1);
 							}
 						}
-						else
+						else //send het bestand in zijn geheel
 						{
 							wantedFile.setDestinationID(nodeData1.getMyNodeID());
 							wantedFile.setDestinationIP(nodeData1.getMyIP());
@@ -208,6 +219,8 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void checkAgentLockAction()
 	{
+		//controlleer of huidige node een actie moet ondernemen (doorsturen van een bestand/verwijderen)
+		
 		TreeMap<Integer, FileData> tempDownloadMap=new TreeMap<Integer, FileData>();
 		tempDownloadMap.putAll(downloadMap);
 		for(Entry<Integer, FileData> entry : tempDownloadMap.entrySet()) 
@@ -238,6 +251,8 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void updateLocalAllFiles()
 	{
+		//Deze functie zorgt ervoor dat de GUI weet wanneer de netwerk bestanden lijst aangepast is
+		//We updaten hier eveneens de lokale lijst met alle bestanden
 		boolean changed=false;
 		if(!(nodeData1.allNetworkFiles.size()==(allAgentNetworkFiles.size())))
 		changed=true;

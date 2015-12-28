@@ -73,7 +73,6 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 	
 	public String[] locateFile(String filename)throws RemoteException
 	{
-		//TODO change String to String[]
 		String[] toSend=new String[2];
 		int destinationKey=0;
 		int hashedFN = Math.abs(filename.hashCode()%32768);
