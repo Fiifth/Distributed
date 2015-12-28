@@ -26,12 +26,12 @@ public class NodeOrderThread extends Thread {
 
 	public void run() {
 		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-		//message = 0-nodeName or 1-nodename-prevnode-nextnode
+		//message = 0-nodeID or 1-nodeID-prevnode-nextnode
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
 		String[] msgs = msg.split("-");
 		int toLeave = Integer.parseInt(msgs[0]);
-		int newNodeID= Math.abs(msgs[1].hashCode()%32768);
+		int newNodeID= Integer.parseInt(msgs[1]);
 
 		if(toLeave == 1)
 		{

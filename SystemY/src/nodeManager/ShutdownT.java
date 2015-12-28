@@ -52,7 +52,7 @@ public class ShutdownT extends Thread
 		    	}
 				
 				nodedata1.setToLeave(1);
-				String text="1"+"-"+nodedata1.getNodeName()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode()+"-"+nodedata1.getPrevNodeIP()+"-"+nodedata1.getNextNodeIP();
+				String text="1"+"-"+nodedata1.getMyNodeID()+"-"+nodedata1.getPrevNode()+"-"+nodedata1.getNextNode()+"-"+nodedata1.getPrevNodeIP()+"-"+nodedata1.getNextNodeIP();
 				
 				multi.sendMulticast(text);
 

@@ -9,6 +9,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.TreeMap;
 
 import networkFunctions.RMI;
 import nodeAgent.AgentMain;
@@ -94,6 +95,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	}
 	public void rmiFailAgentExecution(AgentMain failAgent) throws RemoteException
 	{
+		System.out.println("running failagent");
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	
 		if(nodedata1.getNextNode() != nodedata1.getMyNodeID())
 		{
@@ -112,6 +114,16 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 						} catch (MalformedURLException | RemoteException | NotBoundException e){}
 					}
 				}.start();
+			}
+			else //restart fileAgent after restoring from failure
+			{
+				System.out.println("restarting fileAgent");
+				TreeMap<Integer, TreeMap<Integer, FileData>> NewAgentNetworkFiles = new TreeMap<Integer, TreeMap<Integer,FileData>>();
+				TreeMap<Integer, FileData> newDownloadMap = new TreeMap<Integer, FileData>();
+				TreeMap<Integer, Integer> newRemoveMap = new TreeMap<Integer, Integer>();
+				
+				AgentMain fileAgent = new AgentMain(true, NewAgentNetworkFiles, newDownloadMap, newRemoveMap, 0, 0);
+				rmiFileAgentExecution(fileAgent);
 			}
 		}
 	}

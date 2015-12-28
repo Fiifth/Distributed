@@ -29,7 +29,7 @@ public class StartNode
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
 
 		multi.joinMulticastGroup();
-		multi.sendMulticast("0"+"-"+nodedata1.getNodeName());
+		multi.sendMulticast("0"+"-"+nodedata1.getMyNodeID());
 		multi.LeaveMulticast();
 
 		try 

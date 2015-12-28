@@ -257,45 +257,50 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void checkReplicationFiles(){
 		TreeMap<Integer,FileData> nodeReplFiles = nodeData1.replFiles;
-		for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) 
+		if(!nodeReplFiles.isEmpty())
 		{
-		  Integer fileHash = entry.getKey();
-		  FileData tempFD = entry.getValue();
-		  TreeMap<Integer,String> localFileOwners =new TreeMap<Integer,String>();
-		  localFileOwners.putAll(tempFD.getLocalOwners());
-		  List<Integer> owners = new ArrayList<Integer>(localFileOwners.keySet());
-		  for(int temp : owners)
-		  {
-			  if(temp == failedNodeID)
-			  {
-				  if(tempFD.removeOwner(temp))//returns true if no owners remain
-				  {//if no local owners remain remove file from replication lists
-					  nodeData1.replFiles.remove(fileHash);
-					  Path source = Paths.get(tempFD.getFolderLocation()+"\\"+tempFD.getFileName());
-					  try {Files.delete(source);} catch (IOException e) {}
-				  }
-				  else
-				  {//if other owners exist update file in list
-					  nodeData1.replFiles.put(fileHash,tempFD);
-				  }
-			  }
-		  }
+			for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) 
+			{
+				Integer fileHash = entry.getKey();
+				FileData tempFD = entry.getValue();
+				TreeMap<Integer,String> localFileOwners =new TreeMap<Integer,String>();
+				localFileOwners.putAll(tempFD.getLocalOwners());
+				List<Integer> owners = new ArrayList<Integer>(localFileOwners.keySet());
+				for(int temp : owners)
+				{
+					if(temp == failedNodeID)
+					{
+						if(tempFD.removeOwner(temp))//returns true if no owners remain
+						{//if no local owners remain remove file from replication lists
+							nodeData1.replFiles.remove(fileHash);
+							Path source = Paths.get(tempFD.getFolderLocation()+"\\"+tempFD.getFileName());
+							try {Files.delete(source);} catch (IOException e) {}
+						}
+						else
+						{//if other owners exist update file in list
+							nodeData1.replFiles.put(fileHash,tempFD);
+						}
+					}
+				}
+			}
 		}
 	}
 	public void checkReplicationOwnerOfLocalFiles()
 	{
 		TreeMap<Integer,FileData> nodeLocalFiles = new TreeMap<Integer,FileData>();
 		nodeLocalFiles.putAll(nodeData1.localFiles);
-		
-		for(Map.Entry<Integer,FileData> entry : nodeLocalFiles.entrySet())
+		if(!nodeLocalFiles.isEmpty())
 		{
-			Integer fileHash = entry.getKey();
-			FileData tempFD = entry.getValue();
-			if(tempFD.getReplicateOwnerID() == failedNodeID)
+			for(Map.Entry<Integer,FileData> entry : nodeLocalFiles.entrySet())
 			{
-				tempFD.refreshReplicateOwner(nodeData1);
-				nodeData1.sendQueue.add(tempFD);
-				nodeData1.localFiles.put(fileHash,tempFD);
+				Integer fileHash = entry.getKey();
+				FileData tempFD = entry.getValue();
+				if(tempFD.getReplicateOwnerID() == failedNodeID)
+				{
+					tempFD.refreshReplicateOwner(nodeData1);
+					nodeData1.sendQueue.add(tempFD);
+					nodeData1.localFiles.put(fileHash,tempFD);
+				}
 			}
 		}
 	}

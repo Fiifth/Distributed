@@ -34,8 +34,8 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 	}
 
 	
-	public boolean addNode(String nodeName, String nodeIP) throws RemoteException {
-		int hashedNN = Math.abs(nodeName.hashCode()%32768);
+	public boolean addNode(String nodeID, String nodeIP) throws RemoteException {
+		int hashedNN =Integer.parseInt(nodeID);
 		if (!nodeMap.containsKey(hashedNN))
 		{
 	    	nodeMap.put(hashedNN,nodeIP);
@@ -54,8 +54,8 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 		return false;
 	}
 
-	public void rmNode(String nodeName, String nodeIP) throws RemoteException {
-		int hashedNN = Math.abs(nodeName.hashCode()%32768);
+	public void rmNode(String nodeID, String nodeIP) throws RemoteException {
+		int hashedNN = Integer.parseInt(nodeID);
 		nodeMap.remove(hashedNN);
 		System.out.println("************");
     	System.out.println("CURRENT MAP:");
