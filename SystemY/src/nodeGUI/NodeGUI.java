@@ -274,16 +274,24 @@ public class NodeGUI {
 										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
 										int filehash=Math.abs(selectedRMValue.hashCode()%32768);
 										int numberOfOwners = 1;
-										TreeMap<Integer, TreeMap<Integer, FileData>> temp=new TreeMap<Integer, TreeMap<Integer, FileData>>();
-										temp.putAll(node1.nodedata1.allNetworkFiles);
-										for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : temp.entrySet())
+										if (node1.nodedata1.replFiles.containsKey(filehash))
 										{
-											TreeMap<Integer, FileData> nodeRepFiles =entry.getValue();
-											if (nodeRepFiles.containsKey(filehash))
+											FileData file=node1.nodedata1.replFiles.get(filehash);
+											numberOfOwners=file.getNumberOfOwners();
+										}
+										else
+										{
+											TreeMap<Integer, TreeMap<Integer, FileData>> temp=new TreeMap<Integer, TreeMap<Integer, FileData>>();
+											temp.putAll(node1.nodedata1.allNetworkFiles);
+											for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : temp.entrySet())
 											{
-												FileData file=nodeRepFiles.get(filehash);
-												numberOfOwners=file.getNumberOfOwners();
-												System.out.println("found= "+numberOfOwners);
+												TreeMap<Integer, FileData> nodeRepFiles =entry.getValue();
+												if (nodeRepFiles.containsKey(filehash))
+												{
+													FileData file=nodeRepFiles.get(filehash);
+													numberOfOwners=file.getNumberOfOwners();
+													System.out.println("found= "+numberOfOwners);
+												}
 											}
 										}
 										if (numberOfOwners==1)
