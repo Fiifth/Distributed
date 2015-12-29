@@ -271,7 +271,9 @@ public class AgentMain extends Thread implements Serializable
 		}
 	}
 	public void checkReplicationFiles(){
-		TreeMap<Integer,FileData> nodeReplFiles = nodeData1.replFiles;
+		
+		TreeMap<Integer,FileData> nodeReplFiles = new TreeMap<Integer,FileData>();
+		nodeReplFiles = nodeData1.replFiles;
 		if(!nodeReplFiles.isEmpty())
 		{
 			for(Map.Entry<Integer,FileData> entry : nodeReplFiles.entrySet()) 
