@@ -197,7 +197,7 @@ public class NodeGUI {
         	                {
         	                	//wait for fileagent to finish, otherwise failure will not be detected
         	                }
-        	                System.exit(1);
+        	                System.exit(0);
         	                
         	            }
         	        });

@@ -79,7 +79,7 @@ public class ShutdownT extends Thread
 				{
 					((Thread) temp).interrupt();
 				}
-				System.exit(1);//sluit het systeem volledig af
+				System.exit(0);//sluit het systeem volledig af
 			}
 		}	
 	}
