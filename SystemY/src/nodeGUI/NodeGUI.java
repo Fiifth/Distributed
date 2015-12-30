@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -187,7 +188,19 @@ public class NodeGUI {
         	        allfiles.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        allfiles.setText("All Files:");
         	        allfiles.setBounds(230, 30, 100, 20);
-        	        nodeframe.getContentPane().add(allfiles);       	        
+        	        nodeframe.getContentPane().add(allfiles);
+        	        
+        	        nodeframe.addWindowListener(new java.awt.event.WindowAdapter() {
+        	            @Override
+        	            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+        	                while(node1.nodedata1.isFApresent())
+        	                {
+        	                	//wait for fileagent to finish, otherwise failure will not be detected
+        	                }
+        	                System.exit(1);
+        	                
+        	            }
+        	        });
         	        
         	        //refresh button, not needed because list refreshes automatically
         	        JButton btnRefresh = new JButton("Refresh Files");

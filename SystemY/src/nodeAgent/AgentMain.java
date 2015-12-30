@@ -46,6 +46,7 @@ public class AgentMain extends Thread implements Serializable
 	{
 		if(typeOfAgent)
 		{
+			nodeData1.setFApresent(true);
 			//Update agent's network files list
 			updateAgentNetworkFiles();
 			//Iterate local locks and add actions for other nodes
@@ -53,7 +54,8 @@ public class AgentMain extends Thread implements Serializable
 			//Check if current node has to take action (send/remove)
 			checkAgentLockAction();
 			//Update local node's file list
-			updateLocalAllFiles();	
+			updateLocalAllFiles();
+			nodeData1.setFApresent(false);			
 		}
 		else
 		{

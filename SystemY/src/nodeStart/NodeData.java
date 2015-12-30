@@ -17,6 +17,7 @@ import splitAndMerge.Merge;
 public class NodeData implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private volatile boolean toQuit = false;
+	private volatile boolean FApresent = false;
 	private volatile String nodeName;
 	private volatile int prevNode;
 	private volatile int nextNode;
@@ -184,5 +185,11 @@ public class NodeData implements Serializable {
 			files.add(new File(fileOutput));
 			partMap.put(fileID, files);
 		}
+	}
+	public boolean isFApresent() {
+		return FApresent;
+	}
+	public void setFApresent(boolean FApresent) {
+		this.FApresent = FApresent;
 	}
 }
