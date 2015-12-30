@@ -129,6 +129,18 @@ public class NodeGUI {
         	        errortext.setColumns(10);        			
         	        nameframe.getContentPane().add(errortext);
         		}
+        		else if(Math.abs(nodenaam.hashCode()%32768)==6789 || Math.abs(nodenaam.hashCode()%32768)==6790)
+        		{
+        			//socket chosen for rmi & filetransfer will be in use by nameserver
+        			JTextField errortext = new JTextField();
+        			errortext.setForeground(Color.RED);
+        			errortext.setText("Socket will be in use");
+        			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
+        			errortext.setBorder(null);
+        	        errortext.setBounds(10, 100, 290, 20);
+        	        errortext.setColumns(10);        			
+        	        nameframe.getContentPane().add(errortext);
+        		}
         		else if(node1.nodedata1.getNumberOfNodesStart() >= 1 )
         		{	
         			//good name, node starts
