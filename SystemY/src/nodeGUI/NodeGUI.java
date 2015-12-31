@@ -40,6 +40,7 @@ public class NodeGUI {
 	public DefaultListModel<String> allfilelist = new DefaultListModel<String>();
 	public volatile JList<String> displayAllList;
 	public volatile JList<String> displayList;
+	private JButton btnStartNode;
 	
 	public NodeGUI(){
 		
@@ -92,13 +93,17 @@ public class NodeGUI {
 					started.setBounds(10, 100, 290, 20);
 					started.setColumns(10);        			
         	        nameframe.getContentPane().add(started);
+        	        txtpnGeefDeNodenaam.setVisible(false);
+        	        NN.setVisible(false);
+        	        btnStartNode.setVisible(false);
+        	        
 				} catch (RemoteException e1) {} catch (IOException e1) {}        		
             }
     });
 		
 		
 		
-        JButton btnStartNode = new JButton("Start Node");
+        btnStartNode = new JButton("Start Node");
         btnStartNode.setBounds(10, 60 , 110, 23);
         nameframe.getContentPane().add(btnStartNode);
         btnStartNode.addActionListener(new ActionListener() {
