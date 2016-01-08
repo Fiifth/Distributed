@@ -155,14 +155,14 @@ public class AgentMain extends Thread implements Serializable
 							partID=0;
 							sendFromRepOwner=false;
 							numberOfParts=wantedFile.getNumberOfOwners();
-							partSize =(int)(Math.floor(wantedFile.getSize()/numberOfParts));
+							partSize =(int)(Math.floor((wantedFile.getSize()+2)/numberOfParts));
 						}
 						else
 						{
 							partID=1;
 							sendFromRepOwner=true;
 							numberOfParts=wantedFile.getNumberOfOwners()+1;
-							partSize =(int)(Math.ceil(wantedFile.getSize()/numberOfParts));
+							partSize =(int)(Math.ceil((wantedFile.getSize()+2)/numberOfParts));
 						}
 						
 						
