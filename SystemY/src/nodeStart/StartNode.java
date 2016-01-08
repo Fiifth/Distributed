@@ -58,6 +58,10 @@ public class StartNode
 		nodedetection.start();
 		threadList.add(nodedetection);
 		
+		InputDetection inputdetection=new InputDetection(nodedata1);
+		inputdetection.start();
+		threadList.add(inputdetection);
+		
 		ShutdownT shutdown = new ShutdownT(nodedata1,threadList,multi);
 		shutdown.start();
 	}
