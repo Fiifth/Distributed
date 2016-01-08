@@ -76,6 +76,7 @@ public class Sender extends Thread
 				createPartOfFile(file1);
 				tellNodeToReceive(file1);
 				sendFile(file1);
+				removeFile(file1);
 			}
 			nodedata1.setSending(false);
 		}

@@ -155,7 +155,7 @@ public class AgentMain extends Thread implements Serializable
 							partID=0;
 							sendFromRepOwner=false;
 							numberOfParts=wantedFile.getNumberOfOwners();
-							partSize =(int)(Math.ceil(wantedFile.getSize()/numberOfParts));
+							partSize =(int)(Math.floor(wantedFile.getSize()/numberOfParts));
 						}
 						else
 						{
@@ -263,8 +263,11 @@ public class AgentMain extends Thread implements Serializable
 		{
 			for(Entry<Integer, TreeMap<Integer, FileData>> entry : allAgentNetworkFiles.entrySet()) 
 			{
+				if (nodeData1.allNetworkFiles.containsKey(entry.getKey()))
+				{
 				if (!(nodeData1.allNetworkFiles.get(entry.getKey()).size()==entry.getValue().size()))
 					changed=true;
+				}
 			}
 		}
 		nodeData1.allNetworkFiles = allAgentNetworkFiles;
