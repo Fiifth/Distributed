@@ -17,7 +17,7 @@ import splitAndMerge.Merge;
 public class NodeData implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private volatile boolean toQuit = false;
-	private volatile boolean FApresent = false;
+	private volatile boolean FApresent = true;
 	private volatile String nodeName;
 	private volatile int prevNode;
 	private volatile int nextNode;
@@ -41,6 +41,7 @@ public class NodeData implements Serializable {
 	public volatile TreeMap<Integer, FileData> replFiles = new TreeMap<Integer,FileData>();
 	public volatile TreeMap<Integer,ArrayList<File>> partMap=new TreeMap<Integer,ArrayList<File>>();//map(fileID,Arraylist(nodeID))
 	public volatile Semaphore semaphore = new Semaphore(1);
+	private boolean agentWasHere;
 	
 	
 	public String getNodeName() {
@@ -189,7 +190,17 @@ public class NodeData implements Serializable {
 	public boolean isFApresent() {
 		return FApresent;
 	}
-	public void setFApresent(boolean FApresent) {
+	public void setFApresent(boolean FApresent) 
+	{
+		setAgentWasHere(true);
 		this.FApresent = FApresent;
+	}
+	public boolean wasAgentHere() 
+	{
+		return agentWasHere;
+	}
+	public void setAgentWasHere(boolean agentWasHere) 
+	{
+		this.agentWasHere = agentWasHere;
 	}
 }

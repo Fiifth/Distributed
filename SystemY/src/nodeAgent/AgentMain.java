@@ -46,6 +46,7 @@ public class AgentMain extends Thread implements Serializable
 	{
 		if(typeOfAgent)
 		{
+			while(nodeData1.isFApresent()){}
 			nodeData1.setFApresent(true);
 			//Update agent's network files list
 			updateAgentNetworkFiles();

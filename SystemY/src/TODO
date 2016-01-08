@@ -45,4 +45,10 @@ TESTEN
 		1) sluit een node af
 		2) controlleer of de volgorde juist is geupdate
 		
+		
+TODO
+*fileAgentLife starten
+*bij starten ook fail detection
+*agent enkel runnen bij na controle already running
+*
 

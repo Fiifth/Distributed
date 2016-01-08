@@ -198,10 +198,10 @@ public class NodeGUI {
         	        nodeframe.addWindowListener(new java.awt.event.WindowAdapter() {
         	            @Override
         	            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        	                while(node1.nodedata1.isFApresent())
-        	                {
-        	                	//wait for fileagent to finish, otherwise failure will not be detected
-        	                }
+        	                //while(!node1.nodedata1.isFApresent())
+        	               // {
+        	                //	//wait for fileagent to finish, otherwise failure will not be detected
+        	                //}
         	                System.exit(0);
         	                
         	            }

@@ -15,6 +15,7 @@ public class StartNode
 	Multicast multi=new Multicast("228.5.6.7", 6789);
 	String nodeName;
 	public NodeData nodedata1;
+	boolean startFileAgent=false;
 	
 	public StartNode(String nodeName)
 	{
@@ -62,8 +63,15 @@ public class StartNode
 		inputdetection.start();
 		threadList.add(inputdetection);
 		
+		FileAgentLife fileagentlife=new FileAgentLife(nodedata1);
+		fileagentlife.start();
+		threadList.add(fileagentlife);
+		
 		ShutdownT shutdown = new ShutdownT(nodedata1,threadList,multi);
 		shutdown.start();
+		
+		nodedata1.setFApresent(false);
+		if (startFileAgent) startAgent();
 	}
 	
 	private boolean setSurroundingNodes(NodeData nodedata1) 
@@ -82,20 +90,7 @@ public class StartNode
 			System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 			if(numberOfNodes==2)
 			{
-				TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
-				TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
-				TreeMap<Integer,Integer> removeMap=new TreeMap<Integer,Integer>();
-				AgentMain fileAgent = new AgentMain(true, initTree,agentLockList,removeMap, 0, 0);
-				fileAgent.setNodeData1(nodedata1);
-				fileAgent.run();
-				
-				while(fileAgent.isAlive()){}
-				
-				RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
-				try 
-				{
-					recInt.rmiFileAgentExecution(fileAgent);
-				} catch (RemoteException e) {e.printStackTrace();}
+				startFileAgent=true;
 			}
 			return true;
 			
@@ -131,5 +126,23 @@ public class StartNode
 		}
 		else nodes=-1;
 		return nodes;
+	}
+	
+	public void startAgent()
+	{
+		TreeMap<Integer, TreeMap<Integer,FileData>> initTree = new TreeMap<Integer, TreeMap<Integer,FileData>>();
+		TreeMap<Integer,FileData> agentLockList=new TreeMap<Integer,FileData>();
+		TreeMap<Integer,Integer> removeMap=new TreeMap<Integer,Integer>();
+		AgentMain fileAgent = new AgentMain(true, initTree,agentLockList,removeMap, 0, 0);
+		fileAgent.setNodeData1(nodedata1);
+		fileAgent.run();
+		
+		while(fileAgent.isAlive()){}
+		
+		RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
+		try 
+		{
+			recInt.rmiFileAgentExecution(fileAgent);
+		} catch (RemoteException e) {e.printStackTrace();}
 	}
 }
