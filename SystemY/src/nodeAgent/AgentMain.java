@@ -268,6 +268,8 @@ public class AgentMain extends Thread implements Serializable
 				if (!(nodeData1.allNetworkFiles.get(entry.getKey()).size()==entry.getValue().size()))
 					changed=true;
 				}
+				else
+				changed=true;
 			}
 		}
 		nodeData1.allNetworkFiles = allAgentNetworkFiles;
