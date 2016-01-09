@@ -96,7 +96,7 @@ public class NodeGUI {
         	        txtpnGeefDeNodenaam.setVisible(false);
         	        NN.setVisible(false);
         	        btnStartNode.setVisible(false);
-        	        
+        	        btnStartNameserver.setVisible(false);        	        
 				} catch (RemoteException e1) {} catch (IOException e1) {}        		
             }
     });
