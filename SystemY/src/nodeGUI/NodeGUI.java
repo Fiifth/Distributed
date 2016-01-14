@@ -87,11 +87,13 @@ public class NodeGUI {
 					nameserver.startNameServer();
 					JTextField started = new JTextField();
 					started.setForeground(Color.GREEN);
+					txtpnGeefDeNodenaam.setEditable(false);
 					started.setText("NameServer started.");
 					started.setFont(new Font("Tahoma", Font.BOLD, 13));
 					started.setBorder(null);
 					started.setBounds(10, 100, 290, 20);
-					started.setColumns(10);        			
+					started.setColumns(10);   
+					started.setEditable(false);
         	        nameframe.getContentPane().add(started);
         	        txtpnGeefDeNodenaam.setVisible(false);
         	        NN.setVisible(false);
@@ -120,7 +122,8 @@ public class NodeGUI {
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
         	        errortext.setBounds(10, 100, 290, 20);
-        	        errortext.setColumns(10);        			
+        	        errortext.setColumns(10); 
+        	        errortext.setEditable(false);
         	        nameframe.getContentPane().add(errortext);
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() == 0)
@@ -132,7 +135,8 @@ public class NodeGUI {
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
         	        errortext.setBounds(10, 100, 290, 20);
-        	        errortext.setColumns(10);        			
+        	        errortext.setColumns(10);  
+        	        errortext.setEditable(false);
         	        nameframe.getContentPane().add(errortext);
         		}
         		else if(Math.abs(nodenaam.hashCode()%32768)==6789 || Math.abs(nodenaam.hashCode()%32768)==6790)
@@ -144,7 +148,8 @@ public class NodeGUI {
         			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
         			errortext.setBorder(null);
         	        errortext.setBounds(10, 100, 290, 20);
-        	        errortext.setColumns(10);        			
+        	        errortext.setColumns(10);        
+        	        errortext.setEditable(false);
         	        nameframe.getContentPane().add(errortext);
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() >= 1 )
@@ -157,42 +162,49 @@ public class NodeGUI {
         			Nodenaam.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        Nodenaam.setText("Naam: " +nodenaam);
         	        Nodenaam.setBounds(5, 5, 180, 20);
+        	        Nodenaam.setEditable(false);
         	        nodeframe.getContentPane().add(Nodenaam);
         	        
         	        JTextPane Hash = new JTextPane();
         	        Hash.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        Hash.setText("| Hash: " +node1.nodedata1.getMyNodeID());
         	        Hash.setBounds(190, 5, 100, 20);
+        	        Hash.setEditable(false);
         	        nodeframe.getContentPane().add(Hash);
         	        
         	        JTextPane IP = new JTextPane();
         	        IP.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        IP.setText("| IP: " +node1.nodedata1.getMyIP());
         	        IP.setBounds(295, 5, 150, 20);
+        	        IP.setEditable(false);
         	        nodeframe.getContentPane().add(IP);
         	        
         	        JTextPane NameIP = new JTextPane();
         	        NameIP.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        NameIP.setText("| NameServer IP: " +node1.nodedata1.getNameServerIP());
         	        NameIP.setBounds(450, 5, 300, 20);
+        	        NameIP.setEditable(false);
         	        nodeframe.getContentPane().add(NameIP);
         	        
         	        JTextPane line = new JTextPane();
         	        line.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        line.setText("-----------------------------------------------------------------------------------------------------------------------------------------");
         	        line.setBounds(0, 14, 700, 20);
+        	        line.setEditable(false);
         	        nodeframe.getContentPane().add(line);
         	        
         	        JTextPane filelijst = new JTextPane();
         	        filelijst.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        filelijst.setText("Own Files:");
         	        filelijst.setBounds(5, 30, 100, 20);
+        	        filelijst.setEditable(false);
         	        nodeframe.getContentPane().add(filelijst);
         	        
         	        JTextPane allfiles = new JTextPane();
         	        allfiles.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        allfiles.setText("All Files:");
         	        allfiles.setBounds(230, 30, 100, 20);
+        	        allfiles.setEditable(false);
         	        nodeframe.getContentPane().add(allfiles);
         	        
         	        nodeframe.addWindowListener(new java.awt.event.WindowAdapter() {
