@@ -47,8 +47,6 @@ TESTEN
 		
 		
 TODO
-*fileAgentLife starten
-*bij starten ook fail detection
-*agent enkel runnen bij na controle already running
-*
+*heap size error 
+*splitsen in parts
 

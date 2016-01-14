@@ -58,7 +58,13 @@ public class FileDetectionT extends Thread{
 				}
 				else if(kind == ENTRY_MODIFY)
 				{
-					try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}	
+					
+					File temp = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
+					int writingSpeedHDD=100; //MB/S
+					int fileSize=(int) (temp.length()/(1024*1024));//MB
+					
+					int waitTime=(fileSize/writingSpeedHDD)*1000; //Ms
+					try {Thread.sleep(waitTime+100);} catch (InterruptedException e) {e.printStackTrace();}	
 					File varTmpDir = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
 					if ((varTmpDir.exists()))
 					{
