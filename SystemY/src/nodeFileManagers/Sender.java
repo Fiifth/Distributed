@@ -125,6 +125,7 @@ public class Sender extends Thread
         BufferedOutputStream outToClient = null;
         FileInputStream fis = null;
         BufferedInputStream bis=null;
+        int bytesRead;
         try 
         {
             welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
@@ -136,8 +137,7 @@ public class Sender extends Thread
         if (outToClient != null) 
         {
             File myFile = new File(filePath);
-            byte[] mybytearray = new byte[(int) myFile.length()];
-
+            byte[] mybytearray = new byte[512];
             try 
             {
                 fis = new FileInputStream(myFile);
@@ -145,9 +145,14 @@ public class Sender extends Thread
             } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
 
             try 
-            {
-                bis.read(mybytearray, 0, mybytearray.length);
-                outToClient.write(mybytearray, 0, mybytearray.length);
+            {            	
+            	bytesRead=bis.read(mybytearray, 0, mybytearray.length);
+            	do 
+                {
+            		outToClient.write(mybytearray);
+            		bytesRead=bis.read(mybytearray, 0, mybytearray.length);
+                } while (bytesRead != -1);
+
                 outToClient.flush();
                 outToClient.close();
                 connectionSocket.close();

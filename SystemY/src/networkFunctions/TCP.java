@@ -1,13 +1,8 @@
 package networkFunctions;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,42 +45,7 @@ public class TCP
 		catch (IOException e) {}
 		return text;		
 	}
-	public boolean sendFile(String filePath,int socket)
-	{
-        ServerSocket welcomeSocket = null;
-        Socket connectionSocket = null;
-        BufferedOutputStream outToClient = null;
-        FileInputStream fis = null;
-
-        try 
-        {
-            welcomeSocket = new ServerSocket(socket);
-            connectionSocket = welcomeSocket.accept();
-            outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
-            welcomeSocket.close();
-        } catch (IOException ex) { return false;}
-
-        File myFile = new File(filePath);
-        byte[] mybytearray = new byte[(int) myFile.length()];
-
-        try {
-            fis = new FileInputStream(myFile);
-        } catch (FileNotFoundException ex) {return false;}
-        
-        BufferedInputStream bis = new BufferedInputStream(fis);
-
-        try 
-        {
-            bis.read(mybytearray, 0, mybytearray.length);
-            outToClient.write(mybytearray, 0, mybytearray.length);
-            outToClient.flush();
-            outToClient.close();
-            connectionSocket.close();
-            fis.close();
-			bis.close();
-        } catch (IOException ex) {return false; } 
-        return true;
-	}
+	
 	
 	public boolean receiveFile(String sourceIP,int serverPort, String fileOutput)
 	{
@@ -93,15 +53,13 @@ public class TCP
         BufferedOutputStream bos = null;
         Socket clientSocket = null;
         InputStream is = null;
-		byte[] aByte = new byte[1];
+		byte[] aByte = new byte[512];
         int bytesRead;
         
 		try {
 			clientSocket = new Socket(sourceIP, serverPort);
 			is = clientSocket.getInputStream();
 		} catch (IOException e) {System.out.println("coudln't open socket");return false;}
-		
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if (is != null) 
         {
@@ -112,14 +70,12 @@ public class TCP
                 bytesRead = is.read(aByte, 0, aByte.length);
                 do 
                 {
-                	baos.write(aByte);
+                	bos.write(aByte);
                     bytesRead = is.read(aByte);
                 } while (bytesRead != -1);
                 
-                bos.write(baos.toByteArray());
                 bos.flush();
                 bos.close();
-                baos.close();
                 fos.close();
                 clientSocket.close();
             } catch (IOException ex) {System.out.println("writing file failed");return false;}
