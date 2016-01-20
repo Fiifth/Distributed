@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 
 import networkFunctions.RMI;
 import networkFunctions.TCP;
@@ -125,7 +126,7 @@ public class Sender extends Thread
         BufferedOutputStream outToClient = null;
         FileInputStream fis = null;
         BufferedInputStream bis=null;
-        int bytesRead;
+        int bytesRead=1;
         try 
         {
             welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
@@ -137,7 +138,7 @@ public class Sender extends Thread
         if (outToClient != null) 
         {
             File myFile = new File(filePath);
-            byte[] mybytearray = new byte[512];
+            byte[] bytearray = new byte[512];
             try 
             {
                 fis = new FileInputStream(myFile);
@@ -145,13 +146,18 @@ public class Sender extends Thread
             } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
 
             try 
-            {            	
-            	bytesRead=bis.read(mybytearray, 0, mybytearray.length);
-            	do 
-                {
-            		outToClient.write(mybytearray);
-            		bytesRead=bis.read(mybytearray, 0, mybytearray.length);
-                } while (bytesRead != -1);
+            {           
+            	while(bytesRead != -1)
+            	{
+            		bytesRead=bis.read(bytearray, 0, bytearray.length);
+            		if(bytesRead != -1)
+					{
+	            		outToClient.write(Arrays.copyOfRange(bytearray, 0, bytesRead));
+		            		//door gebruik te maken van copy range wordt het potentiëel 
+		            		//lege gedeelde van de array nooit doorgestuurd. BytesRead
+	            			//geeft namelijk op hoeveel bits er ni de array geplaatst zijn.
+					}
+                }
 
                 outToClient.flush();
                 outToClient.close();

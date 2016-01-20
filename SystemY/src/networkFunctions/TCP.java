@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class TCP 
 {
@@ -70,11 +71,13 @@ public class TCP
                 bytesRead = is.read(aByte, 0, aByte.length);
                 do 
                 {
-                	bos.write(aByte);
+                	bos.write(Arrays.copyOfRange(aByte, 0, bytesRead));
+	                	//door gebruik te maken van copy range wordt het potentiëel 
+	            		//lege gedeelde van de array nooit in de file geschreven
                     bytesRead = is.read(aByte);
                 } while (bytesRead != -1);
                 
-                bos.flush();
+                
                 bos.close();
                 fos.close();
                 clientSocket.close();
