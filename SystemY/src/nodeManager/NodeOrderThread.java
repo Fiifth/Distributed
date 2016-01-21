@@ -26,7 +26,6 @@ public class NodeOrderThread extends Thread {
 
 	public void run() {
 		String msg = new String(messageIn.getData(), messageIn.getOffset(), messageIn.getLength());
-		//message = 0-nodeID or 1-nodeID-prevnode-nextnode
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
 		String[] msgs = msg.split("-");
@@ -40,6 +39,8 @@ public class NodeOrderThread extends Thread {
 			int newNextID=Integer.parseInt(msgs[3]);
 			String newPrevIP=msgs[4];
 			String newNextIP=msgs[5];
+			System.out.println(newNextIP);
+			
 			if(myPrevNode == newNodeID)
 			{
 				nodedata1.setPrevNode(newPrevID);

@@ -21,6 +21,7 @@ public class FileAgentLife extends Thread
 	
 	public void run()
 	{
+		try {Thread.sleep(5000);} catch (InterruptedException e) {}
 		int notPresTime=0;
 		int misses=0;
 		while(!Thread.interrupted())

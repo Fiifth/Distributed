@@ -100,6 +100,8 @@ public class StartNode
 			System.out.println("I am the first node");
 			 nodedata1.setPrevNode(nodedata1.getMyNodeID());
 			 nodedata1.setNextNode(nodedata1.getMyNodeID());
+			 nodedata1.setPrevNodeIP(nodedata1.getMyIP());
+			 nodedata1.setNextNodeIP(nodedata1.getMyIP());
 			 return true;
 		}
 		else if(numberOfNodes==0)

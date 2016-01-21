@@ -1,5 +1,6 @@
 package nodeManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -81,11 +82,18 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 					try {
 						recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getPrevNodeIP()+":"+nodedata1.getPrevNode()+"/RMICommunication");
 						recInt.rmiFileAgentExecution(fileAgent);
-					} catch (MalformedURLException | RemoteException | NotBoundException e) {
+					} catch (MalformedURLException | RemoteException | NotBoundException a) 
+					{
+						try {
+							Thread.sleep(2000);
+							recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getPrevNodeIP()+":"+nodedata1.getPrevNode()+"/RMICommunication");
+							recInt.rmiFileAgentExecution(fileAgent);
+						} catch (MalformedURLException | RemoteException | NotBoundException | InterruptedException b) 
+						{
 						Fail fail = new Fail();
 						int failedNodeID = nodedata1.getPrevNode();
 						fail.failureDetected(nodedata1, failedNodeID);
-						//e.printStackTrace();
+						}
 					}
 	            }
 	        }.start();
@@ -95,40 +103,53 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	}
 	public void rmiFailAgentExecution(AgentMain failAgent) throws RemoteException
 	{
+		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}	
+		nodedata1.allNetworkFiles.clear();
+		nodedata1.setChanged(true);
 		System.out.println("running failagent");
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	
-		if(nodedata1.getNextNode() != nodedata1.getMyNodeID())
+		
+		failAgent.setNodeData1(nodedata1);
+		failAgent.run();
+		while(failAgent.isAlive()){}
+		
+	
+		if(nodedata1.getNextNode() != failAgent.startingNodeID)
 		{
-			if(nodedata1.getNextNode() != failAgent.startingNodeID)
-			{
-				failAgent.setNodeData1(nodedata1);
-				failAgent.run();
-				while(failAgent.isAlive()){}
-				new Thread() {
-					public void run()
-					{
-						RMICommunicationInt recInt;
-						try{
-							recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getNextNodeIP()+":"+nodedata1.getNextNode()+"/RMICommunication");
-							recInt.rmiFailAgentExecution(failAgent);
-						} catch (MalformedURLException | RemoteException | NotBoundException e){}
-					}
-				}.start();
-			}
-			else //restart fileAgent after restoring from failure
-			{
-				System.out.println("restarting fileAgent");
-				TreeMap<Integer, TreeMap<Integer, FileData>> NewAgentNetworkFiles = new TreeMap<Integer, TreeMap<Integer,FileData>>();
-				TreeMap<Integer, FileData> newDownloadMap = new TreeMap<Integer, FileData>();
-				TreeMap<Integer, Integer> newRemoveMap = new TreeMap<Integer, Integer>();
-				
-				AgentMain fileAgent = new AgentMain(true, NewAgentNetworkFiles, newDownloadMap, newRemoveMap, 0, 0);
-				rmiFileAgentExecution(fileAgent);
-			}
+			new Thread() {
+				public void run()
+				{
+					RMICommunicationInt recInt;
+					try{
+						recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getNextNodeIP()+":"+nodedata1.getNextNode()+"/RMICommunication");
+						recInt.rmiFailAgentExecution(failAgent);
+					} catch (MalformedURLException | RemoteException | NotBoundException e){}
+				}
+			}.start();
 		}
+		else if(nodedata1.getNextNode()!=nodedata1.getMyNodeID())
+		{
+			System.out.println("restarting fileAgent");
+			TreeMap<Integer, TreeMap<Integer, FileData>> NewAgentNetworkFiles = new TreeMap<Integer, TreeMap<Integer,FileData>>();
+			TreeMap<Integer, FileData> newDownloadMap = new TreeMap<Integer, FileData>();
+			TreeMap<Integer, Integer> newRemoveMap = new TreeMap<Integer, Integer>();
+			
+			AgentMain fileAgent = new AgentMain(true, NewAgentNetworkFiles, newDownloadMap, newRemoveMap, 0, 0);
+			rmiFileAgentExecution(fileAgent);
+		}
+		
 	}
-	public void sendThisFile(FileData file1) throws RemoteException
+	public boolean sendThisFile(FileData file1) throws RemoteException
 	{
-		nodedata1.sendQueue.add(file1);
+		
+		File temp1 = new File(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+		File temp2 = new File(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
+			
+		if (temp1.exists()||temp2.exists())
+		{
+			nodedata1.sendQueue.add(file1);
+			return true;
+		}
+		else
+			return false;
 	}
 }

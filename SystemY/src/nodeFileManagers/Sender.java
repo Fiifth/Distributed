@@ -81,18 +81,10 @@ public class Sender extends Thread
 			}
 			else
 			{
-				List<Integer> owners = new ArrayList<Integer>(file1.getLocalOwners().keySet());
-				if (owners.get(0)!=nodedata1.getMyNodeID())
+				if (!file1.getDestinationFolder().equals("remove")&&!makeSomeoneElseSend(file1))
 				{
-					int id=owners.get(0);
-					String ip=file1.getLocalOwners().get(owners.get(0));
-					tellNodeToSend(file1, id, ip);
-				}
-				else
-				{
-					int id=owners.get(1);
-					String ip=file1.getLocalOwners().get(owners.get(1));
-					tellNodeToSend(file1, id, ip);
+					tellNodeToReceive(file1);
+					tcp.sendEmptyFile(file1);
 				}
 			}
 			nodedata1.setSending(false);
@@ -134,14 +126,31 @@ public class Sender extends Thread
 		
 		return filePresent;
 	}
-	public void tellNodeToSend(FileData file1, int id, String ip)
+	public boolean makeSomeoneElseSend(FileData file1)
+	{
+		List<Integer> owners = new ArrayList<Integer>(file1.getLocalOwners().keySet());
+		boolean send=false;
+		for (Integer owner:owners)
+		{
+			if(!send)
+			{
+				int id=owner;
+				String ip=file1.getLocalOwners().get(id);
+				send = tellNodeToSend(file1, id, ip);
+			}
+		}
+		return send;
+	}
+	public boolean tellNodeToSend(FileData file1, int id, String ip)
 	{
 		RMICommunicationInt recInt=null;
+		boolean present=false;
 		try 
 		{
 			recInt = (RMICommunicationInt) rmi.getRMIObject(id, ip, "RMICommunication");
-			recInt.sendThisFile(file1);
-		} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
+			present=recInt.sendThisFile(file1);
+		} catch (Exception e) {return false;}
+		return present;
 	}
 	
 	public void copyFileLocally(NodeData nodedata1,FileData file1)
