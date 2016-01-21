@@ -127,4 +127,8 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 			}
 		}
 	}
+	public void sendThisFile(FileData file1) throws RemoteException
+	{
+		nodedata1.sendQueue.add(file1);
+	}
 }

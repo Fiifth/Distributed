@@ -40,18 +40,18 @@ public class NodeGUIFunctions
 				{
 					FileData file=nodeRepFiles.get(filehash);
 					numberOfOwners=file.getNumberOfOwners();
-					System.out.println("found= "+numberOfOwners);
 				}
 			}
 		}
 		if (numberOfOwners==1)
 		{
-			System.out.println("you are last lokal owner so I won't delete this");
+			System.out.println("You are last local owner. Use remove global function instead.");
 		}
 		else
 		{
-			Path source = Paths.get(nodedata2.getMyLocalFolder()+"\\"+fileName);
-			try {Files.delete(source);} catch (IOException e1) {}
+			FileData temp= nodedata2.localFiles.get(filehash);
+			temp.setDestinationFolder("remove");
+			nodedata2.sendQueue.add(temp);
 		}
 	}
 

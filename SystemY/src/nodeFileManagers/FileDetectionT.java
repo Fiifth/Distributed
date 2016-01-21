@@ -55,7 +55,6 @@ public class FileDetectionT extends Thread{
 				
 				if((kind == ENTRY_MODIFY)||(kind == ENTRY_CREATE))
 				{
-					System.out.println("file found");
 					File temp = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
 					int writingSpeedHDD=100; //MB/S
 					int fileSize=(int) (temp.length()/(1024*1024));//MB

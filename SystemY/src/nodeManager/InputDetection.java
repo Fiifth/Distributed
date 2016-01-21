@@ -18,9 +18,10 @@ public class InputDetection extends Thread
 	}
 	public void run()
 	{
+		Scanner reader = null;
 		while(!Thread.interrupted())
 		{
-			Scanner reader = new Scanner(System.in);
+			reader = new Scanner(System.in);
 			System.out.println("Commands: open-filename, remlok-filename, rem-filename, show, quit");
 			String n = reader.next();
 			if(n.contains("open-"))
@@ -47,6 +48,7 @@ public class InputDetection extends Thread
 				showFiles(nodedata1);
 			}
 		}
+		reader.close();
 	}
 	private void showFiles(NodeData nodedata2) 
 	{
@@ -56,6 +58,8 @@ public class InputDetection extends Thread
          
 		for (Entry<Integer, TreeMap<Integer, FileData>> entry : tempAllNetworkFiles.entrySet())
         {
+			if (entry.getKey()==nodedata2.getMyNodeID())
+				System.out.print("*");
 			System.out.print(entry.getKey()+": ");
         	for (FileData temp : entry.getValue().values())
         	{

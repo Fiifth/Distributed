@@ -1,10 +1,14 @@
 package nodeFileManagers;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+
 import networkFunctions.RMI;
 import networkFunctions.TCP;
 import nodeManager.RMICommunicationInt;
@@ -33,37 +37,63 @@ public class Sender extends Thread
 				file1 = nodedata1.sendQueue.take();
 				nodedata1.setSending(true);
 			} catch (InterruptedException e1) {return;}
-
-			if (file1.isOwner(nodedata1.getMyNodeID())&&file1.getDestinationFolder().equals("rep")&&file1.getDestinationID()==nodedata1.getMyNodeID())
-			{
-				copyFileLocally(nodedata1,file1);
-				//Indien de lokale eigenaar hetzelfde is als de replicatie eigenaar kan het bestand simpelweg
-				//gekopieerd worden.
-			}
-			else if (file1.getDestinationFolder().equals("rep"))
-			{
-				file1.setSourceIP(nodedata1.getMyIP());
-				file1.setSourceID(nodedata1.getMyNodeID());
+			
+			File temp1 = new File(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
+			File temp2 = new File(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 				
-				if (!tellNodeToReceive(file1))
+			if (temp1.exists()||temp2.exists())
+			{
+				if (file1.getDestinationFolder().equals("remove"))
 				{
+					removeFile(file1);
+				}
+				else if (file1.isOwner(nodedata1.getMyNodeID())&&file1.getDestinationFolder().equals("rep")&&file1.getDestinationID()==nodedata1.getMyNodeID())
+				{
+					copyFileLocally(nodedata1,file1);
+					//Indien de lokale eigenaar hetzelfde is als de replicatie eigenaar kan het bestand simpelweg
+					//gekopieerd worden.
+				}
+				else if (file1.getDestinationFolder().equals("rep"))
+				{
+					file1.setSourceIP(nodedata1.getMyIP());
+					file1.setSourceID(nodedata1.getMyNodeID());
+					
+					if (!tellNodeToReceive(file1))
+					{
+						tcp.sendFile(file1);
+						if (file1.getRemoveAfterSend()) 
+							removeFile(file1);
+					}
+				}
+				else if (file1.getDestinationFolder().equals("lok"))
+				{
+					file1.setFolderLocation(nodedata1.getMyLocalFolder());
+					tellNodeToReceive(file1);
 					tcp.sendFile(file1);
-					if (file1.getRemoveAfterSend()) 
-						removeFile(file1);
+				}
+				else if (file1.getDestinationFolder().equals("part"))
+				{
+					createPartOfFile(file1);
+					tellNodeToReceive(file1);
+					tcp.sendFile(file1);
+					removeFile(file1);
 				}
 			}
-			else if (file1.getDestinationFolder().equals("lok"))
+			else
 			{
-				file1.setFolderLocation(nodedata1.getMyLocalFolder());
-				tellNodeToReceive(file1);
-				tcp.sendFile(file1);
-			}
-			else if (file1.getDestinationFolder().equals("part"))
-			{
-				createPartOfFile(file1);
-				tellNodeToReceive(file1);
-				tcp.sendFile(file1);
-				removeFile(file1);
+				List<Integer> owners = new ArrayList<Integer>(file1.getLocalOwners().keySet());
+				if (owners.get(0)!=nodedata1.getMyNodeID())
+				{
+					int id=owners.get(0);
+					String ip=file1.getLocalOwners().get(owners.get(0));
+					tellNodeToSend(file1, id, ip);
+				}
+				else
+				{
+					int id=owners.get(1);
+					String ip=file1.getLocalOwners().get(owners.get(1));
+					tellNodeToSend(file1, id, ip);
+				}
 			}
 			nodedata1.setSending(false);
 		}
@@ -103,6 +133,15 @@ public class Sender extends Thread
 		} catch (Exception e) {System.out.println("failed connection to RMI of the node"); filePresent=true;}
 		
 		return filePresent;
+	}
+	public void tellNodeToSend(FileData file1, int id, String ip)
+	{
+		RMICommunicationInt recInt=null;
+		try 
+		{
+			recInt = (RMICommunicationInt) rmi.getRMIObject(id, ip, "RMICommunication");
+			recInt.sendThisFile(file1);
+		} catch (Exception e) {System.out.println("failed connection to RMI of the node");}
 	}
 	
 	public void copyFileLocally(NodeData nodedata1,FileData file1)

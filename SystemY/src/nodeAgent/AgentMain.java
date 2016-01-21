@@ -243,9 +243,9 @@ public class AgentMain extends Thread implements Serializable
 			{
 				if(nodeData1.localFiles.containsKey(entry.getValue()))
 				{
-					String fileName=nodeData1.localFiles.get(entry.getValue()).getFileName();
-					Path source = Paths.get(nodeData1.getMyLocalFolder()+"\\"+fileName);
-					try {Files.delete(source);} catch (IOException e) {}
+					FileData temp= nodeData1.localFiles.get(entry.getValue());
+					temp.setDestinationFolder("remove");
+					nodeData1.sendQueue.add(temp);
 					removeMap.remove(entry.getKey());
 				}
 			}
