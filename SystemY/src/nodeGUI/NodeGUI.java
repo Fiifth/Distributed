@@ -34,6 +34,7 @@ public class NodeGUI {
 	public String nodenaam;
 	public StartNode node1;
 	public JButton btnDLFile;
+	NodeGUIFunctions nodeFunctions=new NodeGUIFunctions();
 	public TreeMap<Integer, FileData> tempLocalFiles;
 	public TreeMap<Integer, TreeMap<Integer, FileData>> tempAllNetworkFiles;
 	public DefaultListModel<String> filelist = new DefaultListModel<String>();
@@ -212,7 +213,7 @@ public class NodeGUI {
         	            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         	                //while(!node1.nodedata1.isFApresent())
         	               // {
-        	                //	//wait for fileagent to finish, otherwise failure will not be detected
+        	                //	
         	                //}
         	                System.exit(0);
         	                
@@ -225,7 +226,6 @@ public class NodeGUI {
                     nodeframe.getContentPane().add(btnRefresh);
                     btnRefresh.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                            		System.out.println("lijstenfixke knop");
                                     generateLists();                                       
                             }
                     });
@@ -267,7 +267,7 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										//send lockrequest for file to remove
 										String selectedRMValue = displayRemoveList.getSelectedValue();
-										node1.nodedata1.lockRequestList.put(Math.abs(selectedRMValue.hashCode()%32768), "rm");										
+										nodeFunctions.remove(selectedRMValue, node1.nodedata1);							
 										rmframe.setVisible(false);
 									}
                                 
@@ -314,45 +314,7 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										//remove local file
 										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
-										int filehash=Math.abs(selectedRMValue.hashCode()%32768);
-										int numberOfOwners = 1;
-										if (node1.nodedata1.replFiles.containsKey(filehash))
-										{
-											FileData file=node1.nodedata1.replFiles.get(filehash);
-											numberOfOwners=file.getNumberOfOwners();
-										}
-										else
-										{
-											TreeMap<Integer, TreeMap<Integer, FileData>> temp=new TreeMap<Integer, TreeMap<Integer, FileData>>();
-											temp.putAll(node1.nodedata1.allNetworkFiles);
-											for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : temp.entrySet())
-											{
-												TreeMap<Integer, FileData> nodeRepFiles =entry.getValue();
-												if (nodeRepFiles.containsKey(filehash))
-												{
-													FileData file=nodeRepFiles.get(filehash);
-													numberOfOwners=file.getNumberOfOwners();
-													System.out.println("found= "+numberOfOwners);
-												}
-											}
-										}
-										if (numberOfOwners==1)
-										{
-											JTextField rmerrortext = new JTextField();
-											rmerrortext.setForeground(Color.RED);
-											rmerrortext.setText("Not allowed, you are the only owner.");
-											rmerrortext.setFont(new Font("Tahoma", Font.BOLD, 13));
-											rmerrortext.setBorder(null);
-											rmerrortext.setBounds(10, 345 , 300, 30);
-											rmerrortext.setColumns(10);        			
-						        	        rmframe.getContentPane().add(rmerrortext);
-										}
-										else
-										{
-											Path source = Paths.get(node1.nodedata1.getMyLocalFolder()+"\\"+selectedRMValue);
-											try {Files.delete(source);} catch (IOException e1) {}
-											rmframe.setVisible(false);
-										}
+										nodeFunctions.removeLocal(selectedRMValue, node1.nodedata1);
 									}
                                 
                                 }); 
@@ -398,47 +360,7 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										//send lockrequest for file to download
 										String selectedValue = displayDownloadList.getSelectedValue();
-										int valuehash = Math.abs(selectedValue.hashCode()%32768);
-										Desktop desktop = Desktop.getDesktop();
-										if(node1.nodedata1.localFiles.containsKey(valuehash))
-										{
-											//file is in localfolder
-											File file = new File(node1.nodedata1.getMyLocalFolder() + "\\" + selectedValue);
-											try {
-												desktop.open(file);
-											} catch (IOException e1) {}
-										}
-										else if(node1.nodedata1.replFiles.containsKey(valuehash))
-										{
-											//file is in replfolder
-											File file = new File(node1.nodedata1.getMyReplFolder() + "\\" + selectedValue);
-											try {
-												desktop.open(file);
-											} catch (IOException e1) {}
-										}
-										else
-										{
-											//file needs to be downloaded to local folder
-											JTextField dltext = new JTextField();
-											dltext.setForeground(Color.GREEN);
-											dltext.setText("Downloading file, will open when finished.");
-											dltext.setFont(new Font("Tahoma", Font.BOLD, 13));
-											dltext.setBorder(null);
-											dltext.setBounds(10, 390, 280, 30);
-											dltext.setColumns(10);        			
-						        	        dlframe.getContentPane().add(dltext);
-											node1.nodedata1.lockRequestList.put(Math.abs(selectedValue.hashCode()%32768), "dl");
-											while(!node1.nodedata1.localFiles.containsKey(valuehash))
-											{
-												try {
-													Thread.sleep(300);
-												} catch (InterruptedException e1) {}												
-											}
-											File file = new File(node1.nodedata1.getMyLocalFolder() + "\\" + selectedValue);
-											try {
-												desktop.open(file);
-											} catch (IOException e1) {}
-										}										
+										nodeFunctions.open(selectedValue, node1.nodedata1);							
 										dlframe.setVisible(false);
 									}
                                 
@@ -479,7 +401,6 @@ public class NodeGUI {
         	            	while(true){
         	            		if(node1.nodedata1.isChanged())
         	            		{
-        	            			System.out.println("changed list");
         	            			generateLists();
         	            			node1.nodedata1.setChanged(false);
         	            		}

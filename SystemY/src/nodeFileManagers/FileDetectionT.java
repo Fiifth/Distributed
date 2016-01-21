@@ -52,13 +52,10 @@ public class FileDetectionT extends Thread{
 				WatchEvent.Kind<?> kind = event.kind(); //get event type
 				WatchEvent<Path> ev = (WatchEvent<Path>) event;
 				Path fileName = ev.context();	// get file name
-				if(kind == ENTRY_CREATE)
+				
+				if((kind == ENTRY_MODIFY)||(kind == ENTRY_CREATE))
 				{
-					//do nothing
-				}
-				else if(kind == ENTRY_MODIFY)
-				{
-					
+					System.out.println("file found");
 					File temp = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
 					int writingSpeedHDD=100; //MB/S
 					int fileSize=(int) (temp.length()/(1024*1024));//MB

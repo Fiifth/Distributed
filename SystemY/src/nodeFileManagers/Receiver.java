@@ -38,6 +38,7 @@ public class Receiver extends Thread
 	public void receiveFile(FileData file1, NodeData nodedata1) 
 	{
 		String fileOutput;
+		int oldNextNode=nodedata1.getNextNode();
 		if(file1.getDestinationFolder().equals("rep")) 
 		{
 			fileOutput = nodedata1.getMyReplFolder()+"\\"+file1.getFileName();
@@ -71,11 +72,17 @@ public class Receiver extends Thread
 	        }
 	        else if(file1.getDestinationFolder().equals("rep")) 
 			{
+	        	int currentNextNode=nodedata1.getNextNode();
 	        	int fileNameHash=Math.abs(file1.getFileName().hashCode()%32768);
 				if (!nodedata1.replFiles.containsKey(fileNameHash))
 			    {
 			       	file1.setFolderLocation(nodedata1.getMyReplFolder());
-			       	nodedata1.replFiles.put(fileNameHash,file1);	
+			       	nodedata1.replFiles.put(fileNameHash,file1);
+			       	if (currentNextNode!=oldNextNode)
+			       	{
+			       		FileOwnershipT COT =new FileOwnershipT(nodedata1);
+			    		COT.start();
+			       	}
 			    } 
 			}
         }

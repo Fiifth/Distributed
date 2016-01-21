@@ -47,6 +47,5 @@ TESTEN
 		
 		
 TODO
-*heap size error 
-*splitsen in parts
-
+* downloaden files bugs vinden
+* tijdens lock release teveel unlocken?

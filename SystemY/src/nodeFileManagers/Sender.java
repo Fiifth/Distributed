@@ -1,24 +1,10 @@
 package nodeFileManagers;
 
-/* 1) Connectie met server via RMI zodat bestemming van files opgevraagd kunnen worden
- * 2) Connectie met node waar file naartoe gestuurd moet worden 
- * 		-via RMI zijn IP en ID in een lijst plaatsen op bestemming
- * 3) Wacht op bestemming tot deze klaar is om het bestand te ontvangen
- */
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-
 import networkFunctions.RMI;
 import networkFunctions.TCP;
 import nodeManager.RMICommunicationInt;
@@ -61,7 +47,7 @@ public class Sender extends Thread
 				
 				if (!tellNodeToReceive(file1))
 				{
-					sendFile(file1);
+					tcp.sendFile(file1);
 					if (file1.getRemoveAfterSend()) 
 						removeFile(file1);
 				}
@@ -70,13 +56,13 @@ public class Sender extends Thread
 			{
 				file1.setFolderLocation(nodedata1.getMyLocalFolder());
 				tellNodeToReceive(file1);
-				sendFile(file1);
+				tcp.sendFile(file1);
 			}
 			else if (file1.getDestinationFolder().equals("part"))
 			{
 				createPartOfFile(file1);
 				tellNodeToReceive(file1);
-				sendFile(file1);
+				tcp.sendFile(file1);
 				removeFile(file1);
 			}
 			nodedata1.setSending(false);
@@ -117,55 +103,6 @@ public class Sender extends Thread
 		} catch (Exception e) {System.out.println("failed connection to RMI of the node"); filePresent=true;}
 		
 		return filePresent;
-	}
-	public void sendFile(FileData file1)
-	{
-		String filePath = file1.getFolderLocation()+"\\"+file1.getFileName();
-        ServerSocket welcomeSocket = null;
-        Socket connectionSocket = null;
-        BufferedOutputStream outToClient = null;
-        FileInputStream fis = null;
-        BufferedInputStream bis=null;
-        int bytesRead=1;
-        try 
-        {
-            welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
-            connectionSocket = welcomeSocket.accept();
-            outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
-            welcomeSocket.close();
-        } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
-
-        if (outToClient != null) 
-        {
-            File myFile = new File(filePath);
-            byte[] bytearray = new byte[512];
-            try 
-            {
-                fis = new FileInputStream(myFile);
-                bis = new BufferedInputStream(fis);
-            } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
-
-            try 
-            {           
-            	while(bytesRead != -1)
-            	{
-            		bytesRead=bis.read(bytearray, 0, bytearray.length);
-            		if(bytesRead != -1)
-					{
-	            		outToClient.write(Arrays.copyOfRange(bytearray, 0, bytesRead));
-		            		//door gebruik te maken van copy range wordt het potentiëel 
-		            		//lege gedeelde van de array nooit doorgestuurd. BytesRead
-	            			//geeft namelijk op hoeveel bits er ni de array geplaatst zijn.
-					}
-                }
-
-                outToClient.flush();
-                outToClient.close();
-                connectionSocket.close();
-                fis.close();
-				bis.close();
-            } catch (IOException ex) {System.out.println("Sending file failed!"); } 
-        }
 	}
 	
 	public void copyFileLocally(NodeData nodedata1,FileData file1)
