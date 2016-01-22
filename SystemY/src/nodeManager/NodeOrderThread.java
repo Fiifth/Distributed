@@ -31,7 +31,7 @@ public class NodeOrderThread extends Thread {
 		String[] msgs = msg.split("-");
 		int toLeave = Integer.parseInt(msgs[0]);
 		int newNodeID= Integer.parseInt(msgs[1]);
-
+		
 		if(toLeave == 1)
 		{
 			//Strings van ID's naar int parsen
@@ -54,6 +54,15 @@ public class NodeOrderThread extends Thread {
 				//telkens als setNextNodeIP opgeroepen wordt zal FileOwnershipT gestart worden
 				//wanneer de next node veranderd kan het namelijk zijn dat de bestanden een nieuwe
 				//replicatie eigenaar moeten hebben
+			}
+			if(newNodeID==nodedata1.getMyNodeID())
+			{
+				System.exit(1);
+			}
+			if(myNextNode==nodedata1.getMyNodeID())
+			{
+				nodedata1.allNetworkFiles.clear();
+				nodedata1.setChanged(true);
 			}
 		}
 		//adding new node

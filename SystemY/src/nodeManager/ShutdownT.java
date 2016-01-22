@@ -38,6 +38,8 @@ public class ShutdownT extends Thread
 			} catch (InterruptedException e1) {}
 			if(nodedata1.getToQuit())
 			{
+				while(!nodedata1.receiveQueue.isEmpty()){}
+				while(nodedata1.isReceiving()!=0){}
 				//waarschuw de replicatie eigenaar dat de file niet meer beschikbaar gaat zijn
 				for(Map.Entry<Integer, FileData> entry : nodedata1.localFiles.entrySet())
 				{

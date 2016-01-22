@@ -22,6 +22,7 @@ public class Receiver extends Thread
 			try 
 			{
 				file1=nodedata1.receiveQueue.take();
+				nodedata1.plusReceive();
 			} 
 			catch (InterruptedException e) {return;}
 			final FileData file=file1;
@@ -30,6 +31,7 @@ public class Receiver extends Thread
 	            public void run() 
 	            {
 	            	receiveFile(file,nodedata1); 
+	            	nodedata1.minReceive();
 	            }
 			 }.start();
 		}

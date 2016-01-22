@@ -30,6 +30,8 @@ public class NodeData implements Serializable {
 	private volatile String myLocalFolder;
 	private volatile String myReplFolder;
 	private volatile boolean sending;
+	private volatile boolean abortOpening=false;
+	private volatile int receiving;
 	private volatile boolean changed = true;
 	private volatile String bind;
 	private volatile int numberOfNodesStart;
@@ -138,6 +140,15 @@ public class NodeData implements Serializable {
 	public boolean isSending() {
 		return sending;
 	}
+	public int isReceiving() {
+		return receiving;
+	}
+	public void plusReceive() {
+		this.receiving = receiving+1;
+	}
+	public void minReceive() {
+		this.receiving = receiving-1;
+	}
 	public void setSending(boolean sending) {
 		this.sending = sending;
 	}
@@ -202,5 +213,11 @@ public class NodeData implements Serializable {
 	public void setAgentWasHere(boolean agentWasHere) 
 	{
 		this.agentWasHere = agentWasHere;
+	}
+	public boolean isAbortOpening() {
+		return abortOpening;
+	}
+	public void setAbortOpening(boolean abortOpening) {
+		this.abortOpening = abortOpening;
 	}
 }

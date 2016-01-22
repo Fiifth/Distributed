@@ -14,94 +14,84 @@ public class NodeGUIFunctions
 
 	public void remove(String fileName, NodeData nodedata2) 
 	{
-		if(nodedata2.allNetworkFiles.isEmpty()){}
-		else{
-			nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "rm");
-		}		
+		nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "rm");		
 	}
 	public void removeLocal(String fileName, NodeData nodedata2) 
 	{
-		if(nodedata2.localFiles.isEmpty()){}
-		else{
-			//remove local file
-			int filehash=Math.abs(fileName.hashCode()%32768);
-			int numberOfOwners = 1;
-			if (nodedata2.replFiles.containsKey(filehash))
+		//remove local file
+		int filehash=Math.abs(fileName.hashCode()%32768);
+		int numberOfOwners = 1;
+		if (nodedata2.replFiles.containsKey(filehash))
+		{
+			FileData file=nodedata2.replFiles.get(filehash);
+			numberOfOwners=file.getNumberOfOwners();
+		}
+		else
+		{
+			TreeMap<Integer, TreeMap<Integer, FileData>> temp=new TreeMap<Integer, TreeMap<Integer, FileData>>();
+			temp.putAll(nodedata2.allNetworkFiles);
+			for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : temp.entrySet())
 			{
-				FileData file=nodedata2.replFiles.get(filehash);
-				numberOfOwners=file.getNumberOfOwners();
-			}
-			else
-			{
-				TreeMap<Integer, TreeMap<Integer, FileData>> temp=new TreeMap<Integer, TreeMap<Integer, FileData>>();
-				temp.putAll(nodedata2.allNetworkFiles);
-				for (Map.Entry<Integer, TreeMap<Integer, FileData>> entry : temp.entrySet())
+				TreeMap<Integer, FileData> nodeRepFiles =entry.getValue();
+				if (nodeRepFiles.containsKey(filehash))
 				{
-					TreeMap<Integer, FileData> nodeRepFiles =entry.getValue();
-					if (nodeRepFiles.containsKey(filehash))
-					{
-						FileData file=nodeRepFiles.get(filehash);
-						numberOfOwners=file.getNumberOfOwners();
-					}
+					FileData file=nodeRepFiles.get(filehash);
+					numberOfOwners=file.getNumberOfOwners();
 				}
 			}
-			if (numberOfOwners==1)
-			{
-				System.out.println("You are last local owner. Use remove global function instead.");
-			}
-			else
-			{
-				FileData temp= nodedata2.localFiles.get(filehash);
-				temp.setDestinationFolder("remove");
-				nodedata2.sendQueue.add(temp);
-			}
 		}
-		
+		if (numberOfOwners==1)
+		{
+			System.out.println("You are last local owner. Use remove global function instead.");
+		}
+		else
+		{
+			FileData temp= nodedata2.localFiles.get(filehash);
+			temp.setDestinationFolder("remove");
+			nodedata2.sendQueue.add(temp);
+		}		
 	}
 
 	public void open(String fileName, NodeData nodedata2) 
 	{
-		if(nodedata2.allNetworkFiles.isEmpty()){}
-		else{
-			int valuehash = Math.abs(fileName.hashCode()%32768);
-			Desktop desktop = Desktop.getDesktop();
-			if(nodedata2.localFiles.containsKey(valuehash))
+		int valuehash = Math.abs(fileName.hashCode()%32768);
+		Desktop desktop = Desktop.getDesktop();
+		if(nodedata2.localFiles.containsKey(valuehash))
+		{
+			//file is in localfolder
+			File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
+			try {
+				desktop.open(file);
+			} catch (IOException e1) {}
+		}
+		else if(nodedata2.replFiles.containsKey(valuehash))
+		{
+			//file is in replfolder
+			File file = new File(nodedata2.getMyReplFolder() + "\\" + fileName);
+			try {
+				desktop.open(file);
+			} catch (IOException e1) {}
+		}
+		else
+		{
+			//file needs to be downloaded to local folder
+			boolean failure=false;
+			nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "dl");
+			while(!nodedata2.localFiles.containsKey(valuehash)&&!failure)
 			{
-				//file is in localfolder
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e1) {}	
+				failure=nodedata2.allNetworkFiles.isEmpty()&&nodedata2.isAbortOpening();
+			}
+			nodedata2.setAbortOpening(false);
+			if (!failure)
+			{
 				File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
 				try {
 					desktop.open(file);
 				} catch (IOException e1) {}
 			}
-			else if(nodedata2.replFiles.containsKey(valuehash))
-			{
-				//file is in replfolder
-				File file = new File(nodedata2.getMyReplFolder() + "\\" + fileName);
-				try {
-					desktop.open(file);
-				} catch (IOException e1) {}
-			}
-			else
-			{
-				//file needs to be downloaded to local folder
-				boolean failure=false;
-				nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "dl");
-				while(!nodedata2.localFiles.containsKey(valuehash)&&!failure)
-				{
-					try {
-						Thread.sleep(300);
-					} catch (InterruptedException e1) {}	
-					failure=nodedata2.allNetworkFiles.isEmpty();
-				}
-				if (!failure)
-				{
-					File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
-					try {
-						desktop.open(file);
-					} catch (IOException e1) {}
-				}
-			}
-		}
-												
+		}										
 	}
 }

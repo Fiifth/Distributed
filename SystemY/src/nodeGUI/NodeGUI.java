@@ -267,8 +267,11 @@ public class NodeGUI {
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										//send lockrequest for file to remove
+										if(!displayRemoveList.isSelectionEmpty())
+										{
 										String selectedRMValue = displayRemoveList.getSelectedValue();
-										nodeFunctions.remove(selectedRMValue, node1.nodedata1);							
+										nodeFunctions.remove(selectedRMValue, node1.nodedata1);	
+										}
 										rmframe.setVisible(false);
 									}
                                 
@@ -314,8 +317,11 @@ public class NodeGUI {
                                 rmbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										//remove local file
+										if(!displayRemoveLocalList.isSelectionEmpty())
+										{
 										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
 										nodeFunctions.removeLocal(selectedRMValue, node1.nodedata1);
+										}
 									}
                                 
                                 }); 
@@ -357,7 +363,7 @@ public class NodeGUI {
                                 dlframe.getContentPane().add(abortButton);
                                 abortButton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										
+										node1.nodedata1.setAbortOpening(true);
 									}                                
                                 });
                                 abortButton.setVisible(false); 
@@ -370,10 +376,11 @@ public class NodeGUI {
 										abortButton.setVisible(true);
 										
 										//send lockrequest for file to download
+										if (!displayDownloadList.isSelectionEmpty())
+										{
 										String selectedValue = displayDownloadList.getSelectedValue();
-										//new Thread() {
-					        	          //  public void run() {
 										nodeFunctions.open(selectedValue, node1.nodedata1);	  
+										}
 										//}
 					        	        //}.start();
 										abortButton.setVisible(false);										
