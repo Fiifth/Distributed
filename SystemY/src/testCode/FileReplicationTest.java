@@ -19,13 +19,13 @@ public class FileReplicationTest {
 		nameserver.startNameServer();
 		Thread.sleep(1000);
 		
-		StartNode node2=new StartNode("5");		
+		StartNode node2=new StartNode("5",false);		
 		node2.startNewNode();
 		Thread.sleep(1000);
-		StartNode node1=new StartNode("2");		
+		StartNode node1=new StartNode("2",false);		
 		node1.startNewNode();
 		Thread.sleep(1000);
-		StartNode node3=new StartNode("7");		
+		StartNode node3=new StartNode("7",false);		
 		node3.startNewNode();
 		Thread.sleep(1000);
 		
@@ -47,7 +47,7 @@ public class FileReplicationTest {
 		boolean test2=!check3;
 		
 		//NEW REPLICATE FILE OWNER test
-		StartNode newNode1=new StartNode("3");		
+		StartNode newNode1=new StartNode("3",false);		
 		newNode1.startNewNode();
 		Thread.sleep(5000);
 		check2=fileExists(newNode1.nodedata1.getMyReplFolder(),"4")&&newNode1.nodedata1.replFiles.containsKey(Math.abs("4".hashCode()%32768));;

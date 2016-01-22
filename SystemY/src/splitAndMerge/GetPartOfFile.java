@@ -41,7 +41,6 @@ public class GetPartOfFile
 					buf.clear();
 				}
 			}
-			
 			//lees de grote van buffer in (in buf) vertrekkend van de grote van de stukken maal het aantal stukken
 			//er moet -1 gedaan worden aangezien we altijd met part 1 beginnen (zo zal eerste part van pos 0 beginnen)
 			//(de rede hiervoor is dat de stukken dan gemakkelijk met winrar gemergt konden worden tijdens het ontwerpen.)

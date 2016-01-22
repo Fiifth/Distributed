@@ -29,9 +29,6 @@ public class NameServerThread extends Thread {
 		{
 			try {	
 				nameServer.rmNode(message[1],nodeIP);
-				System.out.println("Removed NodeIP: " + nodeIP + "Removed NodeID: " + message[1]);
-				Integer numberOfNodes = nameServer.getNodeMap().size();
-				System.out.println("There are "+ numberOfNodes + " nodes left in the map.");
 			} catch (RemoteException e) {e.printStackTrace();}				
 		}
 		else//addnode
@@ -48,7 +45,6 @@ public class NameServerThread extends Thread {
 			if (isNewNode)
 			{
 				Integer numberOfNodes = nameServer.getNodeMap().size(); 
-				System.out.println("Added NodeIP: " + nodeIP);
 				numOfNodesString = numberOfNodes.toString();	
 			}
 			else

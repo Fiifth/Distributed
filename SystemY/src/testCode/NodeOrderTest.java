@@ -12,22 +12,22 @@ public class NodeOrderTest {
 		StartNameServer nameserver= new StartNameServer();
 		nameserver.startNameServer();
 		Thread.sleep(1000);
-		StartNode node2=new StartNode("3");		//first node
+		StartNode node2=new StartNode("3",false);		//first node
 		node2.startNewNode();
 		Thread.sleep(1000);
-		StartNode node3=new StartNode("5");		//second node
+		StartNode node3=new StartNode("5",false);		//second node
 		node3.startNewNode();
 		Thread.sleep(1000);
-		StartNode node5=new StartNode("7");		//add node at end
+		StartNode node5=new StartNode("7",false);		//add node at end
 		node5.startNewNode();
 		Thread.sleep(1000);
-		StartNode dub=new StartNode("7");		//adding a nodename that already exists
+		StartNode dub=new StartNode("7",false);		//adding a nodename that already exists
 		dub.startNewNode();
 		Thread.sleep(1000);
-		StartNode node1=new StartNode("1");		//add node in beginning
+		StartNode node1=new StartNode("1",false);		//add node in beginning
 		node1.startNewNode();
 		Thread.sleep(1000);
-		StartNode node4=new StartNode("6");		//add node in the middle
+		StartNode node4=new StartNode("6",false);		//add node in the middle
 		node4.startNewNode();
 		
 		Thread.sleep(5000);

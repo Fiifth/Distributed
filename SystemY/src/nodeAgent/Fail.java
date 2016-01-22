@@ -12,7 +12,8 @@ public class Fail
 {
 	
 	public void failureDetected(NodeData nodeData1, int failedNodeID)
-	{		
+	{
+		if(nodeData1.isDebug()) System.out.println("Failure detected: "+failedNodeID);
 		try {
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodeData1.getNameServerIP()+":1099/NameServer");
 			nameserver.thisNodeFails(failedNodeID);
@@ -26,9 +27,7 @@ public class Fail
 		while(failAgent.isAlive()){}
 
 		if((nodeData1.getNextNode() != failAgent.startingNodeID)&& nodeData1.getNextNode()!=failedNodeID)
-		{
-			System.out.println("failagent started");
-			System.out.println("assumedNextNodeID:" + nodeData1.getNextNode());
+		{;
 			RMICommunicationInt recInt;
 			try {
 				recInt = (RMICommunicationInt) Naming.lookup("//"+nodeData1.getNextNodeIP()+":"+nodeData1.getNextNode()+"/RMICommunication");

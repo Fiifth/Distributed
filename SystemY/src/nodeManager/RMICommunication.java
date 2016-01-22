@@ -105,13 +105,11 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public void rmiFailAgentExecution(AgentMain failAgent) throws RemoteException
 	{
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}	
-		System.out.println("running failagent");
 		
 		failAgent.setNodeData1(nodedata1);
 		failAgent.run();
 		while(failAgent.isAlive()){}
 		
-	
 		if(nodedata1.getNextNode() != failAgent.startingNodeID)
 		{
 			new Thread() {
@@ -127,7 +125,7 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		}
 		else if(nodedata1.getNextNode()!=nodedata1.getMyNodeID())
 		{
-			System.out.println("restarting fileAgent");
+			if(nodedata1.isDebug()) System.out.println("File agent restarted");
 			TreeMap<Integer, TreeMap<Integer, FileData>> NewAgentNetworkFiles = new TreeMap<Integer, TreeMap<Integer,FileData>>();
 			TreeMap<Integer, FileData> newDownloadMap = new TreeMap<Integer, FileData>();
 			TreeMap<Integer, Integer> newRemoveMap = new TreeMap<Integer, Integer>();

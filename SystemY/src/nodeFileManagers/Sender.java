@@ -46,10 +46,13 @@ public class Sender extends Thread
 				if (file1.getDestinationFolder().equals("remove"))
 				{
 					removeFile(file1);
+					if(nodedata1.isDebug()) System.out.println("removed file: "+file1.getFileName());
 				}
 				else if (file1.isOwner(nodedata1.getMyNodeID())&&file1.getDestinationFolder().equals("rep")&&file1.getDestinationID()==nodedata1.getMyNodeID())
 				{
 					copyFileLocally(nodedata1,file1);
+					if(nodedata1.isDebug()) System.out.println("copied file: "+file1.getFileName());
+				     
 					//Indien de lokale eigenaar hetzelfde is als de replicatie eigenaar kan het bestand simpelweg
 					//gekopieerd worden.
 				}
@@ -61,6 +64,7 @@ public class Sender extends Thread
 					if (!tellNodeToReceive(file1))
 					{
 						tcp.sendFile(file1);
+						if(nodedata1.isDebug()) System.out.println("Replicated file: "+file1.getFileName());
 						if (file1.getRemoveAfterSend()) 
 							removeFile(file1);
 					}
@@ -70,6 +74,7 @@ public class Sender extends Thread
 					file1.setFolderLocation(nodedata1.getMyLocalFolder());
 					tellNodeToReceive(file1);
 					tcp.sendFile(file1);
+					if(nodedata1.isDebug()) System.out.println("Send file: "+file1.getFileName());
 				}
 				else if (file1.getDestinationFolder().equals("part"))
 				{
@@ -77,6 +82,7 @@ public class Sender extends Thread
 					tellNodeToReceive(file1);
 					tcp.sendFile(file1);
 					removeFile(file1);
+					if(nodedata1.isDebug()) System.out.println("Send file: "+file1.getFileName());
 				}
 			}
 			else

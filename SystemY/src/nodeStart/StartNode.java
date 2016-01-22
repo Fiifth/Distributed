@@ -16,16 +16,19 @@ public class StartNode
 	String nodeName;
 	public NodeData nodedata1;
 	boolean startFileAgent=false;
+	boolean debug;
 	
-	public StartNode(String nodeName)
+	public StartNode(String nodeName,boolean debug)
 	{
 		this.nodeName=nodeName;
+		this.debug=debug;
 	}
 	
 	public void startNewNode()
 	{
 		nodedata1=new NodeData();		
 		nodedata1.setNodeName(nodeName);
+		nodedata1.setDebug(debug);
 		System.out.println("My name is: "+nodedata1.getNodeName());
 		System.out.println("My id is: "+nodedata1.getMyNodeID());
 

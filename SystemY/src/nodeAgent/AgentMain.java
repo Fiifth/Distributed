@@ -60,7 +60,6 @@ public class AgentMain extends Thread implements Serializable
 		}
 		else
 		{
-			//nodeData1.partMap.clear();
 			nodeData1.allNetworkFiles.clear();
 			nodeData1.setChanged(true);
 			//check if local owners equals failing node id, if so remove owner from owners list
@@ -152,7 +151,8 @@ public class AgentMain extends Thread implements Serializable
 						FileData tempFile=entry.getValue().get(fileHash);
 						FileData wantedFile=new FileData();
 						wantedFile.deepCopy(tempFile);
-						
+						if (nodeData1.partMap.containsKey(fileHash))
+							nodeData1.partMap.remove(fileHash);
 						if(tempFile.isOwner(wantedFile.getReplicateOwnerID()))
 						{
 							partID=0;

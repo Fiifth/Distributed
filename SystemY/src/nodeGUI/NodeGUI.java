@@ -108,7 +108,7 @@ public class NodeGUI {
         	public void actionPerformed(ActionEvent e) {
         		btnStartNode.setEnabled(false);
         		nodenaam = NN.getText();
-        		node1=new StartNode(nodenaam);
+        		node1=new StartNode(nodenaam,false);
     			node1.startNewNode();
         		if(nodenaam.contains(" "))
         		{
@@ -232,14 +232,14 @@ public class NodeGUI {
                     });
                    
                    
-                    JButton btnRMFile = new JButton("Remove File");
+                    JButton btnRMFile = new JButton("Remove global File");
                     btnRMFile.setBounds(500, 100 , 150, 30);
                     nodeframe.getContentPane().add(btnRMFile);
                     btnRMFile.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                             	//let the user choose which files to remove
                             	JFrame rmframe = new JFrame();
-                            	rmframe.setTitle("Remove File");
+                            	rmframe.setTitle("Remove network File");
                             	rmframe.getContentPane().setForeground(Color.BLACK);
                             	rmframe.setResizable(true);
                             	rmframe.getContentPane().setBackground(Color.WHITE);

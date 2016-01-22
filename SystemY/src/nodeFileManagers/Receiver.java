@@ -62,6 +62,7 @@ public class Receiver extends Thread
         
         if (tcp.receiveFile(file1.getSourceIP(), serverPort, fileOutput))
         {
+        	if(nodedata1.isDebug()) System.out.println("received "+file1.getDestinationFolder()+" file: "+file1.getFileName());
 	        if (file1.getDestinationFolder().equals("part") )
 	        {	        
 		        if(file1.getFileName().length()>=5) //extra controle
@@ -97,6 +98,8 @@ public class Receiver extends Thread
         else if (file1.getDestinationFolder().equals("rep")&&!file1.getLocalOwners().containsKey(file1.getSourceID()))
         {
         	makeSomeoneElseSend(file1);
+        	//indien deze node een nieuwe replicatie eigenaar van een file moest worden
+        	//maar er iets misliep met het zenden
         }
     }
 	public boolean makeSomeoneElseSend(FileData file1)

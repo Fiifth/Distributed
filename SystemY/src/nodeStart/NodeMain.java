@@ -10,6 +10,7 @@ public class NodeMain {
 	{
 		String name = "test";
 		String mode = "gui";
+		boolean debug=false;
 		final StartNode node1;
 		StartNameServer nameserver = null;
 		
@@ -19,10 +20,12 @@ public class NodeMain {
 				mode=args[i+1];
 			if (args[i].equals("-name"))
 				name=args[i+1];
+			if (args[i].equals("-debug"))
+				debug=true;
 		}
 		if (mode.equals("nogui"))
 		{
-			node1=new StartNode(name);
+			node1=new StartNode(name,debug);
 			node1.startNewNode();
 		}
 		else if (mode.equals("server"))

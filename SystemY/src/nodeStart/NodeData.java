@@ -31,6 +31,7 @@ public class NodeData implements Serializable {
 	private volatile String myReplFolder;
 	private volatile boolean sending;
 	private volatile boolean abortOpening=false;
+	private volatile boolean debug=false;
 	private volatile int receiving;
 	private volatile boolean changed = true;
 	private volatile String bind;
@@ -187,6 +188,7 @@ public class NodeData implements Serializable {
 				Collections.sort(files); //zorgt ervoor dat de parts in juiste volgorde staan om te mergen
 				Merge merger=new Merge();
 				merger.mergeFiles(files, destination);
+				if(this.isDebug()) System.out.println("File merged; "+destination);
 				partMap.remove(fileID);
 			}
 			else
@@ -219,5 +221,11 @@ public class NodeData implements Serializable {
 	}
 	public void setAbortOpening(boolean abortOpening) {
 		this.abortOpening = abortOpening;
+	}
+	public boolean isDebug() {
+		return debug;
+	}
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 }
