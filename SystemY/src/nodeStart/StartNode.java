@@ -140,7 +140,7 @@ public class StartNode
 		fileAgent.run();
 		
 		while(fileAgent.isAlive()){}
-		
+		try {Thread.sleep(100);} catch (InterruptedException e1) {	}
 		RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
 		try 
 		{
