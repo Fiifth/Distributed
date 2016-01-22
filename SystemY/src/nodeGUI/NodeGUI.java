@@ -105,6 +105,7 @@ public class NodeGUI {
         nameframe.getContentPane().add(btnStartNode);
         btnStartNode.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		btnStartNode.setEnabled(false);
         		nodenaam = NN.getText();
         		node1=new StartNode(nodenaam);
     			node1.startNewNode();
@@ -120,6 +121,7 @@ public class NodeGUI {
         	        errortext.setColumns(10); 
         	        errortext.setEditable(false);
         	        nameframe.getContentPane().add(errortext);
+        	        btnStartNode.setEnabled(true);
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() == 0)
         		{
@@ -133,6 +135,7 @@ public class NodeGUI {
         	        errortext.setColumns(10);  
         	        errortext.setEditable(false);
         	        nameframe.getContentPane().add(errortext);
+        	        btnStartNode.setEnabled(true);
         		}
         		else if(Math.abs(nodenaam.hashCode()%32768)==6789 || Math.abs(nodenaam.hashCode()%32768)==6790)
         		{
@@ -146,10 +149,12 @@ public class NodeGUI {
         	        errortext.setColumns(10);        
         	        errortext.setEditable(false);
         	        nameframe.getContentPane().add(errortext);
+        	        btnStartNode.setEnabled(true);
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() >= 1 )
         		{	
         			//good name, node starts
+        			
         			nameframe.setVisible(false);
         			nodeframe.setTitle("Node " + nodenaam);
         			
@@ -354,7 +359,12 @@ public class NodeGUI {
 									public void actionPerformed(ActionEvent e) {
 										//send lockrequest for file to download
 										String selectedValue = displayDownloadList.getSelectedValue();
-										nodeFunctions.open(selectedValue, node1.nodedata1);							
+										//new Thread() {
+					        	          //  public void run() {
+										nodeFunctions.open(selectedValue, node1.nodedata1);	  
+										//}
+					        	        //}.start();
+										
 										dlframe.setVisible(false);
 									}
                                 

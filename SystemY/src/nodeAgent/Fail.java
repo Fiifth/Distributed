@@ -12,10 +12,7 @@ public class Fail
 {
 	
 	public void failureDetected(NodeData nodeData1, int failedNodeID)
-	{
-		nodeData1.allNetworkFiles.clear();
-		nodeData1.setChanged(true);
-		
+	{		
 		try {
 			NameServerInterface nameserver = (NameServerInterface)Naming.lookup("//"+nodeData1.getNameServerIP()+":1099/NameServer");
 			nameserver.thisNodeFails(failedNodeID);

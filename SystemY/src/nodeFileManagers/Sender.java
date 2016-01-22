@@ -81,11 +81,14 @@ public class Sender extends Thread
 			}
 			else
 			{
-				if (!file1.getDestinationFolder().equals("remove")&&!makeSomeoneElseSend(file1))
-				{
-					tellNodeToReceive(file1);
-					tcp.sendEmptyFile(file1);
-				}
+				makeSomeoneElseSend(file1);
+				/*
+				 * Aangezien remove opdrachten eveneens in de zendqueue staand is het mogelijk
+				 * dat een bestand verwijderd wordt en daarna doorgestuurd moet worden. Daarom
+				 * Controleren we eerst of het bestand nog wel aanwezig is.
+				 * Remove opdrachten worden aan de zendqueue toegevoegd zodat wanneer een bestand
+				 * verwijderd moet worden, deze niet op hetzelfde moment doorgestuurd kan worden.
+				 */
 			}
 			nodedata1.setSending(false);
 		}

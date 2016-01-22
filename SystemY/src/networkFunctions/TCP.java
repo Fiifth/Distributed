@@ -109,7 +109,7 @@ public class TCP
             connectionSocket = welcomeSocket.accept();
             outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
             welcomeSocket.close();
-        } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
+        } catch (IOException ex) { 	System.out.println("Couldn't open socket1"); return;}
 
         if (outToClient != null) 
         {
@@ -119,7 +119,7 @@ public class TCP
             {
                 fis = new FileInputStream(myFile);
                 bis = new BufferedInputStream(fis);
-            } catch (FileNotFoundException ex) {System.out.println("File wasn't found!");}
+            } catch (FileNotFoundException ex) {System.out.println("File wasn't found!"); return;}
 
             try 
             {           
@@ -140,7 +140,7 @@ public class TCP
                 connectionSocket.close();
                 fis.close();
 				bis.close();
-            } catch (IOException ex) {System.out.println("Sending file failed!"); } 
+            } catch (IOException ex) {System.out.println("Sending file failed!"); return;} 
         }
 	}
 	public void sendEmptyFile(FileData file1)
@@ -154,7 +154,7 @@ public class TCP
             connectionSocket = welcomeSocket.accept();
             outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
             welcomeSocket.close();
-        } catch (IOException ex) { 	System.out.println("Couldn't open socket1");}
+        } catch (IOException ex) {System.out.println("Couldn't open socket1");}
 
         if (outToClient != null) 
         {

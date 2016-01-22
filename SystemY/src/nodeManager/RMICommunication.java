@@ -104,8 +104,6 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 	public void rmiFailAgentExecution(AgentMain failAgent) throws RemoteException
 	{
 		try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}	
-		nodedata1.allNetworkFiles.clear();
-		nodedata1.setChanged(true);
 		System.out.println("running failagent");
 		
 		failAgent.setNodeData1(nodedata1);

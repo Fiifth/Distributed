@@ -75,17 +75,22 @@ public class NodeGUIFunctions
 		else
 		{
 			//file needs to be downloaded to local folder
+			boolean failure=false;
 			nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "dl");
-			while(!nodedata2.localFiles.containsKey(valuehash))
+			while(!nodedata2.localFiles.containsKey(valuehash)&&!failure)
 			{
 				try {
 					Thread.sleep(300);
-				} catch (InterruptedException e1) {}												
+				} catch (InterruptedException e1) {}	
+				failure=nodedata2.allNetworkFiles.isEmpty();
 			}
-			File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
-			try {
-				desktop.open(file);
-			} catch (IOException e1) {}
+			if (!failure)
+			{
+				File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
+				try {
+					desktop.open(file);
+				} catch (IOException e1) {}
+			}
 		}										
 	}
 }

@@ -60,6 +60,9 @@ public class AgentMain extends Thread implements Serializable
 		}
 		else
 		{
+			//nodeData1.partMap.clear();
+			nodeData1.allNetworkFiles.clear();
+			nodeData1.setChanged(true);
 			//check if local owners equals failing node id, if so remove owner from owners list
 			checkReplicationFiles();
 			checkReplicationOwnerOfLocalFiles();

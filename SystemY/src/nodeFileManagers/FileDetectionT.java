@@ -4,6 +4,8 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -55,17 +57,28 @@ public class FileDetectionT extends Thread{
 				
 				if((kind == ENTRY_MODIFY)||(kind == ENTRY_CREATE))
 				{
-					File temp = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
-					int writingSpeedHDD=100; //MB/S
-					int fileSize=(int) (temp.length()/(1024*1024));//MB
+					boolean filePresent=true;
+					File temp = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);					
+					try {
+						Thread.sleep(1000);
+						FileInputStream fis = new FileInputStream(temp);
+						fis.close();
+					} catch (IOException | InterruptedException e) {filePresent=false;}
 					
-					int waitTime=(fileSize/writingSpeedHDD)*1000; //Ms
-					try {Thread.sleep(waitTime+100);} catch (InterruptedException e) {e.printStackTrace();}	
-					File varTmpDir = new File(nodedata1.getMyLocalFolder()+"\\"+fileName);
-					if ((varTmpDir.exists()))
+					if ((temp.exists()&&filePresent))
 					{
-					addFile(fileName.toString(),varTmpDir.length());
+					addFile(fileName.toString(),temp.length());
 					}
+					/*
+					Wanneer een bestand gekopieerd wordt zal het 2 keer door de watcher gedetecteerd worden
+					1 keer wanneer je begint te kopieren en 1 keer wanneer het kopieren voltooid is.
+					We hadden er eerst voor gezorgt dat je een bestand nog steeds kan verzenden bij de eerste
+					detectie door een bepaalde schrijfsnelheid te kiezen en daarvan afhankelijk te wachten vooralleer het toetevoegen
+					 Dit heeft als nadeel dat de gekozen snelheid fout kan zijn voor de computer die het programma gebruikt
+					of wanneer je van een extern geheugen kopieerd. Daarom is het nu opgelost door te zien of het 
+					programma in een FileInputStream ingeladen kan worden. Als dit niet het geval is dan zal de file
+					nog niet voledig aanwezig zijn en wachten we dus op de tweede detectie
+					 */ 
 				}
 				else if(kind == ENTRY_DELETE)
 				{
