@@ -54,43 +54,47 @@ public class NodeGUIFunctions
 
 	public void open(String fileName, NodeData nodedata2) 
 	{
-		int valuehash = Math.abs(fileName.hashCode()%32768);
-		Desktop desktop = Desktop.getDesktop();
-		if(nodedata2.localFiles.containsKey(valuehash))
-		{
-			//file is in localfolder
-			File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
-			try {
-				desktop.open(file);
-			} catch (IOException e1) {}
-		}
-		else if(nodedata2.replFiles.containsKey(valuehash))
-		{
-			//file is in replfolder
-			File file = new File(nodedata2.getMyReplFolder() + "\\" + fileName);
-			try {
-				desktop.open(file);
-			} catch (IOException e1) {}
-		}
-		else
-		{
-			//file needs to be downloaded to local folder
-			boolean failure=false;
-			nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "dl");
-			while(!nodedata2.localFiles.containsKey(valuehash)&&!failure)
+		if(nodedata2.allNetworkFiles.isEmpty()){}
+		else{
+			int valuehash = Math.abs(fileName.hashCode()%32768);
+			Desktop desktop = Desktop.getDesktop();
+			if(nodedata2.localFiles.containsKey(valuehash))
 			{
-				try {
-					Thread.sleep(300);
-				} catch (InterruptedException e1) {}	
-				failure=nodedata2.allNetworkFiles.isEmpty();
-			}
-			if (!failure)
-			{
+				//file is in localfolder
 				File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
 				try {
 					desktop.open(file);
 				} catch (IOException e1) {}
 			}
-		}										
+			else if(nodedata2.replFiles.containsKey(valuehash))
+			{
+				//file is in replfolder
+				File file = new File(nodedata2.getMyReplFolder() + "\\" + fileName);
+				try {
+					desktop.open(file);
+				} catch (IOException e1) {}
+			}
+			else
+			{
+				//file needs to be downloaded to local folder
+				boolean failure=false;
+				nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "dl");
+				while(!nodedata2.localFiles.containsKey(valuehash)&&!failure)
+				{
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e1) {}	
+					failure=nodedata2.allNetworkFiles.isEmpty();
+				}
+				if (!failure)
+				{
+					File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
+					try {
+						desktop.open(file);
+					} catch (IOException e1) {}
+				}
+			}
+		}
+												
 	}
 }

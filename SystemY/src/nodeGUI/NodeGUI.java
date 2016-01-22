@@ -335,7 +335,7 @@ public class NodeGUI {
                             	dlframe.setResizable(true);
                             	dlframe.getContentPane().setBackground(Color.WHITE);
                             	dlframe.setBackground(Color.WHITE);
-                            	dlframe.setBounds(200, 200, 300, 410);
+                            	dlframe.setBounds(200, 200, 300, 430);
                             	dlframe.setResizable(false);
                             	dlframe.getContentPane().setLayout(null);
                             	
@@ -352,11 +352,23 @@ public class NodeGUI {
                                 filestodl.setBackground(Color.WHITE);
                                 dlframe.getContentPane().add(filestodl);
                                 
+                                JButton abortButton = new JButton("Abort");
+                                abortButton.setBounds(75, 360 , 150, 30);
+                                dlframe.getContentPane().add(abortButton);
+                                abortButton.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										
+									}                                
+                                });
+                                abortButton.setVisible(false); 
+                                
                                 JButton dlbutton = new JButton("Open");
                                 dlbutton.setBounds(75, 320 , 150, 30);
                                 dlframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
+										abortButton.setVisible(true);
+										
 										//send lockrequest for file to download
 										String selectedValue = displayDownloadList.getSelectedValue();
 										//new Thread() {
@@ -364,11 +376,10 @@ public class NodeGUI {
 										nodeFunctions.open(selectedValue, node1.nodedata1);	  
 										//}
 					        	        //}.start();
-										
+										abortButton.setVisible(false);										
 										dlframe.setVisible(false);
-									}
-                                
-                                }); 
+									}                                
+                                });                                                               
                                 dlframe.setVisible(true);
                             	
                             }
