@@ -39,7 +39,6 @@ public class NodeOrderThread extends Thread {
 			int newNextID=Integer.parseInt(msgs[3]);
 			String newPrevIP=msgs[4];
 			String newNextIP=msgs[5];
-			System.out.println(newNextIP);
 			
 			if(myPrevNode == newNodeID)
 			{
