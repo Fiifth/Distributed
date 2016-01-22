@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import nodeFileManagers.FileData;
 import nodeStart.NodeData;
@@ -72,7 +73,7 @@ public class NodeGUIFunctions
 				desktop.open(file);
 			} catch (IOException e1) {}
 		}
-		else
+		else if(isPresent(valuehash,nodedata2))
 		{
 			//file needs to be downloaded to local folder
 			boolean failure=false;
@@ -93,5 +94,21 @@ public class NodeGUIFunctions
 				} catch (IOException e1) {}
 			}
 		}										
+	}
+	public boolean isPresent(int fileHash,NodeData nodedata2)
+	{
+		boolean present=false;
+		TreeMap<Integer, TreeMap<Integer, FileData>>  tempAllNetworkFiles = new TreeMap<Integer, TreeMap<Integer, FileData>> ();
+		tempAllNetworkFiles.putAll(nodedata2.allNetworkFiles);
+         
+		for (Entry<Integer, TreeMap<Integer, FileData>> entry : tempAllNetworkFiles.entrySet())
+        {
+        	for (int temp : entry.getValue().keySet())
+        	{
+        		if(temp==fileHash)
+        			present=true;
+        	}
+        }
+		return present;
 	}
 }

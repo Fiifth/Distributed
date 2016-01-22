@@ -1,11 +1,17 @@
 package nodeFileManagers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import networkFunctions.RMI;
 import networkFunctions.TCP;
+import nodeManager.RMICommunicationInt;
 import nodeStart.NodeData;
 
 public class Receiver extends Thread 
 {
 	TCP tcp=new TCP();
+	RMI rmi=new RMI();
 	NodeData nodedata1;
 	
 	public Receiver(NodeData nodedata1)
@@ -88,5 +94,35 @@ public class Receiver extends Thread
 			    } 
 			}
         }
+        else if (file1.getDestinationFolder().equals("rep")&&!file1.getLocalOwners().containsKey(file1.getSourceID()))
+        {
+        	makeSomeoneElseSend(file1);
+        }
     }
+	public boolean makeSomeoneElseSend(FileData file1)
+	{
+		List<Integer> owners = new ArrayList<Integer>(file1.getLocalOwners().keySet());
+		boolean send=false;
+		for (Integer owner:owners)
+		{
+			if(!send)
+			{
+				int id=owner;
+				String ip=file1.getLocalOwners().get(id);
+				send = tellNodeToSend(file1, id, ip);
+			}
+		}
+		return send;
+	}
+	public boolean tellNodeToSend(FileData file1, int id, String ip)
+	{
+		RMICommunicationInt recInt=null;
+		boolean present=false;
+		try 
+		{
+			recInt = (RMICommunicationInt) rmi.getRMIObject(id, ip, "RMICommunication");
+			present=recInt.sendThisFile(file1);
+		} catch (Exception e) {return false;}
+		return present;
+	}
 }

@@ -143,8 +143,15 @@ public class RMICommunication extends UnicastRemoteObject implements RMICommunic
 		File temp1 = new File(nodedata1.getMyLocalFolder()+"\\"+file1.getFileName());
 		File temp2 = new File(nodedata1.getMyReplFolder()+"\\"+file1.getFileName());
 			
-		if (temp1.exists()||temp2.exists())
+		if (temp1.exists())
 		{
+			file1.setFolderLocation(nodedata1.getMyLocalFolder());
+			nodedata1.sendQueue.add(file1);
+			return true;
+		}
+		else if(temp2.exists())
+		{
+			file1.setFolderLocation(nodedata1.getMyReplFolder());
 			nodedata1.sendQueue.add(file1);
 			return true;
 		}
