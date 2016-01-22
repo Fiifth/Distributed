@@ -49,6 +49,7 @@ public class NodeGUI {
 		nameframe.setBounds(20, 20, 300, 160);
 		nameframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		nameframe.getContentPane().setLayout(null);
+		nameframe.toFront();
                
         JTextField NN = new JTextField();
         NN.setBounds(142, 20, 132, 20);
@@ -190,6 +191,7 @@ public class NodeGUI {
         	        line.setFont(new Font("Tahoma", Font.BOLD, 13));
         	        line.setText("-----------------------------------------------------------------------------------------------------------------------------------------");
         	        line.setBounds(0, 14, 700, 20);
+        	        line.setOpaque(false);
         	        line.setEditable(false);
         	        nodeframe.getContentPane().add(line);
         	        
@@ -321,8 +323,6 @@ public class NodeGUI {
                             }
                     });
                     
-                    
-                   
                     btnDLFile = new JButton("Open File");
                     btnDLFile.setBounds(500, 200, 150, 30);
                     nodeframe.getContentPane().add(btnDLFile);
