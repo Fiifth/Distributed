@@ -31,7 +31,7 @@ public class NodeData implements Serializable {
 	private volatile String myReplFolder;
 	private volatile boolean sending;
 	private volatile boolean abortOpening=false;
-	private volatile boolean debug=true;
+	private volatile boolean debug=false;
 	private volatile int receiving;
 	private volatile boolean changed = true;
 	private volatile String bind;
