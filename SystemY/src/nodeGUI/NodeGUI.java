@@ -366,15 +366,12 @@ public class NodeGUI {
 										node1.nodedata1.setAbortOpening(true);
 									}                                
                                 });
-                                abortButton.setVisible(false); 
                                 
                                 JButton dlbutton = new JButton("Open");
                                 dlbutton.setBounds(75, 320 , 150, 30);
                                 dlframe.getContentPane().add(dlbutton);
                                 dlbutton.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										abortButton.setVisible(true);
-										
+									public void actionPerformed(ActionEvent e) {										
 										//send lockrequest for file to download
 										if (!displayDownloadList.isSelectionEmpty())
 										{
@@ -382,8 +379,7 @@ public class NodeGUI {
 										nodeFunctions.open(selectedValue, node1.nodedata1);	  
 										}
 										//}
-					        	        //}.start();
-										abortButton.setVisible(false);										
+					        	        //}.start();										
 										dlframe.setVisible(false);
 									}                                
                                 });                                                               
