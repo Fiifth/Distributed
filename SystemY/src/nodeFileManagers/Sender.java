@@ -45,6 +45,12 @@ public class Sender extends Thread
 			{
 				if (file1.getDestinationFolder().equals("remove"))
 				{
+					if (temp1.exists())
+					{
+						file1.setFolderLocation(nodedata1.getMyLocalFolder());
+					}
+					else
+						file1.setFolderLocation(nodedata1.getMyReplFolder());
 					removeFile(file1);
 					if(nodedata1.isDebug()) System.out.println("removed file: "+file1.getFileName());
 				}
