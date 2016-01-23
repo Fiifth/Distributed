@@ -341,7 +341,7 @@ public class NodeGUI {
                             	dlframe.setResizable(true);
                             	dlframe.getContentPane().setBackground(Color.WHITE);
                             	dlframe.setBackground(Color.WHITE);
-                            	dlframe.setBounds(200, 200, 300, 430);
+                            	dlframe.setBounds(200, 200, 300, 400);
                             	dlframe.setResizable(false);
                             	dlframe.getContentPane().setLayout(null);
                             	
@@ -357,15 +357,6 @@ public class NodeGUI {
                                 filestodl.setBounds(5, 30, 275, 280);
                                 filestodl.setBackground(Color.WHITE);
                                 dlframe.getContentPane().add(filestodl);
-                                
-                                JButton abortButton = new JButton("Abort");
-                                abortButton.setBounds(75, 360 , 150, 30);
-                                dlframe.getContentPane().add(abortButton);
-                                abortButton.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										node1.nodedata1.setAbortOpening(true);
-									}                                
-                                });
                                 
                                 JButton dlbutton = new JButton("Open");
                                 dlbutton.setBounds(75, 320 , 150, 30);
