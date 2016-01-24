@@ -4,6 +4,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 
 import networkFunctions.TCP;
+import nodeFileManagers.FileOwnershipT;
 import nodeStart.NodeData;
 
 public class NodeOrderThread extends Thread {
@@ -32,7 +33,7 @@ public class NodeOrderThread extends Thread {
 		int toLeave = Integer.parseInt(msgs[0]);
 		int newNodeID= Integer.parseInt(msgs[1]);
 		
-		if(toLeave == 1)
+		if(toLeave == 1||toLeave ==2)
 		{
 			//Strings van ID's naar int parsen
 			int newPrevID=Integer.parseInt(msgs[2]);
@@ -63,9 +64,14 @@ public class NodeOrderThread extends Thread {
 				nodedata1.allNetworkFiles.clear();
 				nodedata1.setChanged(true);
 			}
+			if (toLeave==1)
+			{
+				FileOwnershipT COT =new FileOwnershipT(nodedata1,5,newNodeID,newPrevIP,newPrevID);
+				COT.start();
+			}
 		}
 		//adding new node
-		else
+		else if (toLeave==0)
 		{
 			if (myNodeID == newNodeID || newNodeID==myNextNode ||newNodeID==myPrevNode )
 			{
@@ -131,6 +137,8 @@ public class NodeOrderThread extends Thread {
 					System.out.println("I am the next of the new node (begin)");
 				}	
 			}
+			FileOwnershipT COT =new FileOwnershipT(nodedata1,4,newNodeID,nodeIP,0);
+			COT.start();
 		}
 		System.out.println("My: "+nodedata1.getMyNodeID()+" Next: "+nodedata1.getNextNode()+" prev: "+nodedata1.getPrevNode());
 	}

@@ -89,7 +89,7 @@ public class Receiver extends Thread
 			       	nodedata1.replFiles.put(fileNameHash,file1);
 			       	if (currentNextNode!=oldNextNode)
 			       	{
-			       		FileOwnershipT COT =new FileOwnershipT(nodedata1);
+			       		FileOwnershipT COT =new FileOwnershipT(nodedata1,2,0,"0",0);
 			    		COT.start();
 			       	}
 			    } 

@@ -25,7 +25,7 @@ public class NameServerThread extends Thread {
 		int toLeave=Integer.parseInt(message[0]);
 		InetAddress addr=messageIn.getAddress();
 		String nodeIP = addr.getHostAddress().toString();
-		if(toLeave == 1)//rmnode
+		if(toLeave == 1||toLeave==2)//rmnode
 		{
 			try {	
 				nameServer.rmNode(message[1],nodeIP);

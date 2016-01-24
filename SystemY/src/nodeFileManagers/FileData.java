@@ -95,6 +95,12 @@ public class FileData implements Serializable
 		return replicateOwnerIP;
 	}
 
+	public void setReplicateOwnerID(int replicateOwnerID) {
+		this.replicateOwnerID = replicateOwnerID;
+	}
+	public void setReplicateOwnerIP(String replicateOwnerIP) {
+		this.replicateOwnerIP = replicateOwnerIP;
+	}
 	public String getSourceIP() {
 		return sourceIP;
 	}

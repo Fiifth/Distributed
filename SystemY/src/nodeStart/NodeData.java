@@ -84,7 +84,7 @@ public class NodeData implements Serializable {
 		return nextNodeIP;
 	}
 	public void setNextNodeIP(String nextNodeIP) {
-		FileOwnershipT COT =new FileOwnershipT(this);
+		FileOwnershipT COT =new FileOwnershipT(this,2,0,"0",0);
 		COT.start();
 		this.nextNodeIP = nextNodeIP;
 	}

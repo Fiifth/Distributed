@@ -119,7 +119,7 @@ public class StartNameServer extends UnicastRemoteObject implements NameServerIn
 			nextNodeID = nodeMap.higherKey(failingNodeID);
 			nextNodeIP = nodeMap.get(nextNodeID);
 		}
-		String text="1"+"-"+failingNodeID+"-"+prevNodeID+"-"+nextNodeID+"-"+prevNodeIP+"-"+nextNodeIP;
+		String text="2"+"-"+failingNodeID+"-"+prevNodeID+"-"+nextNodeID+"-"+prevNodeIP+"-"+nextNodeIP;
 		multi.sendMulticast(text);
 		
 	}

@@ -61,7 +61,7 @@ public class ShutdownT extends Thread
 				stay = false;
 				try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}		
 				//stuur alle files door die deze node gerepliceerd heeft naar een nieuwe rep eigenaar
-				FileOwnershipT COT =new FileOwnershipT(nodedata1);
+				FileOwnershipT COT =new FileOwnershipT(nodedata1,3,0,"0",0);
 				COT.start();
 				//wacht tot alle bestanden behandeld zijn
 				while(COT.isAlive()){}
