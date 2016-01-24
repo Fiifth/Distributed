@@ -99,7 +99,7 @@ public class Receiver extends Thread
 		       	}
 			}
         }
-        else if (file1.getDestinationFolder().equals("rep")&&!file1.getLocalOwners().containsKey(file1.getSourceID()))
+        else if (file1.getDestinationFolder().equals("rep"))
         {
         	makeSomeoneElseSend(file1);
         	//indien deze node een nieuwe replicatie eigenaar van een file moest worden
