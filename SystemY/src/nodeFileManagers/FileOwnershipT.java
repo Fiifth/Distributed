@@ -24,14 +24,14 @@ public class FileOwnershipT extends Thread
 	public void run()
 	{
 		try {Thread.sleep(500);} catch (InterruptedException e1) {	}
-		if (mode==1)
+		if (mode==1) //wordt niet meer gebruikt
 		{
 		TreeMap<Integer,FileData> tempRepFiles=new TreeMap<Integer, FileData>();
 		tempRepFiles.putAll(nodedata1.replFiles);
 
 		for (Integer key : tempRepFiles.keySet())
 		{
-			if (tempRepFiles.get(key).refreshReplicateOwner(nodedata1)) //return waarde geeft weer of rep eigenaar veranderd is
+			if (tempRepFiles.get(key).refreshReplicateOwner(nodedata1))
 			{
 				nodedata1.replFiles.remove(key);
 				tempRepFiles.get(key).setRemoveAfterSend(true);
@@ -39,7 +39,7 @@ public class FileOwnershipT extends Thread
 			}
 		}
 		}
-		if (mode==2)
+		else if(mode==2) //controleerd of de nieuwe node een rep eigenaar van een file moet zijn
 		{
 			TreeMap<Integer,FileData> tempRepFiles=new TreeMap<Integer, FileData>();
 			tempRepFiles.putAll(nodedata1.replFiles);
@@ -60,7 +60,7 @@ public class FileOwnershipT extends Thread
 				}
 			}
 		}
-		if (mode==3)
+		else if (mode==3) //zend alles naar vorige eigenaar (bij afsluiten)
 		{
 			TreeMap<Integer,FileData> tempRepFiles=new TreeMap<Integer, FileData>();
 			tempRepFiles.putAll(nodedata1.replFiles);
@@ -76,7 +76,7 @@ public class FileOwnershipT extends Thread
 				nodedata1.sendQueue.add(tempRepFiles.get(key));
 			}
 		}
-		if (mode==4)
+		else if (mode==4) //controlleerd of rep eigenaar van locale bestanden veranderen bij nieuwe node
 		{
 			TreeMap<Integer,FileData> tempRepFiles=new TreeMap<Integer, FileData>();
 			tempRepFiles.putAll(nodedata1.localFiles);
@@ -94,7 +94,7 @@ public class FileOwnershipT extends Thread
 				}
 			}
 		}
-		if (mode==5)
+		else if (mode==5) //zelfde als mode 4 maar voor wanneer een node weg gaat
 		{
 			TreeMap<Integer,FileData> tempRepFiles=new TreeMap<Integer, FileData>();
 			tempRepFiles.putAll(nodedata1.localFiles);

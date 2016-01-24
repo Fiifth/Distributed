@@ -105,26 +105,14 @@ public class NodeGUI {
         btnStartNode.setBounds(10, 60 , 110, 23);
         nameframe.getContentPane().add(btnStartNode);
         btnStartNode.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
+        	public void actionPerformed(ActionEvent e) 
+        	{
         		btnStartNode.setEnabled(false);
         		nodenaam = NN.getText();
+        		
         		node1=new StartNode(nodenaam,debug);
     			node1.startNewNode();
-        		if(nodenaam.contains(" "))
-        		{
-        			//bad nodename
-        			JTextField errortext = new JTextField();
-        			errortext.setForeground(Color.RED);
-        			errortext.setText(nodenaam + " is geen geldige nodenaam.");
-        			errortext.setFont(new Font("Tahoma", Font.BOLD, 13));
-        			errortext.setBorder(null);
-        	        errortext.setBounds(10, 100, 290, 20);
-        	        errortext.setColumns(10); 
-        	        errortext.setEditable(false);
-        	        nameframe.getContentPane().add(errortext);
-        	        btnStartNode.setEnabled(true);
-        		}
-        		else if(node1.nodedata1.getNumberOfNodesStart() == 0)
+        		if(node1.nodedata1.getNumberOfNodesStart() == 0)
         		{
         			//name already exists
         			JTextField errortext = new JTextField();
@@ -154,8 +142,6 @@ public class NodeGUI {
         		}
         		else if(node1.nodedata1.getNumberOfNodesStart() >= 1 )
         		{	
-        			//good name, node starts
-        			
         			nameframe.setVisible(false);
         			nodeframe.setTitle("Node " + nodenaam);
         			
@@ -211,13 +197,9 @@ public class NodeGUI {
         	        
         	        nodeframe.addWindowListener(new java.awt.event.WindowAdapter() {
         	            @Override
-        	            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        	                //while(!node1.nodedata1.isFApresent())
-        	               // {
-        	                //	
-        	                //}
-        	                System.exit(0);
-        	                
+        	            public void windowClosing(java.awt.event.WindowEvent windowEvent) 
+        	            {
+        	                System.exit(0);  
         	            }
         	        });
         	        

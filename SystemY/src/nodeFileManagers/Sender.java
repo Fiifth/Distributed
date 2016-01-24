@@ -48,17 +48,14 @@ public class Sender extends Thread
 					if (temp1.exists())
 					{
 						file1.setFolderLocation(nodedata1.getMyLocalFolder());
+						removeFile(file1);
+						if(nodedata1.isDebug()) System.out.println("removed file: "+file1.getFileName());
 					}
-					else
-						file1.setFolderLocation(nodedata1.getMyReplFolder());
-					removeFile(file1);
-					if(nodedata1.isDebug()) System.out.println("removed file: "+file1.getFileName());
 				}
 				else if (file1.isOwner(nodedata1.getMyNodeID())&&file1.getDestinationFolder().equals("rep")&&file1.getDestinationID()==nodedata1.getMyNodeID())
 				{
 					copyFileLocally(nodedata1,file1);
 					if(nodedata1.isDebug()) System.out.println("copied file: "+file1.getFileName());
-				     
 					//Indien de lokale eigenaar hetzelfde is als de replicatie eigenaar kan het bestand simpelweg
 					//gekopieerd worden.
 				}
@@ -99,7 +96,7 @@ public class Sender extends Thread
 				 * dat een bestand verwijderd wordt en daarna doorgestuurd moet worden. Daarom
 				 * Controleren we eerst of het bestand nog wel aanwezig is.
 				 * Remove opdrachten worden aan de zendqueue toegevoegd zodat wanneer een bestand
-				 * verwijderd moet worden, deze niet op hetzelfde moment doorgestuurd kan worden.
+				 * verwijderd moet worden, deze niet op hetzelfde moment verzonden wordt.
 				 */
 			}
 			nodedata1.setSending(false);

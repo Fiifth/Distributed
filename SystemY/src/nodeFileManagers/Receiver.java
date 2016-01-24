@@ -68,13 +68,11 @@ public class Receiver extends Thread
 		        if(file1.getFileName().length()>=5) //extra controle
 		        {
 		        	//bestandnaam.*** (***is part nummer)
-		        	String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4);
+		        	String fileName= file1.getFileName().substring(0, file1.getFileName().length() - 4); //get bestandnaam
 			        int fileNameHash=Math.abs(fileName.hashCode()%32768);
 			     	//we zorgen ervoor dat verschillende threads de addAPart functie niet tegelijk oproepen
-			        //door gebruik te maken van een Semaphore.
 			        nodedata1.acquire();
-			        //de functie addAPart zorgt voor een lijst met parts. Wanneer deze compleet is worden 
-			        //de parts samengevoegd.
+			        //de functie addAPart zorgt voor een lijst met parts. Wanneer deze compleet is worden de parts samengevoegd.
 					nodedata1.addAPart(fileNameHash, fileOutput,file1.getNumberOfParts(), fileName);
 					nodedata1.release();
 		        }
@@ -87,12 +85,18 @@ public class Receiver extends Thread
 			    {
 			       	file1.setFolderLocation(nodedata1.getMyReplFolder());
 			       	nodedata1.replFiles.put(fileNameHash,file1);
-			       	if (currentNextNode!=oldNextNode)
-			       	{
-			       		FileOwnershipT COT =new FileOwnershipT(nodedata1,2,0,"0",0);
-			    		COT.start();
-			       	}
-			    } 
+			    }
+				else
+				{
+					nodedata1.replFiles.get(fileNameHash).addOwner(file1.getSourceID(),file1.getSourceIP());
+				}
+				if (currentNextNode!=oldNextNode)
+		       	{
+		       		FileOwnershipT COT =new FileOwnershipT(nodedata1,2,0,"0",0);
+		    		COT.start();
+		    		//Indien er tijdens het ontvangen een nieuwe next node aangekomen is, is het mogelijk dat deze
+		    		//de nieuwe eigenaar zou moeten zijn van de juist ontvangen file.
+		       	}
 			}
         }
         else if (file1.getDestinationFolder().equals("rep")&&!file1.getLocalOwners().containsKey(file1.getSourceID()))

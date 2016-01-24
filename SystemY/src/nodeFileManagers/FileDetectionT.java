@@ -65,9 +65,7 @@ public class FileDetectionT extends Thread{
 					} catch (IOException | InterruptedException e) {filePresent=false;}
 					
 					if ((temp.exists()&&filePresent))
-					{
-					addFile(fileName.toString(),temp.length());
-					}
+						addFile(fileName.toString(),temp.length());
 					/*
 					Wanneer een bestand gekopieerd wordt zal het 2 keer door de watcher gedetecteerd worden
 					1 keer wanneer je begint te kopieren en 1 keer wanneer het kopieren voltooid is.

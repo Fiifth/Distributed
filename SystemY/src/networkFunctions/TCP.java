@@ -143,31 +143,6 @@ public class TCP
             } catch (IOException ex) {System.out.println("Sending file failed!"); return;} 
         }
 	}
-	public void sendEmptyFile(FileData file1)
-	{
-        ServerSocket welcomeSocket = null;
-        Socket connectionSocket = null;
-        BufferedOutputStream outToClient = null;
-        try 
-        {
-            welcomeSocket = new ServerSocket(file1.getSourceID()+32768);
-            connectionSocket = welcomeSocket.accept();
-            outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
-            welcomeSocket.close();
-        } catch (IOException ex) {System.out.println("Couldn't open socket1");}
-
-        if (outToClient != null) 
-        {
-            byte[] bytearray = new byte[10];
-            try 
-            {
-            	outToClient.write(bytearray);
-                outToClient.flush();
-                outToClient.close();
-                connectionSocket.close();
-            } catch (IOException ex) {System.out.println("Sending file failed!"); }
-        }
-	}
 }
 
 

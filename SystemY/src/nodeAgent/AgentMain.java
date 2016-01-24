@@ -72,8 +72,8 @@ public class AgentMain extends Thread implements Serializable
 	public void updateAgentNetworkFiles()
 	{
 		//Deze functie update de Treemap als de node een verandering heeft bij zijn replicatie files
-		//Hierbij worden entries enkel verwijderd, toegevoegd of vervangen indien er verandering zijn
-		//Een filedata wordt vervangent indien de eigenaar lijst van de file wijzigd. Dit zorgt ervoor dat
+		//Hierbij worden de volledig lijst vervangen indien er verandering zijn gevonden.
+		//Wanneer de eigenaar lijst van de file gewijzigd, wanneer er een file meer of minder in de lijst staat. 
 		//wanneer iemand een file download/verwijderd zal de lock automatisch verdwijnen aangezien een
 		//eigenaar van de file toegevoegd/verwijderd wordt.
 		TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFilesTemp=new TreeMap<Integer, TreeMap<Integer,FileData>>();
@@ -128,7 +128,7 @@ public class AgentMain extends Thread implements Serializable
 		//ondernemen en wat hij juist moet doen.
 		
 		//opm: bij doorsturen van parts zal de replicatie eigenaar enkel een stuk doorsturen indien
-		//hij ook geen gewone eigenaar is (anders zou hij 2 parts moeten doorsturen)
+		//hij geen gewone eigenaar is (anders zou hij 2 parts moeten doorsturen)
 		TreeMap<Integer, TreeMap<Integer, FileData>> tempAllAgentNetworkFiles=new TreeMap<Integer,TreeMap<Integer,FileData>>();
 		tempAllAgentNetworkFiles.putAll(allAgentNetworkFiles);
 		TreeMap<Integer,String> copyLockList=new TreeMap<Integer,String>();
@@ -202,7 +202,7 @@ public class AgentMain extends Thread implements Serializable
 								downloadMap.put(owner, file1);
 							}
 						}
-						else //send het bestand in zijn geheel
+						else //zend het bestand in zijn geheel
 						{
 							wantedFile.setDestinationID(nodeData1.getMyNodeID());
 							wantedFile.setDestinationIP(nodeData1.getMyIP());
@@ -227,7 +227,7 @@ public class AgentMain extends Thread implements Serializable
 	}
 	public void checkAgentLockAction()
 	{
-		//controlleer of huidige node een actie moet ondernemen (doorsturen van een bestand/verwijderen)
+		//controlleer of huidige node een actie moet ondernemen (doorsturen/verwijderen van een bestand)
 		
 		TreeMap<Integer, FileData> tempDownloadMap=new TreeMap<Integer, FileData>();
 		tempDownloadMap.putAll(downloadMap);
@@ -329,7 +329,6 @@ public class AgentMain extends Thread implements Serializable
 				if(fd.getReplicateOwnerID() == failedNodeID)
 				{
 					fd.refreshReplicateOwner(nodeData1);
-					System.out.println("add to queue");
 					nodeData1.sendQueue.add(fd);
 					nodeData1.localFiles.put(fileHash,fd);
 				}

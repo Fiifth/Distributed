@@ -10,7 +10,6 @@ import nodeStart.NodeData;
 
 public class Fail
 {
-	
 	public void failureDetected(NodeData nodeData1, int failedNodeID)
 	{
 		if(nodeData1.isDebug()) System.out.println("Failure detected: "+failedNodeID);

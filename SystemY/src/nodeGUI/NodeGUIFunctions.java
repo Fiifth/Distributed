@@ -19,7 +19,6 @@ public class NodeGUIFunctions
 	}
 	public void removeLocal(String fileName, NodeData nodedata2) 
 	{
-		//remove local file
 		int filehash=Math.abs(fileName.hashCode()%32768);
 		int numberOfOwners = 1;
 		if (nodedata2.replFiles.containsKey(filehash))
@@ -59,7 +58,6 @@ public class NodeGUIFunctions
 		Desktop desktop = Desktop.getDesktop();
 		if(nodedata2.localFiles.containsKey(valuehash))
 		{
-			//file is in localfolder
 			File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
 			try {
 				desktop.open(file);
@@ -67,7 +65,6 @@ public class NodeGUIFunctions
 		}
 		else if(nodedata2.replFiles.containsKey(valuehash))
 		{
-			//file is in replfolder
 			File file = new File(nodedata2.getMyReplFolder() + "\\" + fileName);
 			try {
 				desktop.open(file);
@@ -80,18 +77,14 @@ public class NodeGUIFunctions
 			nodedata2.lockRequestList.put(Math.abs(fileName.hashCode()%32768), "dl");
 			while(!nodedata2.localFiles.containsKey(valuehash)&&!failure)
 			{
-				try {
-					Thread.sleep(300);
-				} catch (InterruptedException e1) {}	
+				try {Thread.sleep(1000);} catch (InterruptedException e1) {}	
 				failure=nodedata2.allNetworkFiles.isEmpty()&&nodedata2.isAbortOpening();
 			}
 			nodedata2.setAbortOpening(false);
 			if (!failure)
 			{
 				File file = new File(nodedata2.getMyLocalFolder() + "\\" + fileName);
-				try {
-					desktop.open(file);
-				} catch (IOException e1) {}
+				try {desktop.open(file);} catch (IOException e1) {}
 			}
 		}										
 	}

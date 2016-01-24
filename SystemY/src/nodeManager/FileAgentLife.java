@@ -44,8 +44,8 @@ public class FileAgentLife extends Thread
 					notPresTime=notPresTime+5;
 				}
 				int numOfnod=nodedata1.allNetworkFiles.size();
-				int cycleTimeAgent=numOfnod*2;
-				if (cycleTimeAgent==0) cycleTimeAgent=10; 
+				int cycleTimeAgent=numOfnod; //1 second/node
+				if (cycleTimeAgent==0) cycleTimeAgent=10; //failure agent cleared the map
 				if (notPresTime>cycleTimeAgent)
 				{
 					misses=misses+(notPresTime/cycleTimeAgent);
