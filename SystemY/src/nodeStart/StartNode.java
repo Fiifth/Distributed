@@ -86,6 +86,11 @@ public class StartNode
 			String[] received=tcp.receiveTextWithTCP(6770, 5000);
 			String nodes = received[0];
 			nodedata1.setPrevNodeIP(received[1]);
+			if (nodes==null||!nodes.contains("-"))
+			{
+				System.out.println("communication with prev node went wrong");
+				return false;
+			}
 			String[] node = nodes.split("-");
 			nodedata1.setPrevNode(Integer.parseInt(node[0]));
 			nodedata1.setNextNode(Integer.parseInt(node[1]));
