@@ -53,7 +53,7 @@ public class FileAgentLife extends Thread
 				}
 				if (nodedata1.getPrevNode()>nodedata1.getNextNode())
 				{
-					if(misses>5)
+					if(misses>3)
 					{
 						startAgent();
 						misses=0;
@@ -61,7 +61,7 @@ public class FileAgentLife extends Thread
 				}
 				else if (nodedata1.getPrevNode()<nodedata1.getNextNode())
 				{
-					if(misses>10)
+					if(misses>7)
 					{
 						startAgent();
 						misses=0;
@@ -69,7 +69,7 @@ public class FileAgentLife extends Thread
 				}
 				else if (nodedata1.getPrevNode()==nodedata1.getNextNode())
 				{
-					if(misses>5)
+					if(misses>3)
 					{
 						startAgent();
 						misses=0;
@@ -79,7 +79,7 @@ public class FileAgentLife extends Thread
 				{
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(20);
-					if(misses>(20+randomInt))
+					if(misses>(15+randomInt))
 					{
 						startAgent();
 						misses=0;
