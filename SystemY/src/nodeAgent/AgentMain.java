@@ -350,16 +350,20 @@ public class AgentMain extends Thread implements Serializable
 				FileData fd = nodeData1.localFiles.get(fileHash);
 				if((!isPresent(fileHash,nodeData1))&&(!nodeData1.isSending()))
 				{
-					if(!absentCounter.containsKey(fileHash))
-						absentCounter.put(fileHash, 1);
+					if(!absentCounter.containsKey((fileHash*100000)+nodeData1.getMyNodeID()))
+						absentCounter.put((fileHash*100000)+nodeData1.getMyNodeID(), 1);
 					else
 					{
-						absentCounter.put(fileHash, absentCounter.get(fileHash)+1);
-						if(absentCounter.get(fileHash)>5)
+						absentCounter.put((fileHash*100000)+nodeData1.getMyNodeID(), absentCounter.get((fileHash*100000)+nodeData1.getMyNodeID())+1);
+						if(absentCounter.get((fileHash*100000)+nodeData1.getMyNodeID())>5)
 						{
-							fd.refreshReplicateOwner(nodeData1);
 							if(nodeData1.isDebug())System.out.println(fd.getFileName()+"was not found on network");
 							nodeData1.sendQueue.add(fd);
+							absentCounter.remove((fileHash*100000)+nodeData1.getMyNodeID());
+						}
+						else if(absentCounter.get((fileHash*100000)+nodeData1.getMyNodeID())>2)
+						{
+							fd.refreshReplicateOwner(nodeData1);
 						}
 					}
 				}
