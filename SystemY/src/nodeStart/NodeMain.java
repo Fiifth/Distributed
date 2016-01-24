@@ -10,16 +10,22 @@ public class NodeMain {
 	{
 		String name = "test";
 		String mode = "gui";
-		boolean debug=false;
+		boolean debug=true;
 		final StartNode node1;
 		StartNameServer nameserver = null;
 		
 		for(int i = 0; i < args.length; i++)
 		{
 			if (args[i].equals("-mode"))
+			{
+				if(args.length>=(i+1))
 				mode=args[i+1];
+			}
 			if (args[i].equals("-name"))
+			{
+				if(args.length>=(i+1))
 				name=args[i+1];
+			}
 			if (args[i].equals("-debug"))
 				debug=true;
 		}
@@ -37,7 +43,7 @@ public class NodeMain {
 		}
 		else
 		{
-			new NodeGUI();
+			new NodeGUI(debug);
 			
 		}
 	}

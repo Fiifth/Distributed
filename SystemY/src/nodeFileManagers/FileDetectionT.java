@@ -86,15 +86,18 @@ public class FileDetectionT extends Thread{
 					if (!(varTmpDir.exists()))
 					{
 						int fileNameHash=Math.abs(fileName.toString().hashCode()%32768);
-						FileData removedFile=nodedata1.localFiles.get(fileNameHash);
-				        removedFile.refreshReplicateOwner(nodedata1);
-				        try 
-				        {
-				        	RMICommunicationInt recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
-							recInt.removeThisOwner(removedFile);
-						} catch (RemoteException e) {e.printStackTrace();}
-				        nodedata1.localFiles.remove(fileNameHash);
-				        nodedata1.setChanged(true);
+						if(nodedata1.localFiles.containsKey(fileNameHash))
+						{
+							FileData removedFile=nodedata1.localFiles.get(fileNameHash);
+					        removedFile.refreshReplicateOwner(nodedata1);
+					        try 
+					        {
+					        	RMICommunicationInt recInt = (RMICommunicationInt) rmi.getRMIObject(removedFile.getReplicateOwnerID(), removedFile.getReplicateOwnerIP(), "RMICommunication");
+								recInt.removeThisOwner(removedFile);
+							} catch (RemoteException e) {e.printStackTrace();}
+					        nodedata1.localFiles.remove(fileNameHash);
+					        nodedata1.setChanged(true);
+						}
 					}
 				}
 				key.reset();

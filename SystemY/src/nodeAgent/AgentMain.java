@@ -60,11 +60,13 @@ public class AgentMain extends Thread implements Serializable
 		}
 		else
 		{
+			nodeData1.setFApresent(true);
 			nodeData1.allNetworkFiles.clear();
 			nodeData1.setChanged(true);
 			//check if local owners equals failing node id, if so remove owner from owners list
 			checkReplicationFiles();
 			checkReplicationOwnerOfLocalFiles();
+			nodeData1.setFApresent(false);	
 		}
 	}
 	public void updateAgentNetworkFiles()
@@ -327,6 +329,7 @@ public class AgentMain extends Thread implements Serializable
 				if(fd.getReplicateOwnerID() == failedNodeID)
 				{
 					fd.refreshReplicateOwner(nodeData1);
+					System.out.println("add to queue");
 					nodeData1.sendQueue.add(fd);
 					nodeData1.localFiles.put(fileHash,fd);
 				}

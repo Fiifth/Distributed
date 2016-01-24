@@ -2,12 +2,16 @@ package nodeManager;
 
 import nodeStart.NodeData;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.TreeMap;
 
 import networkFunctions.RMI;
 import nodeAgent.AgentMain;
+import nodeAgent.Fail;
 import nodeFileManagers.FileData;
 
 public class FileAgentLife extends Thread 
@@ -41,7 +45,7 @@ public class FileAgentLife extends Thread
 				}
 				int numOfnod=nodedata1.allNetworkFiles.size();
 				int cycleTimeAgent=numOfnod*2;
-				if (cycleTimeAgent==0) cycleTimeAgent=2;
+				if (cycleTimeAgent==0) cycleTimeAgent=10; 
 				if (notPresTime>cycleTimeAgent)
 				{
 					misses=misses+(notPresTime/cycleTimeAgent);
@@ -49,7 +53,7 @@ public class FileAgentLife extends Thread
 				}
 				if (nodedata1.getPrevNode()>nodedata1.getNextNode())
 				{
-					if(misses>3)
+					if(misses>5)
 					{
 						startAgent();
 						misses=0;
@@ -57,7 +61,7 @@ public class FileAgentLife extends Thread
 				}
 				else if (nodedata1.getPrevNode()<nodedata1.getNextNode())
 				{
-					if(misses>6)
+					if(misses>10)
 					{
 						startAgent();
 						misses=0;
@@ -67,7 +71,7 @@ public class FileAgentLife extends Thread
 				{
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(20);
-					if(misses>(10+randomInt))
+					if(misses>(20+randomInt))
 					{
 						startAgent();
 						misses=0;
@@ -87,11 +91,15 @@ public class FileAgentLife extends Thread
 		
 		while(fileAgent.isAlive()){}
 		
-		RMICommunicationInt recInt=(RMICommunicationInt) rmi.getRMIObject(nodedata1.getPrevNode(), nodedata1.getPrevNodeIP(), "RMICommunication");
 		try 
 		{
+			RMICommunicationInt recInt = (RMICommunicationInt) Naming.lookup("//"+nodedata1.getPrevNodeIP()+":"+nodedata1.getPrevNode()+"/RMICommunication");
 			recInt.rmiFileAgentExecution(fileAgent);
-		} catch (RemoteException e) {e.printStackTrace();}
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			Fail fail = new Fail();
+		int failedNodeID = nodedata1.getPrevNode();
+		fail.failureDetected(nodedata1, failedNodeID);
+		}
 		
 	}
 }

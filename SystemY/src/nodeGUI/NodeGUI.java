@@ -37,7 +37,7 @@ public class NodeGUI {
 	public volatile JList<String> displayList;
 	private JButton btnStartNode;
 	
-	public NodeGUI(){
+	public NodeGUI(boolean debug){
 		
 		//startupframe where user can start nameserver and choose name of node
 		JFrame nameframe = new JFrame();
@@ -108,7 +108,7 @@ public class NodeGUI {
         	public void actionPerformed(ActionEvent e) {
         		btnStartNode.setEnabled(false);
         		nodenaam = NN.getText();
-        		node1=new StartNode(nodenaam,false);
+        		node1=new StartNode(nodenaam,debug);
     			node1.startNewNode();
         		if(nodenaam.contains(" "))
         		{
