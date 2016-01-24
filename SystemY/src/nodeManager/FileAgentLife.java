@@ -30,8 +30,8 @@ public class FileAgentLife extends Thread
 		int misses=0;
 		while(!Thread.interrupted())
 		{
-			try {Thread.sleep(5000);} catch (InterruptedException e) {}
-			if (nodedata1.getPrevNode()!=nodedata1.getNextNode())
+			try {Thread.sleep(4000);} catch (InterruptedException e) {}
+			if (nodedata1.getMyNodeID()!=nodedata1.getNextNode())
 			{
 				if (nodedata1.wasAgentHere())
 				{
@@ -62,6 +62,14 @@ public class FileAgentLife extends Thread
 				else if (nodedata1.getPrevNode()<nodedata1.getNextNode())
 				{
 					if(misses>10)
+					{
+						startAgent();
+						misses=0;
+					}
+				}
+				else if (nodedata1.getPrevNode()==nodedata1.getNextNode())
+				{
+					if(misses>5)
 					{
 						startAgent();
 						misses=0;
