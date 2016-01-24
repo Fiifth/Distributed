@@ -23,6 +23,7 @@ public class AgentMain extends Thread implements Serializable
 	public TreeMap<Integer, TreeMap<Integer,FileData>> allAgentNetworkFiles;
 	public TreeMap<Integer,FileData> downloadMap; //local owner,filedata
 	public TreeMap<Integer,Integer> removeMap; //local owner,fileID
+	public final TreeMap<Integer,Integer> absentCounter=new TreeMap<Integer,Integer>(); //local owner,fileID
 	public boolean networkFilesChanged;
 	public int startingNodeID;
 	
@@ -36,7 +37,7 @@ public class AgentMain extends Thread implements Serializable
 		this.downloadMap=downloadMap;
 		this.removeMap=removeMap;
 		this.failedNodeID = failedNodeID;
-		startingNodeID = failStarterID;
+		this.startingNodeID = failStarterID;
 	}
 	public void setNodeData1(NodeData nodeData1) 
 	{
@@ -56,6 +57,7 @@ public class AgentMain extends Thread implements Serializable
 			checkAgentLockAction();
 			//Update local node's file list
 			updateLocalAllFiles();
+			checkIfFilesAreReplicated();
 			nodeData1.setFApresent(false);			
 		}
 		else
@@ -69,6 +71,7 @@ public class AgentMain extends Thread implements Serializable
 			nodeData1.setFApresent(false);	
 		}
 	}
+	
 	public void updateAgentNetworkFiles()
 	{
 		//Deze functie update de Treemap als de node een verandering heeft bij zijn replicatie files
@@ -334,6 +337,51 @@ public class AgentMain extends Thread implements Serializable
 				}
 			}
 		}
+	}
+	private void checkIfFilesAreReplicated() 
+	{
+		TreeMap<Integer,FileData> nodeLocalFiles = new TreeMap<Integer,FileData>();
+		nodeLocalFiles.putAll(nodeData1.localFiles);
+		if(!nodeLocalFiles.isEmpty())
+		{
+			for(Map.Entry<Integer,FileData> entry : nodeLocalFiles.entrySet())
+			{
+				Integer fileHash = entry.getKey();
+				FileData fd = nodeData1.localFiles.get(fileHash);
+				if((!isPresent(fileHash,nodeData1))&&(!nodeData1.isSending()))
+				{
+					if(!absentCounter.containsKey(fileHash))
+						absentCounter.put(fileHash, 1);
+					else
+					{
+						absentCounter.put(fileHash, absentCounter.get(fileHash)+1);
+						if(absentCounter.get(fileHash)>5)
+						{
+							fd.refreshReplicateOwner(nodeData1);
+							if(nodeData1.isDebug())System.out.println(fd.getFileName()+"was not found on network");
+							nodeData1.sendQueue.add(fd);
+						}
+					}
+				}
+			}
+		}
+		if (absentCounter.size()>100) absentCounter.clear();
+	}
+	public boolean isPresent(int fileHash,NodeData nodedata2)
+	{
+		boolean present=false;
+		TreeMap<Integer, TreeMap<Integer, FileData>>  tempAllNetworkFiles = new TreeMap<Integer, TreeMap<Integer, FileData>> ();
+		tempAllNetworkFiles.putAll(nodedata2.allNetworkFiles);
+         
+		for (Entry<Integer, TreeMap<Integer, FileData>> entry : tempAllNetworkFiles.entrySet())
+        {
+        	for (int temp : entry.getValue().keySet())
+        	{
+        		if(temp==fileHash)
+        			present=true;
+        	}
+        }
+		return present;
 	}
 }
 
