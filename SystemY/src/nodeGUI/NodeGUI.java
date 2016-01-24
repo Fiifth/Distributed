@@ -304,6 +304,7 @@ public class NodeGUI {
 										String selectedRMValue = displayRemoveLocalList.getSelectedValue();	
 										nodeFunctions.removeLocal(selectedRMValue, node1.nodedata1);
 										}
+										rmframe.setVisible(false);
 									}
                                 
                                 }); 
